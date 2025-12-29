@@ -73,13 +73,43 @@ jobs:
         id: vercel-deploy
         working-directory: ./website
         run: |
+          set -e
           export VERCEL_TOKEN="${{ secrets.VERCEL_TOKEN }}"
           export VERCEL_NON_INTERACTIVE=1
           
-          # Deploy to production (--prod flag, no --yes needed with VERCEL_NON_INTERACTIVE)
+          # Verify Vercel CLI is installed
+          echo "Checking Vercel CLI version..."
+          vercel --version || echo "Warning: Could not get Vercel version"
+          
+          # Check if project is linked
+          if [ -f ".vercel/project.json" ]; then
+            echo "✓ Project is linked"
+            cat .vercel/project.json
+          else
+            echo "⚠️ Project not linked, Vercel will attempt to link automatically"
+          fi
+          
+          # Deploy to production
           echo "Deploying to Vercel production..."
+          echo "Working directory: $(pwd)"
+          echo "Files in directory:"
+          ls -la | head -20
+          
+          # Capture both stdout and stderr
+          set +e
           DEPLOY_OUTPUT=$(vercel --prod --token="$VERCEL_TOKEN" 2>&1)
+          DEPLOY_EXIT_CODE=$?
+          set -e
+          
+          echo "=== Vercel Deployment Output ==="
           echo "$DEPLOY_OUTPUT"
+          echo "=== Exit Code: $DEPLOY_EXIT_CODE ==="
+          
+          if [ $DEPLOY_EXIT_CODE -ne 0 ]; then
+            echo "❌ Vercel deployment failed with exit code $DEPLOY_EXIT_CODE"
+            echo "Full error output above"
+            exit $DEPLOY_EXIT_CODE
+          fi
           
           # Extract deployment URL from output (try multiple patterns)
           DEPLOY_URL=$(echo "$DEPLOY_OUTPUT" | grep -oE 'https://[a-zA-Z0-9-]+\.vercel\.app' | head -1 || echo "")
@@ -94,7 +124,8 @@ jobs:
             echo "✅ Deployment successful: $DEPLOY_URL"
           else
             echo "⚠️ Warning: Could not extract deployment URL from output"
-            echo "Full output saved above for debugging"
+            echo "Deployment may have succeeded but URL extraction failed"
+            echo "Check Vercel dashboard for deployment status"
           fi
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
