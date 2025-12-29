@@ -51,9 +51,14 @@ jobs:
           echo "TARBALL_PATH=$(pwd)/$TARBALL" >> $GITHUB_ENV
           echo "Tarball created: $TARBALL at $(pwd)"
           ls -la $TARBALL
-          # Always copy to expected name for website package.json
-          cp "$TARBALL" "$(pwd)/balanceui-core-1.0.0.tgz"
-          echo "Copied to balanceui-core-1.0.0.tgz"
+          # Only copy if the name doesn't match the expected name
+          if [ "$TARBALL" != "balanceui-core-1.0.0.tgz" ]; then
+            cp "$TARBALL" "$(pwd)/balanceui-core-1.0.0.tgz"
+            echo "Copied to balanceui-core-1.0.0.tgz"
+          else
+            echo "Tarball already has expected name: balanceui-core-1.0.0.tgz"
+          fi
+          # Verify expected file exists
           ls -la balanceui-core-1.0.0.tgz
           pwd
 
