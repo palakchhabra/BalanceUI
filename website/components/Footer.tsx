@@ -4,7 +4,7 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-black/10 bg-white/80 backdrop-blur-sm dark:border-white/20 dark:bg-black/80">
+    <footer className="border-t border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-900">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand Section */}
@@ -15,7 +15,7 @@ export function Footer() {
                 BalanceUI
               </span>
             </div>
-            <p className="mt-4 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+            <p className="mt-4 text-sm leading-relaxed text-gray-700 dark:text-gray-300">
               A modern, accessible React component library built with TypeScript
               and best practices.
             </p>
@@ -30,7 +30,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/docs"
-                  className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                  className="text-sm text-gray-700 transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
                 >
                   Documentation
                 </Link>
@@ -38,7 +38,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/components"
-                  className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                  className="text-sm text-gray-700 transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
                 >
                   Components
                 </Link>
@@ -46,7 +46,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/examples"
-                  className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                  className="text-sm text-gray-700 transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
                 >
                   Examples
                 </Link>
@@ -65,7 +65,7 @@ export function Footer() {
                   href="https://github.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                  className="text-sm text-gray-700 transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
                 >
                   GitHub
                 </a>
@@ -75,7 +75,7 @@ export function Footer() {
                   href="https://twitter.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                  className="text-sm text-gray-700 transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
                 >
                   Twitter
                 </a>
@@ -85,7 +85,7 @@ export function Footer() {
                   href="https://discord.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                  className="text-sm text-gray-700 transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
                 >
                   Discord
                 </a>
@@ -102,7 +102,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/privacy"
-                  className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                  className="text-sm text-gray-700 transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
                 >
                   Privacy Policy
                 </Link>
@@ -110,7 +110,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/terms"
-                  className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                  className="text-sm text-gray-700 transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
                 >
                   Terms of Service
                 </Link>
@@ -118,7 +118,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/license"
-                  className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+                  className="text-sm text-gray-700 transition-colors hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
                 >
                   License
                 </Link>
@@ -128,7 +128,7 @@ export function Footer() {
         </div>
 
         {/* Copyright Section */}
-        <div className="mt-8 border-t border-black/10 pt-6 dark:border-white/20 sm:mt-10 sm:pt-8">
+        <div className="mt-8 border-t border-gray-300 pt-6 dark:border-gray-700 sm:mt-10 sm:pt-8">
           <p className="text-center text-sm text-gray-600 dark:text-gray-400">
             © {currentYear} BalanceUI. All rights reserved.
           </p>
