@@ -62,12 +62,13 @@ jobs:
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID || '' }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID || '' }}
           vercel-args: 'pull --yes'
           working-directory: ./website
         env:
           VERCEL_NON_INTERACTIVE: '1'
+        continue-on-error: true
 
       - name: Copy tarball for website
         run: |
@@ -109,8 +110,8 @@ jobs:
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID || '' }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID || '' }}
           vercel-args: '--prod --yes'
           working-directory: ./website
         env:
