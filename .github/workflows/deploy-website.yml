@@ -95,14 +95,14 @@ jobs:
           ls -la | head -20
           
           # Run vercel deploy and capture output (don't exit on error yet)
-          echo "Running: vercel --prod --token=\"***\""
-          DEPLOY_OUTPUT=$(vercel --prod --token="$VERCEL_TOKEN" 2>&1) || true
+          echo "Running: vercel --prod --yes --token=\"***\""
+          DEPLOY_OUTPUT=$(vercel --prod --yes --token="$VERCEL_TOKEN" 2>&1) || true
           DEPLOY_EXIT_CODE=${PIPESTATUS[0]}
           
           # If command substitution failed, try running directly
           if [ -z "$DEPLOY_OUTPUT" ]; then
             echo "Command substitution failed, running vercel directly..."
-            vercel --prod --token="$VERCEL_TOKEN" 2>&1 || DEPLOY_EXIT_CODE=$?
+            vercel --prod --yes --token="$VERCEL_TOKEN" 2>&1 || DEPLOY_EXIT_CODE=$?
           else
             echo "=== Vercel Deployment Output ==="
             echo "$DEPLOY_OUTPUT"
