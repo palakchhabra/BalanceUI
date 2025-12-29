@@ -43,8 +43,10 @@ jobs:
           npm pack
           TARBALL=$(ls balanceui-core-*.tgz | head -1)
           echo "TARBALL_NAME=$TARBALL" >> $GITHUB_ENV
-          echo "Tarball created: $TARBALL"
+          echo "TARBALL_PATH=$(pwd)/$TARBALL" >> $GITHUB_ENV
+          echo "Tarball created: $TARBALL at $(pwd)"
           ls -la $TARBALL
+          pwd
 
       - name: Install Vercel CLI
         run: npm install --global vercel@latest
@@ -72,8 +74,8 @@ jobs:
         working-directory: ./website
         run: |
           npm install --legacy-peer-deps
-          # Install the tarball, bypassing integrity checks since it's freshly created
-          npm install --legacy-peer-deps ../balanceui-core-*.tgz --force --no-package-lock
+          # Install the tarball from root directory
+          npm install --legacy-peer-deps ${{ github.workspace }}/balanceui-core-*.tgz --force --no-package-lock
 
       - name: Build website
         working-directory: ./website
