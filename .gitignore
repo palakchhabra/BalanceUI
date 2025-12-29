@@ -42,6 +42,7 @@ storybook-static/
 *.tsbuildinfo
 next-env.d.ts
 
-# Ignore all Markdown files
+# Ignore all Markdown files (except in .github directory)
 *.md
+!.github/**/*.md
 sample-project/
