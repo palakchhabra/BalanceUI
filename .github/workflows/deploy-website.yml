@@ -56,7 +56,10 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--force'
           working-directory: ./website
+        env:
+          VERCEL_NON_INTERACTIVE: '1'
 
       - name: Install website dependencies
         working-directory: ./website
@@ -78,8 +81,10 @@ jobs:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-          vercel-args: '--prod'
+          vercel-args: '--prod --force'
           working-directory: ./website
+        env:
+          VERCEL_NON_INTERACTIVE: '1'
 
       - name: Comment PR with deployment URL
         if: github.event_name == 'pull_request'
