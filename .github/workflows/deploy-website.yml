@@ -4,14 +4,14 @@ on:
   push:
     branches: [main]
     paths:
-      - 'balanceui-website/**'
+      - 'website/**'
       - 'src/**'
       - 'package.json'
       - '.github/workflows/deploy-website.yml'
   pull_request:
     branches: [main]
     paths:
-      - 'balanceui-website/**'
+      - 'website/**'
       - 'src/**'
       - 'package.json'
   workflow_dispatch:
@@ -19,6 +19,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: PROD
     permissions:
       contents: read
       pull-requests: write
@@ -53,16 +54,16 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '--yes'
-          working-directory: ./balanceui-website
+          working-directory: ./website
 
       - name: Install website dependencies
-        working-directory: ./balanceui-website
+        working-directory: ./website
         run: |
           npm install
           npm install ../balanceui-core-*.tgz
 
       - name: Build website
-        working-directory: ./balanceui-website
+        working-directory: ./website
         run: npm run build
         env:
           VERCEL: 1
@@ -75,7 +76,7 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           vercel-args: '--prod'
-          working-directory: ./balanceui-website
+          working-directory: ./website
 
       - name: Comment PR with deployment URL
         if: github.event_name == 'pull_request'
