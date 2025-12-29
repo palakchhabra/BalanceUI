@@ -13,14 +13,15 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(({
   style,
   error,
   helperText,
+  id: providedId,
   "aria-label": ariaLabel,
   "aria-describedby": ariaDescribedBy,
   ...props
 }, ref) => {
   const [focused, setFocused] = useState(false);
   
-  // Generate unique IDs for accessibility
-  const id = `select-${Math.random().toString(36).substr(2, 9)}`;
+  // Use provided id or generate unique ID for accessibility
+  const id = providedId || `select-${Math.random().toString(36).substr(2, 9)}`;
   const errorId = error ? `${id}-error` : undefined;
   const helperId = helperText ? `${id}-helper` : undefined;
   const describedBy = [errorId, helperId, ariaDescribedBy].filter(Boolean).join(" ") || undefined;
@@ -32,7 +33,11 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(({
         ref={ref}
         id={id}
         value={value}
-        onChange={(e) => onChange?.(e.target.value)}
+        onChange={(e) => {
+          if (!disabled) {
+            onChange?.(e.target.value);
+          }
+        }}
         disabled={disabled}
         aria-label={ariaLabel}
         aria-describedby={describedBy}

@@ -71,7 +71,8 @@ describe('Tabs', () => {
   describe('Active State', () => {
     it('highlights active tab', () => {
       const { container } = render(<Tabs tabs={mockTabs} value="tab2" onChange={vi.fn()} />);
-      const activeTab = container.querySelector('[style*="font-weight"]');
+      // Active tab has borderBottom style with primary color
+      const activeTab = container.querySelector('[style*="border-bottom"]');
       expect(activeTab).toBeInTheDocument();
     });
 
