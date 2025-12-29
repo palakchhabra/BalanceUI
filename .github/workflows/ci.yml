@@ -58,4 +58,131 @@ jobs:
       - name: Build website
         working-directory: ./website
         run: npm run build
+        env:
+          VERCEL: 1
+
+  deploy-website:
+    runs-on: ubuntu-latest
+    needs: [test, build-website]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment: PROD
+    permissions:
+      contents: read
+      pull-requests: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Clean Vercel directory
+        working-directory: ./website
+        run: |
+          rm -rf .vercel
+        continue-on-error: true
+
+      - name: Link Vercel Project (if IDs provided)
+        working-directory: ./website
+        run: |
+          if [ -n "${{ secrets.VERCEL_PROJECT_ID }}" ] && [ -n "${{ secrets.VERCEL_ORG_ID }}" ]; then
+            echo "Linking Vercel project using provided IDs"
+            mkdir -p .vercel
+            echo "{\"projectId\":\"${{ secrets.VERCEL_PROJECT_ID }}\",\"orgId\":\"${{ secrets.VERCEL_ORG_ID }}\"}" > .vercel/project.json
+            echo "Project linked successfully"
+          else
+            echo "No project IDs provided, Vercel will auto-discover"
+          fi
+        continue-on-error: true
+
+      - name: Install website dependencies
+        working-directory: ./website
+        run: |
+          echo "Installing dependencies including @balanceui/core from npm registry..."
+          npm install --legacy-peer-deps
+          echo "✓ Dependencies installed successfully"
+
+      - name: Build website
+        working-directory: ./website
+        run: npm run build
+        env:
+          VERCEL: 1
+
+      - name: Deploy Project to Vercel
+        id: vercel-deploy
+        working-directory: ./website
+        run: |
+          export VERCEL_TOKEN="${{ secrets.VERCEL_TOKEN }}"
+          export VERCEL_NON_INTERACTIVE=1
+          
+          # Verify Vercel CLI is installed
+          echo "Checking Vercel CLI version..."
+          vercel --version || echo "Warning: Could not get Vercel version"
+          
+          # Check if project is linked
+          if [ -f ".vercel/project.json" ]; then
+            echo "✓ Project is linked"
+            cat .vercel/project.json
+          else
+            echo "⚠️ Project not linked, Vercel will attempt to link automatically"
+          fi
+          
+          # Deploy to production
+          echo "Deploying to Vercel production..."
+          echo "Working directory: $(pwd)"
+          echo "Files in directory:"
+          ls -la | head -20
+          
+          # Run vercel deploy and capture output (don't exit on error yet)
+          echo "Running: vercel --prod --token=\"***\""
+          DEPLOY_OUTPUT=$(vercel --prod --token="$VERCEL_TOKEN" 2>&1) || true
+          DEPLOY_EXIT_CODE=${PIPESTATUS[0]}
+          
+          # If command substitution failed, try running directly
+          if [ -z "$DEPLOY_OUTPUT" ]; then
+            echo "Command substitution failed, running vercel directly..."
+            vercel --prod --token="$VERCEL_TOKEN" 2>&1 || DEPLOY_EXIT_CODE=$?
+          else
+            echo "=== Vercel Deployment Output ==="
+            echo "$DEPLOY_OUTPUT"
+            echo "=== Exit Code: $DEPLOY_EXIT_CODE ==="
+          fi
+          
+          if [ $DEPLOY_EXIT_CODE -ne 0 ]; then
+            echo "❌ Vercel deployment failed with exit code $DEPLOY_EXIT_CODE"
+            if [ -n "$DEPLOY_OUTPUT" ]; then
+              echo "Full error output:"
+              echo "$DEPLOY_OUTPUT"
+            fi
+            exit $DEPLOY_EXIT_CODE
+          fi
+          
+          # Extract deployment URL from output (try multiple patterns)
+          if [ -n "$DEPLOY_OUTPUT" ]; then
+            DEPLOY_URL=$(echo "$DEPLOY_OUTPUT" | grep -oE 'https://[a-zA-Z0-9-]+\.vercel\.app' | head -1 || echo "")
+            if [ -z "$DEPLOY_URL" ]; then
+              # Try alternative pattern
+              DEPLOY_URL=$(echo "$DEPLOY_OUTPUT" | grep -oE 'https://[^\s]+vercel[^\s]*' | head -1 || echo "")
+            fi
+            
+            if [ -n "$DEPLOY_URL" ]; then
+              echo "deployment-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
+              echo "preview-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
+              echo "✅ Deployment successful: $DEPLOY_URL"
+            else
+              echo "⚠️ Warning: Could not extract deployment URL from output"
+              echo "Deployment may have succeeded but URL extraction failed"
+              echo "Check Vercel dashboard for deployment status"
+            fi
+          fi
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_NON_INTERACTIVE: '1'
 
