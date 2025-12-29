@@ -42,10 +42,19 @@ jobs:
           npm run build
           npm pack
           TARBALL=$(ls balanceui-core-*.tgz | head -1)
+          if [ -z "$TARBALL" ]; then
+            echo "Error: Tarball not created"
+            ls -la
+            exit 1
+          fi
           echo "TARBALL_NAME=$TARBALL" >> $GITHUB_ENV
           echo "TARBALL_PATH=$(pwd)/$TARBALL" >> $GITHUB_ENV
           echo "Tarball created: $TARBALL at $(pwd)"
           ls -la $TARBALL
+          # Always copy to expected name for website package.json
+          cp "$TARBALL" "$(pwd)/balanceui-core-1.0.0.tgz"
+          echo "Copied to balanceui-core-1.0.0.tgz"
+          ls -la balanceui-core-1.0.0.tgz
           pwd
 
       - name: Install Vercel CLI
@@ -70,29 +79,20 @@ jobs:
           VERCEL_NON_INTERACTIVE: '1'
         continue-on-error: true
 
-      - name: Copy tarball for website
+      - name: Verify tarball exists
         run: |
-          # Find the tarball in workspace root
-          TARBALL=$(ls ${{ github.workspace }}/balanceui-core-*.tgz 2>/dev/null | head -1)
-          if [ -z "$TARBALL" ]; then
-            echo "Error: Tarball not found in workspace root"
-            ls -la ${{ github.workspace }}/ || echo "Workspace listing failed"
+          # Verify the tarball exists in workspace root
+          if [ ! -f "${{ github.workspace }}/balanceui-core-1.0.0.tgz" ]; then
+            echo "Error: balanceui-core-1.0.0.tgz not found in workspace root"
+            echo "Workspace: ${{ github.workspace }}"
+            echo "Listing workspace contents:"
+            ls -la "${{ github.workspace }}/" || echo "Failed to list workspace"
+            echo "Looking for any tarball files:"
+            ls -la "${{ github.workspace }}/"*.tgz 2>/dev/null || echo "No .tgz files found"
             exit 1
           fi
-          echo "Found tarball: $TARBALL"
-          TARBALL_NAME=$(basename "$TARBALL")
-          echo "Tarball name: $TARBALL_NAME"
-          # package.json expects file:../balanceui-core-1.0.0.tgz
-          # So we need to ensure the tarball exists at the root with the expected name
-          # If the name doesn't match, create a symlink or copy
-          if [ "$TARBALL_NAME" != "balanceui-core-1.0.0.tgz" ]; then
-            cp "$TARBALL" "${{ github.workspace }}/balanceui-core-1.0.0.tgz"
-            echo "Copied tarball to expected name: balanceui-core-1.0.0.tgz"
-          else
-            echo "Tarball already has expected name"
-          fi
-          # Verify it exists
-          ls -la "${{ github.workspace }}/balanceui-core-1.0.0.tgz" || exit 1
+          echo "✓ Tarball verified: ${{ github.workspace }}/balanceui-core-1.0.0.tgz"
+          ls -lh "${{ github.workspace }}/balanceui-core-1.0.0.tgz"
 
       - name: Install website dependencies
         working-directory: ./website
