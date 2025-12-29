@@ -71,17 +71,17 @@ jobs:
           rm -rf .vercel
         continue-on-error: true
 
-      - name: Pull Vercel Environment Information
-        id: vercel-pull
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID || '' }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID || '' }}
-          vercel-args: 'pull --yes'
-          working-directory: ./website
-        env:
-          VERCEL_NON_INTERACTIVE: '1'
+      - name: Link Vercel Project (if IDs provided)
+        working-directory: ./website
+        run: |
+          if [ -n "${{ secrets.VERCEL_PROJECT_ID }}" ] && [ -n "${{ secrets.VERCEL_ORG_ID }}" ]; then
+            echo "Linking Vercel project using provided IDs"
+            mkdir -p .vercel
+            echo "{\"projectId\":\"${{ secrets.VERCEL_PROJECT_ID }}\",\"orgId\":\"${{ secrets.VERCEL_ORG_ID }}\"}" > .vercel/project.json
+            echo "Project linked successfully"
+          else
+            echo "No project IDs provided, Vercel will auto-discover"
+          fi
         continue-on-error: true
 
       - name: Verify tarball exists
@@ -112,14 +112,26 @@ jobs:
 
       - name: Deploy Project to Vercel
         id: vercel-deploy
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: ${{ secrets.VERCEL_ORG_ID || '' }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID || '' }}
-          vercel-args: '--prod --yes'
-          working-directory: ./website
+        working-directory: ./website
+        run: |
+          export VERCEL_TOKEN="${{ secrets.VERCEL_TOKEN }}"
+          export VERCEL_NON_INTERACTIVE=1
+          
+          # Deploy to production
+          DEPLOY_OUTPUT=$(vercel --prod --yes --token="$VERCEL_TOKEN" 2>&1)
+          echo "$DEPLOY_OUTPUT"
+          
+          # Extract deployment URL from output
+          DEPLOY_URL=$(echo "$DEPLOY_OUTPUT" | grep -oP 'https://[^\s]+\.vercel\.app' | head -1 || echo "")
+          if [ -n "$DEPLOY_URL" ]; then
+            echo "deployment-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
+            echo "preview-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
+            echo "Deployment successful: $DEPLOY_URL"
+          else
+            echo "Warning: Could not extract deployment URL from output"
+          fi
         env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_NON_INTERACTIVE: '1'
 
       - name: Comment PR with deployment URL
