@@ -118,13 +118,13 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/favicon.ico", type: "image/x-icon" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any", type: "image/x-icon" },
     ],
     apple: [
-      { url: "/favicon.ico", sizes: "180x180", type: "image/x-icon" },
+      { url: "/icon.svg", sizes: "180x180", type: "image/svg+xml" },
     ],
-    shortcut: "/favicon.ico",
+    shortcut: "/icon.svg",
   },
   other: {
     "apple-mobile-web-app-capable": "yes",
