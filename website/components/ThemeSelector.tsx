@@ -91,28 +91,29 @@ export function ThemeSelector() {
                     }
                     setIsOpen(false);
                   }}
-                  className={`w-full text-left px-3 py-2 rounded text-sm transition-colors flex items-center gap-2 ${
+                  className={`w-full text-left px-3 py-2 rounded text-sm transition-colors flex items-center justify-between ${
                     isSelected
                       ? "bg-black text-white font-medium"
                       : "hover:bg-gray-100 text-gray-700"
                   }`}
                 >
-                  <div className="flex items-center gap-2 flex-1">
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
                     <div
                       className="w-4 h-4 rounded border border-gray-300 flex-shrink-0"
                       style={{ backgroundColor: t.color }}
                     />
-                    <span>{t.label}</span>
+                    <span className="truncate">{t.label}</span>
                   </div>
                   <input
                     type="checkbox"
                     checked={isSelected}
                     readOnly
-                    className="w-4 h-4 cursor-pointer flex-shrink-0"
+                    className="w-4 h-4 cursor-pointer flex-shrink-0 ml-2"
                     style={{ 
                       accentColor: isSelected ? "#ffffff" : "#000000",
                       filter: isSelected ? "brightness(0) invert(1)" : "none"
                     }}
+                    aria-label={`Select ${t.label} theme`}
                   />
                 </button>
               );
