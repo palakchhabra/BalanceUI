@@ -48,26 +48,14 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Build core package
-        run: |
-          cd ${{ github.workspace }}
-          npm ci --legacy-peer-deps
-          npm run build
-
-      - name: Pack core package
-        run: |
-          cd ${{ github.workspace }}
-          npm pack
-          mv balanceui-core-*.tgz ../
-
       - name: Install website dependencies
+        working-directory: ./website
         run: |
-          cd website
-          npm install
+          echo "Installing dependencies including @balanceui/core from npm registry..."
+          npm install --legacy-peer-deps
+          echo "✓ Dependencies installed successfully"
 
       - name: Build website
-        run: |
-          cd website
-          npm install ../balanceui-core-*.tgz
-          npm run build
+        working-directory: ./website
+        run: npm run build
 
