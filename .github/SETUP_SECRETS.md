@@ -21,12 +21,15 @@ You need to create the following secrets in your GitHub repository for the workf
 
 **How to get it:**
 1. Go to [NPM Account Settings → Access Tokens](https://www.npmjs.com/settings/YOUR_USERNAME/tokens)
-2. Click **Generate New Token** → **Automation** (recommended) or **Publish**
-3. Copy the token (you won't see it again!)
-4. Add it as `NPM_TOKEN` in GitHub Secrets
+2. Click **Generate New Token** → **Automation** (REQUIRED for CI/CD)
+3. **Important**: You MUST use "Automation" token type - this bypasses 2FA/OTP requirements
+4. Copy the token (you won't see it again!)
+5. Add it as `NPM_TOKEN` in GitHub Secrets
 
 **Note:** 
-- Use "Automation" token type for CI/CD
+- ⚠️ **CRITICAL**: Use "Automation" token type (NOT "Publish" or "Read-Only")
+- Automation tokens bypass 2FA/OTP requirements for CI/CD
+- Regular tokens will fail with "EOTP" error if 2FA is enabled
 - Token must have publish permissions
 - Keep it secure - never commit it to the repository
 
