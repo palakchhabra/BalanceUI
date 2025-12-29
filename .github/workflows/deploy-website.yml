@@ -71,6 +71,26 @@ jobs:
           rm -rf .vercel
         continue-on-error: true
 
+      - name: Verify tarball exists before install
+        run: |
+          # Verify the tarball exists in workspace root
+          echo "Checking for tarball at: ${{ github.workspace }}/balanceui-core-1.0.0.tgz"
+          if [ ! -f "${{ github.workspace }}/balanceui-core-1.0.0.tgz" ]; then
+            echo "❌ Error: balanceui-core-1.0.0.tgz not found in workspace root"
+            echo "Workspace: ${{ github.workspace }}"
+            echo "Current directory: $(pwd)"
+            echo "Listing workspace contents:"
+            ls -la "${{ github.workspace }}/" || echo "Failed to list workspace"
+            echo "Looking for any tarball files:"
+            ls -la "${{ github.workspace }}/"*.tgz 2>/dev/null || echo "No .tgz files found"
+            exit 1
+          fi
+          echo "✓ Tarball verified: ${{ github.workspace }}/balanceui-core-1.0.0.tgz"
+          ls -lh "${{ github.workspace }}/balanceui-core-1.0.0.tgz"
+          # Also verify from website directory perspective
+          echo "Verifying from website directory:"
+          ls -lh "../balanceui-core-1.0.0.tgz" || echo "Warning: Cannot see tarball from website directory"
+
       - name: Link Vercel Project (if IDs provided)
         working-directory: ./website
         run: |
@@ -84,24 +104,19 @@ jobs:
           fi
         continue-on-error: true
 
-      - name: Verify tarball exists
-        run: |
-          # Verify the tarball exists in workspace root
-          if [ ! -f "${{ github.workspace }}/balanceui-core-1.0.0.tgz" ]; then
-            echo "Error: balanceui-core-1.0.0.tgz not found in workspace root"
-            echo "Workspace: ${{ github.workspace }}"
-            echo "Listing workspace contents:"
-            ls -la "${{ github.workspace }}/" || echo "Failed to list workspace"
-            echo "Looking for any tarball files:"
-            ls -la "${{ github.workspace }}/"*.tgz 2>/dev/null || echo "No .tgz files found"
-            exit 1
-          fi
-          echo "✓ Tarball verified: ${{ github.workspace }}/balanceui-core-1.0.0.tgz"
-          ls -lh "${{ github.workspace }}/balanceui-core-1.0.0.tgz"
-
       - name: Install website dependencies
         working-directory: ./website
         run: |
+          # Verify tarball is accessible from website directory
+          if [ ! -f "../balanceui-core-1.0.0.tgz" ]; then
+            echo "❌ Error: Cannot find tarball from website directory"
+            echo "Current directory: $(pwd)"
+            echo "Looking for: ../balanceui-core-1.0.0.tgz"
+            echo "Parent directory contents:"
+            ls -la ../ || echo "Failed to list parent"
+            exit 1
+          fi
+          echo "✓ Tarball found, proceeding with installation"
           npm install --legacy-peer-deps
 
       - name: Build website
