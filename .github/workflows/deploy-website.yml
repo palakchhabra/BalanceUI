@@ -68,12 +68,34 @@ jobs:
         env:
           VERCEL_NON_INTERACTIVE: '1'
 
+      - name: Copy tarball for website
+        run: |
+          # Find the tarball in workspace root
+          TARBALL=$(ls ${{ github.workspace }}/balanceui-core-*.tgz 2>/dev/null | head -1)
+          if [ -z "$TARBALL" ]; then
+            echo "Error: Tarball not found in workspace root"
+            ls -la ${{ github.workspace }}/ || echo "Workspace listing failed"
+            exit 1
+          fi
+          echo "Found tarball: $TARBALL"
+          TARBALL_NAME=$(basename "$TARBALL")
+          echo "Tarball name: $TARBALL_NAME"
+          # package.json expects file:../balanceui-core-1.0.0.tgz
+          # So we need to ensure the tarball exists at the root with the expected name
+          # If the name doesn't match, create a symlink or copy
+          if [ "$TARBALL_NAME" != "balanceui-core-1.0.0.tgz" ]; then
+            cp "$TARBALL" "${{ github.workspace }}/balanceui-core-1.0.0.tgz"
+            echo "Copied tarball to expected name: balanceui-core-1.0.0.tgz"
+          else
+            echo "Tarball already has expected name"
+          fi
+          # Verify it exists
+          ls -la "${{ github.workspace }}/balanceui-core-1.0.0.tgz" || exit 1
+
       - name: Install website dependencies
         working-directory: ./website
         run: |
           npm install --legacy-peer-deps
-          # Install the tarball from root directory
-          npm install --legacy-peer-deps ${{ github.workspace }}/balanceui-core-*.tgz --force --no-package-lock
 
       - name: Build website
         working-directory: ./website
