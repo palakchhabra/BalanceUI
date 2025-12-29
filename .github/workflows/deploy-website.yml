@@ -117,18 +117,25 @@ jobs:
           export VERCEL_TOKEN="${{ secrets.VERCEL_TOKEN }}"
           export VERCEL_NON_INTERACTIVE=1
           
-          # Deploy to production
-          DEPLOY_OUTPUT=$(vercel --prod --yes --token="$VERCEL_TOKEN" 2>&1)
+          # Deploy to production (--prod flag, no --yes needed with VERCEL_NON_INTERACTIVE)
+          echo "Deploying to Vercel production..."
+          DEPLOY_OUTPUT=$(vercel --prod --token="$VERCEL_TOKEN" 2>&1)
           echo "$DEPLOY_OUTPUT"
           
-          # Extract deployment URL from output
-          DEPLOY_URL=$(echo "$DEPLOY_OUTPUT" | grep -oP 'https://[^\s]+\.vercel\.app' | head -1 || echo "")
+          # Extract deployment URL from output (try multiple patterns)
+          DEPLOY_URL=$(echo "$DEPLOY_OUTPUT" | grep -oE 'https://[a-zA-Z0-9-]+\.vercel\.app' | head -1 || echo "")
+          if [ -z "$DEPLOY_URL" ]; then
+            # Try alternative pattern
+            DEPLOY_URL=$(echo "$DEPLOY_OUTPUT" | grep -oE 'https://[^\s]+vercel[^\s]*' | head -1 || echo "")
+          fi
+          
           if [ -n "$DEPLOY_URL" ]; then
             echo "deployment-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
             echo "preview-url=$DEPLOY_URL" >> $GITHUB_OUTPUT
-            echo "Deployment successful: $DEPLOY_URL"
+            echo "✅ Deployment successful: $DEPLOY_URL"
           else
-            echo "Warning: Could not extract deployment URL from output"
+            echo "⚠️ Warning: Could not extract deployment URL from output"
+            echo "Full output saved above for debugging"
           fi
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
