@@ -1,0 +1,192 @@
+.balanceui-stepper {
+  font-family: var(--bu-font-family);
+  font-size: var(--bu-font-size-md, 14px);
+  line-height: var(--bu-line-height-normal, 1.5);
+  color: var(--bu-fg, rgba(0, 0, 0, 0.87));
+}
+
+.balanceui-stepper-container {
+  display: flex;
+  gap: 24px;
+}
+
+.balanceui-stepper-container.vertical {
+  flex-direction: column;
+}
+
+.balanceui-stepper-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: color var(--bu-transition-fast);
+  flex: 1;
+}
+
+.balanceui-stepper-step-wrapper {
+  display: flex;
+  flex: 1;
+  align-items: center;
+}
+
+.balanceui-stepper-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: var(--bu-font-weight-semibold, 600);
+  transition: 
+    background-color var(--bu-transition-base),
+    border-color var(--bu-transition-base),
+    color var(--bu-transition-base),
+    transform var(--bu-transition-base);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.balanceui-stepper-step:hover .balanceui-stepper-circle {
+  transform: scale(1.05);
+}
+
+.balanceui-stepper-circle.active {
+  background: var(--bu-primary, #1f2937);
+  color: var(--bu-on-primary, #ffffff);
+  border: 2px solid var(--bu-primary, #1f2937);
+  box-shadow: 0 0 0 4px rgba(31, 41, 55, 0.1);
+}
+
+.balanceui-stepper-circle.completed {
+  background: var(--bu-success, #16a34a);
+  color: var(--bu-on-primary, #ffffff);
+  border: 2px solid var(--bu-success, #16a34a);
+}
+
+.balanceui-stepper-circle.completed::after {
+  content: "✓";
+  font-size: 16px;
+  font-weight: var(--bu-font-weight-bold, 700);
+}
+
+.balanceui-stepper-circle.error {
+  background: var(--bu-surface, #ffffff);
+  color: var(--bu-danger, #dc2626);
+  border: 2px solid var(--bu-danger, #dc2626);
+}
+
+.balanceui-stepper-circle.inactive {
+  background: var(--bu-surface, #ffffff);
+  color: var(--bu-muted, #6b7280);
+  border: 2px solid var(--bu-border, #e5e7eb);
+}
+
+.balanceui-stepper-content {
+  flex: 1;
+}
+
+.balanceui-stepper-label {
+  font-weight: var(--bu-font-weight-medium, 500);
+  color: var(--bu-fg, #111827);
+  transition: color var(--bu-transition-fast);
+}
+
+.balanceui-stepper-step.active .balanceui-stepper-label {
+  color: var(--bu-primary, #1f2937);
+  font-weight: var(--bu-font-weight-semibold, 600);
+}
+
+.balanceui-stepper-step.completed .balanceui-stepper-label {
+  color: var(--bu-success, #16a34a);
+}
+
+.balanceui-stepper-step.error .balanceui-stepper-label {
+  color: var(--bu-danger, #dc2626);
+}
+
+.balanceui-stepper-step.inactive .balanceui-stepper-label {
+  color: var(--bu-muted, #6b7280);
+}
+
+.balanceui-stepper-description {
+  font-size: var(--bu-font-size-sm, 12px);
+  color: var(--bu-muted, #6b7280);
+  margin-top: 2px;
+  transition: color var(--bu-transition-fast);
+}
+
+.balanceui-stepper-connector {
+  flex: 1;
+  height: 2px;
+  background: var(--bu-border, #e5e7eb);
+  transition: background-color var(--bu-transition-base);
+  position: relative;
+  overflow: visible;
+}
+
+.balanceui-stepper-connector.completed {
+  background: var(--bu-success, #16a34a);
+}
+
+.balanceui-stepper-connector::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  background: var(--bu-success, #16a34a);
+  transition: width var(--bu-transition-slow) ease-out;
+}
+
+.balanceui-stepper-connector.completed::after {
+  width: 100%;
+}
+
+/* Dotted line variant */
+.balanceui-stepper-connector.dotted {
+  background: transparent;
+  background-image: radial-gradient(circle, var(--bu-border, #e5e7eb) 1.5px, transparent 1.5px);
+  background-size: 8px 2px;
+  background-position: center;
+  background-repeat: repeat-x;
+}
+
+.balanceui-stepper-connector.dotted.completed {
+  background-image: radial-gradient(circle, var(--bu-success, #16a34a) 1.5px, transparent 1.5px);
+}
+
+.balanceui-stepper-connector.dotted::after {
+  display: none;
+}
+
+/* Vertical orientation */
+.balanceui-stepper-container.vertical .balanceui-stepper-step-wrapper {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.balanceui-stepper-container.vertical .balanceui-stepper-step {
+  flex-direction: row;
+  width: 100%;
+}
+
+.balanceui-stepper-container.vertical .balanceui-stepper-connector {
+  width: 2px;
+  height: 24px;
+  margin-left: 15px;
+  flex: none;
+}
+
+.balanceui-stepper-container.vertical .balanceui-stepper-connector::after {
+  width: 100%;
+  height: 0;
+  transition: height var(--bu-transition-slow) ease-out;
+}
+
+.balanceui-stepper-container.vertical .balanceui-stepper-connector.completed::after {
+  height: 100%;
+}
+

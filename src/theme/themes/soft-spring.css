@@ -1,0 +1,29 @@
+[data-bu-theme="soft-spring"], html[data-bu-theme="soft-spring"] {
+  /* Soft Spring - Seasonal combination */
+  --bu-bg: #fefcfb;
+  --bu-surface: #ffffff;
+  --bu-surface-variant: #f0fdf4;
+  
+  --bu-fg: #1e293b;
+  --bu-fg-secondary: #475569;
+  --bu-muted: #64748b;
+  
+  --bu-primary: #3b82f6;
+  --bu-primary-light: #60a5fa;
+  --bu-primary-dark: #2563eb;
+  --bu-on-primary: #ffffff;
+  
+  --bu-border: #bfdbfe;
+  --bu-border-hover: #93c5fd;
+  --bu-soft: rgba(59, 130, 246, 0.08);
+  
+  --bu-tonal-bg: #dbeafe;
+  --bu-tonal-fg: #1e40af;
+  
+  --bu-disabled: #cbd5e1;
+  --bu-error: #dc2626;
+  --bu-success: #16a34a;
+  --bu-warning: #f59e0b;
+  --bu-info: #3b82f6;
+}
+

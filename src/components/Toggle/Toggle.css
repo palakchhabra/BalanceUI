@@ -1,0 +1,10 @@
+.balanceui-toggle {
+  position: relative;
+}
+
+.balanceui-toggle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2), 0 0 0 3px var(--bu-primary, #1976d2);
+  border-radius: 10px;
+}
+

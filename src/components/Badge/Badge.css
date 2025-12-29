@@ -1,0 +1,49 @@
+.balanceui-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: var(--bu-font-size-xs, 11px);
+  font-weight: var(--bu-font-weight-medium, 500);
+  line-height: 1.43;
+  letter-spacing: 0.01071em;
+  white-space: nowrap;
+  transition: 
+    background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 20px;
+  height: 20px;
+}
+
+.balanceui-badge.variant-solid {
+  background: var(--bu-primary, #1976d2);
+  color: var(--bu-on-primary, #ffffff);
+}
+
+.balanceui-badge.variant-soft {
+  background: var(--bu-surface-variant, rgba(0, 0, 0, 0.08));
+  color: var(--bu-fg, rgba(0, 0, 0, 0.87));
+  border: none;
+}
+
+.balanceui-badge.variant-outline {
+  background: transparent;
+  color: var(--bu-primary, #1976d2);
+  border: 1px solid var(--bu-primary, #1976d2);
+}
+
+.balanceui-badge.variant-danger {
+  background: var(--bu-danger, #d32f2f);
+  color: var(--bu-on-primary, #ffffff);
+}
+
+.balanceui-badge.variant-success {
+  background: var(--bu-success, #388e3c);
+  color: var(--bu-on-primary, #ffffff);
+}
+
+.balanceui-badge.variant-warning {
+  background: var(--bu-warning, #f57c00);
+  color: var(--bu-on-primary, #ffffff);
+}

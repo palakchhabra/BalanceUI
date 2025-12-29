@@ -1,0 +1,29 @@
+[data-bu-theme="autumn-leaves"], html[data-bu-theme="autumn-leaves"] {
+  /* Autumn Leaves - Seasonal combination */
+  --bu-bg: #fefcfb;
+  --bu-surface: #ffffff;
+  --bu-surface-variant: #fff7ed;
+  
+  --bu-fg: #1f2937;
+  --bu-fg-secondary: #4b5563;
+  --bu-muted: #6b7280;
+  
+  --bu-primary: #f97316;
+  --bu-primary-light: #fb923c;
+  --bu-primary-dark: #ea580c;
+  --bu-on-primary: #ffffff;
+  
+  --bu-border: #fed7aa;
+  --bu-border-hover: #fdba74;
+  --bu-soft: rgba(249, 115, 22, 0.08);
+  
+  --bu-tonal-bg: #ffedd5;
+  --bu-tonal-fg: #9a3412;
+  
+  --bu-disabled: #fed7aa;
+  --bu-error: #dc2626;
+  --bu-success: #16a34a;
+  --bu-warning: #f97316;
+  --bu-info: #3b82f6;
+}
+

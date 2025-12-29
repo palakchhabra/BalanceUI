@@ -1,0 +1,29 @@
+[data-bu-theme="us-black-white"], html[data-bu-theme="us-black-white"] {
+  /* US Black and White - Classic monochrome theme */
+  --bu-bg: #ffffff;
+  --bu-surface: #ffffff;
+  --bu-surface-variant: #f5f5f5;
+  
+  --bu-fg: #000000;
+  --bu-fg-secondary: #333333;
+  --bu-muted: #666666;
+  
+  --bu-primary: #000000;
+  --bu-primary-light: #333333;
+  --bu-primary-dark: #000000;
+  --bu-on-primary: #ffffff;
+  
+  --bu-border: #cccccc;
+  --bu-border-hover: #999999;
+  --bu-soft: rgba(0, 0, 0, 0.05);
+  
+  --bu-tonal-bg: #f0f0f0;
+  --bu-tonal-fg: #000000;
+  
+  --bu-disabled: #999999;
+  --bu-error: #000000;
+  --bu-success: #000000;
+  --bu-warning: #333333;
+  --bu-info: #000000;
+}
+

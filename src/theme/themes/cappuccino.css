@@ -1,0 +1,29 @@
+[data-bu-theme="cappuccino"], html[data-bu-theme="cappuccino"] {
+  /* Cappuccino - Neutral combination */
+  --bu-bg: #fafaf9;
+  --bu-surface: #ffffff;
+  --bu-surface-variant: #f5f5f4;
+  
+  --bu-fg: #1c1917;
+  --bu-fg-secondary: #44403c;
+  --bu-muted: #57534e;
+  
+  --bu-primary: #92400e;
+  --bu-primary-light: #b45309;
+  --bu-primary-dark: #78350f;
+  --bu-on-primary: #ffffff;
+  
+  --bu-border: #d6d3d1;
+  --bu-border-hover: #78716c;
+  --bu-soft: rgba(146, 64, 14, 0.08);
+  
+  --bu-tonal-bg: #fef3c7;
+  --bu-tonal-fg: #78350f;
+  
+  --bu-disabled: #a8a29e;
+  --bu-error: #dc2626;
+  --bu-success: #16a34a;
+  --bu-warning: #f59e0b;
+  --bu-info: #3b82f6;
+}
+

@@ -1,0 +1,17 @@
+@keyframes bu-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.balanceui-shimmer {
+  display: block;
+}
+
+.balanceui-shimmer-group {
+  width: 100%;
+}
+

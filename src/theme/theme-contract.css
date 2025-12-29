@@ -1,0 +1,74 @@
+:root,
+html {
+  /* ========= COLORS (Material UI) ========= */
+  --bu-primary: #1976d2;
+  --bu-on-primary: #ffffff;
+  --bu-primary-light: #42a5f5;
+  --bu-primary-dark: #1565c0;
+
+  --bu-surface: #ffffff;
+  --bu-surface-variant: rgba(0, 0, 0, 0.05);
+  --bu-soft: rgba(0, 0, 0, 0.04);
+  --bu-border: rgba(0, 0, 0, 0.12);
+  --bu-border-hover: rgba(0, 0, 0, 0.4);
+
+  --bu-fg: rgba(0, 0, 0, 0.87);
+  --bu-fg-secondary: rgba(0, 0, 0, 0.6);
+  --bu-muted: rgba(0, 0, 0, 0.54);
+
+  --bu-danger: #d32f2f;
+  --bu-success: #2e7d32;
+  --bu-warning: #f57c00;
+  --bu-info: #0288d1;
+  
+  --bu-error: #d32f2f;
+
+  /* ========= ELEVATION & SHADOWS (Material UI) ========= */
+  --bu-elevation-0: none;
+  --bu-elevation-1: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+                    0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+                    0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  --bu-elevation-2: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+                    0px 2px 2px 0px rgba(0, 0, 0, 0.14),
+                    0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  --bu-elevation-4: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+                    0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+                    0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  --bu-elevation-8: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
+                    0px 8px 10px 1px rgba(0, 0, 0, 0.14),
+                    0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+
+  /* ========= RADIUS (Material UI) ========= */
+  --bu-radius-sm: 4px;
+  --bu-radius-md: 4px;
+  --bu-radius-lg: 8px;
+  --bu-radius-full: 999px;
+
+  /* ========= SPACING (Material UI) ========= */
+  --bu-space-xs: 4px;
+  --bu-space-sm: 8px;
+  --bu-space-md: 16px;
+  --bu-space-lg: 24px;
+  --bu-space-xl: 32px;
+
+  /* ========= CONTROL HEIGHTS (Material UI) ========= */
+  --bu-control-height-sm: 32px;
+  --bu-control-height-md: 40px;
+  --bu-control-height-lg: 48px;
+  --bu-control-height-dense: 36px;
+
+  /* ========= MOTION (Material UI) ========= */
+  --bu-fast: 150ms;
+  --bu-medium: 250ms;
+  --bu-slow: 300ms;
+  --bu-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --bu-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --bu-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --bu-ease-in-out: cubic-bezier(0.4, 0, 0.6, 1);
+
+  /* ========= STATE (Material UI) ========= */
+  --bu-disabled-opacity: 0.38;
+  --bu-hover-opacity: 0.04;
+  --bu-focus-opacity: 0.12;
+  --bu-selected-opacity: 0.08;
+}

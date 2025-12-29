@@ -1,0 +1,29 @@
+[data-bu-theme="salt-pepper"], html[data-bu-theme="salt-pepper"] {
+  /* Salt and Pepper - Neutral combination */
+  --bu-bg: #ffffff;
+  --bu-surface: #ffffff;
+  --bu-surface-variant: #f8f9fa;
+  
+  --bu-fg: #000000;
+  --bu-fg-secondary: #374151;
+  --bu-muted: #6b7280;
+  
+  --bu-primary: #1f2937;
+  --bu-primary-light: #374151;
+  --bu-primary-dark: #111827;
+  --bu-on-primary: #ffffff;
+  
+  --bu-border: #d1d5db;
+  --bu-border-hover: #9ca3af;
+  --bu-soft: rgba(31, 41, 55, 0.06);
+  
+  --bu-tonal-bg: #f3f4f6;
+  --bu-tonal-fg: #1f2937;
+  
+  --bu-disabled: #9ca3af;
+  --bu-error: #dc2626;
+  --bu-success: #16a34a;
+  --bu-warning: #f59e0b;
+  --bu-info: #3b82f6;
+}
+

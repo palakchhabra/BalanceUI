@@ -1,0 +1,29 @@
+[data-bu-theme="quiet-luxury"], html[data-bu-theme="quiet-luxury"] {
+  /* Quiet Luxury - Neutral combination */
+  --bu-bg: #fafaf9;
+  --bu-surface: #ffffff;
+  --bu-surface-variant: #f5f5f4;
+  
+  --bu-fg: #18181b;
+  --bu-fg-secondary: #3f3f46;
+  --bu-muted: #52525b;
+  
+  --bu-primary: #27272a;
+  --bu-primary-light: #3f3f46;
+  --bu-primary-dark: #18181b;
+  --bu-on-primary: #ffffff;
+  
+  --bu-border: #d4d4d8;
+  --bu-border-hover: #71717a;
+  --bu-soft: rgba(39, 39, 42, 0.08);
+  
+  --bu-tonal-bg: #e4e4e7;
+  --bu-tonal-fg: #18181b;
+  
+  --bu-disabled: #a1a1aa;
+  --bu-error: #dc2626;
+  --bu-success: #16a34a;
+  --bu-warning: #f59e0b;
+  --bu-info: #3b82f6;
+}
+

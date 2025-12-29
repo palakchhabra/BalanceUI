@@ -1,0 +1,29 @@
+[data-bu-theme="gothic-noir"], html[data-bu-theme="gothic-noir"] {
+  /* Gothic Noir - Dark combination */
+  --bu-bg: #0f172a;
+  --bu-surface: #1e293b;
+  --bu-surface-variant: #334155;
+  
+  --bu-fg: #f1f5f9;
+  --bu-fg-secondary: #cbd5e1;
+  --bu-muted: #94a3b8;
+  
+  --bu-primary: #f8fafc;
+  --bu-primary-light: #ffffff;
+  --bu-primary-dark: #e2e8f0;
+  --bu-on-primary: #0f172a;
+  
+  --bu-border: #475569;
+  --bu-border-hover: #64748b;
+  --bu-soft: rgba(248, 250, 252, 0.15);
+  
+  --bu-tonal-bg: #334155;
+  --bu-tonal-fg: #f1f5f9;
+  
+  --bu-disabled: #475569;
+  --bu-error: #ef4444;
+  --bu-success: #22c55e;
+  --bu-warning: #f59e0b;
+  --bu-info: #3b82f6;
+}
+

@@ -1,0 +1,29 @@
+[data-bu-theme="stone-path"], html[data-bu-theme="stone-path"] {
+  /* Stone Path - Neutral combination */
+  --bu-bg: #faf9f7;
+  --bu-surface: #ffffff;
+  --bu-surface-variant: #f5f3f0;
+  
+  --bu-fg: #1c1917;
+  --bu-fg-secondary: #44403c;
+  --bu-muted: #57534e;
+  
+  --bu-primary: #292524;
+  --bu-primary-light: #44403c;
+  --bu-primary-dark: #1c1917;
+  --bu-on-primary: #ffffff;
+  
+  --bu-border: #d6d3d1;
+  --bu-border-hover: #78716c;
+  --bu-soft: rgba(41, 37, 36, 0.08);
+  
+  --bu-tonal-bg: #e7e5e4;
+  --bu-tonal-fg: #292524;
+  
+  --bu-disabled: #a8a29e;
+  --bu-error: #dc2626;
+  --bu-success: #16a34a;
+  --bu-warning: #f59e0b;
+  --bu-info: #3b82f6;
+}
+

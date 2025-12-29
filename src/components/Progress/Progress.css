@@ -1,0 +1,131 @@
+.balanceui-progress {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--bu-radius-full, 999px);
+  background: var(--bu-border, #e5e7eb);
+}
+
+.balanceui-progress.variant-linear {
+  height: 6px;
+}
+
+.balanceui-progress.variant-linear-thick {
+  height: 12px;
+}
+
+.balanceui-progress.variant-linear-thin {
+  height: 4px;
+}
+
+.balanceui-progress.variant-circular {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.balanceui-progress-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: inherit;
+  transition: width var(--bu-transition-base), background-color var(--bu-transition-base);
+}
+
+.balanceui-progress-fill.variant-solid {
+  background: var(--bu-primary, #1f2937);
+  box-shadow: 0 0 8px rgba(31, 41, 55, 0.3);
+}
+
+.balanceui-progress-fill.variant-soft {
+  background: var(--bu-soft, #f3f4f6);
+  border: 1px solid var(--bu-border, #e5e7eb);
+}
+
+.balanceui-progress-fill.variant-danger {
+  background: var(--bu-danger, #dc2626);
+  box-shadow: 0 0 8px rgba(220, 38, 38, 0.3);
+}
+
+.balanceui-progress-fill.variant-success {
+  background: var(--bu-success, #16a34a);
+  box-shadow: 0 0 8px rgba(22, 163, 74, 0.3);
+}
+
+.balanceui-progress-fill.variant-warning {
+  background: var(--bu-warning, #f59e0b);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
+}
+
+.balanceui-progress-indeterminate {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: bu-shimmer 1.5s infinite linear;
+}
+
+.balanceui-progress-indeterminate.variant-solid {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  ),
+  var(--bu-primary, #1f2937);
+  background-size: 200% 100%;
+}
+
+.balanceui-progress-indeterminate.variant-danger {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  ),
+  var(--bu-danger, #dc2626);
+  background-size: 200% 100%;
+}
+
+.balanceui-progress-value {
+  margin-top: 8px;
+  font-size: var(--bu-font-size-sm, 12px);
+  font-weight: var(--bu-font-weight-medium, 500);
+  color: var(--bu-fg, #111827);
+  text-align: center;
+}
+
+.balanceui-progress-circular {
+  width: 64px;
+  height: 64px;
+  position: relative;
+}
+
+.balanceui-progress-circular svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.balanceui-progress-circular-track {
+  fill: none;
+  stroke: var(--bu-border, #e5e7eb);
+  stroke-width: 4;
+}
+
+.balanceui-progress-circular-fill {
+  fill: none;
+  stroke: var(--bu-primary, #1f2937);
+  stroke-width: 4;
+  stroke-linecap: round;
+  transition: stroke-dashoffset var(--bu-transition-base);
+}
+

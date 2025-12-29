@@ -1,0 +1,63 @@
+/* Material UI style checkbox for Tree */
+.balanceui-tree-checkbox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.balanceui-checkbox-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.balanceui-checkbox-box {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(0, 0, 0, 0.54);
+  border-radius: 2px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 
+    background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.balanceui-tree-checkbox:hover .balanceui-checkbox-box {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.balanceui-checkbox-box.checked {
+  background-color: var(--bu-primary, #1976d2);
+  border-color: var(--bu-primary, #1976d2);
+}
+
+.balanceui-checkbox-box.checked svg {
+  color: white;
+  width: 14px;
+  height: 14px;
+}
+
+.balanceui-checkbox-input:focus-visible + .balanceui-checkbox-box {
+  outline: 2px solid var(--bu-primary, #1976d2);
+  outline-offset: 2px;
+}
+
+.balanceui-checkbox-input:disabled + .balanceui-checkbox-box {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+

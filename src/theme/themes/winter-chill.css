@@ -1,0 +1,29 @@
+[data-bu-theme="winter-chill"], html[data-bu-theme="winter-chill"] {
+  /* Winter Chill - Seasonal combination */
+  --bu-bg: #0f172a;
+  --bu-surface: #1e293b;
+  --bu-surface-variant: #334155;
+  
+  --bu-fg: #f1f5f9;
+  --bu-fg-secondary: #cbd5e1;
+  --bu-muted: #94a3b8;
+  
+  --bu-primary: #60a5fa;
+  --bu-primary-light: #93c5fd;
+  --bu-primary-dark: #3b82f6;
+  --bu-on-primary: #1e40af;
+  
+  --bu-border: #475569;
+  --bu-border-hover: #64748b;
+  --bu-soft: rgba(96, 165, 250, 0.15);
+  
+  --bu-tonal-bg: #1e3a8a;
+  --bu-tonal-fg: #bfdbfe;
+  
+  --bu-disabled: #475569;
+  --bu-error: #ef4444;
+  --bu-success: #22c55e;
+  --bu-warning: #f59e0b;
+  --bu-info: #60a5fa;
+}
+

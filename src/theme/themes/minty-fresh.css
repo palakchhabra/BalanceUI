@@ -1,0 +1,29 @@
+[data-bu-theme="minty-fresh"], html[data-bu-theme="minty-fresh"] {
+  /* Minty Fresh - Tranquil combination */
+  --bu-bg: #fefcfb;
+  --bu-surface: #ffffff;
+  --bu-surface-variant: #f0fdf4;
+  
+  --bu-fg: #1e293b;
+  --bu-fg-secondary: #475569;
+  --bu-muted: #64748b;
+  
+  --bu-primary: #10b981;
+  --bu-primary-light: #34d399;
+  --bu-primary-dark: #059669;
+  --bu-on-primary: #ffffff;
+  
+  --bu-border: #a7f3d0;
+  --bu-border-hover: #6ee7b7;
+  --bu-soft: rgba(16, 185, 129, 0.08);
+  
+  --bu-tonal-bg: #d1fae5;
+  --bu-tonal-fg: #065f46;
+  
+  --bu-disabled: #cbd5e1;
+  --bu-error: #dc2626;
+  --bu-success: #10b981;
+  --bu-warning: #f59e0b;
+  --bu-info: #3b82f6;
+}
+

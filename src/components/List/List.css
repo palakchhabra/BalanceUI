@@ -1,0 +1,60 @@
+.balanceui-list-item {
+  position: relative;
+}
+
+.balanceui-list-item:not(.balanceui-list-disabled):hover {
+  background-color: var(--bu-surface-variant, rgba(0, 0, 0, 0.05)) !important;
+}
+
+.balanceui-list-item.balanceui-list-selected:not(.balanceui-list-disabled):hover {
+  background-color: var(--bu-primary-light, rgba(25, 118, 210, 0.12)) !important;
+}
+
+.balanceui-list-item:focus-visible {
+  outline: 2px solid var(--bu-primary, #1976d2);
+  outline-offset: -2px;
+}
+
+.balanceui-list-avatar,
+.balanceui-list-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.balanceui-list-avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.balanceui-list-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--bu-fg-secondary, rgba(0, 0, 0, 0.6));
+}
+
+.balanceui-list-content {
+  overflow: hidden;
+}
+
+.balanceui-list-primary {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.balanceui-list-secondary {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.balanceui-list-action {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+

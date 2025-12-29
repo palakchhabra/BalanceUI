@@ -1,0 +1,29 @@
+[data-bu-theme="beachfront-views"], html[data-bu-theme="beachfront-views"] {
+  /* Beachfront Views - Tranquil combination */
+  --bu-bg: #fefcfb;
+  --bu-surface: #ffffff;
+  --bu-surface-variant: #f0fdfa;
+  
+  --bu-fg: #1e293b;
+  --bu-fg-secondary: #475569;
+  --bu-muted: #64748b;
+  
+  --bu-primary: #14b8a6;
+  --bu-primary-light: #2dd4bf;
+  --bu-primary-dark: #0d9488;
+  --bu-on-primary: #ffffff;
+  
+  --bu-border: #99f6e4;
+  --bu-border-hover: #5eead4;
+  --bu-soft: rgba(20, 184, 166, 0.08);
+  
+  --bu-tonal-bg: #ccfbf1;
+  --bu-tonal-fg: #134e4a;
+  
+  --bu-disabled: #cbd5e1;
+  --bu-error: #dc2626;
+  --bu-success: #16a34a;
+  --bu-warning: #f59e0b;
+  --bu-info: #14b8a6;
+}
+

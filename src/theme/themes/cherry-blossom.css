@@ -1,0 +1,29 @@
+[data-bu-theme="cherry-blossom"], html[data-bu-theme="cherry-blossom"] {
+  /* Cherry Blossom - Romantic combination */
+  --bu-bg: #fefcfb;
+  --bu-surface: #ffffff;
+  --bu-surface-variant: #fef2f2;
+  
+  --bu-fg: #1f2937;
+  --bu-fg-secondary: #4b5563;
+  --bu-muted: #6b7280;
+  
+  --bu-primary: #ec4899;
+  --bu-primary-light: #f472b6;
+  --bu-primary-dark: #db2777;
+  --bu-on-primary: #ffffff;
+  
+  --bu-border: #fbcfe8;
+  --bu-border-hover: #f9a8d4;
+  --bu-soft: rgba(236, 72, 153, 0.08);
+  
+  --bu-tonal-bg: #fce7f3;
+  --bu-tonal-fg: #9f1239;
+  
+  --bu-disabled: #fda4af;
+  --bu-error: #dc2626;
+  --bu-success: #16a34a;
+  --bu-warning: #f59e0b;
+  --bu-info: #3b82f6;
+}
+

@@ -1,0 +1,29 @@
+[data-bu-theme="golden-hour"], html[data-bu-theme="golden-hour"] {
+  /* Golden Hour - Romantic combination */
+  --bu-bg: #fefcfb;
+  --bu-surface: #ffffff;
+  --bu-surface-variant: #fffbeb;
+  
+  --bu-fg: #1f2937;
+  --bu-fg-secondary: #4b5563;
+  --bu-muted: #6b7280;
+  
+  --bu-primary: #f59e0b;
+  --bu-primary-light: #fbbf24;
+  --bu-primary-dark: #d97706;
+  --bu-on-primary: #78350f;
+  
+  --bu-border: #fde68a;
+  --bu-border-hover: #fcd34d;
+  --bu-soft: rgba(245, 158, 11, 0.08);
+  
+  --bu-tonal-bg: #fef3c7;
+  --bu-tonal-fg: #92400e;
+  
+  --bu-disabled: #fde68a;
+  --bu-error: #dc2626;
+  --bu-success: #16a34a;
+  --bu-warning: #f59e0b;
+  --bu-info: #3b82f6;
+}
+

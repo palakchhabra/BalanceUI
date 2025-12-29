@@ -1,0 +1,148 @@
+.balanceui-videotrimmer {
+  width: 100%;
+}
+
+.balanceui-videotrimmer-disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.balanceui-videotrimmer-timeline {
+  user-select: none;
+  position: relative;
+}
+
+.balanceui-videotrimmer-timeline:hover:not(:disabled) {
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+.balanceui-videotrimmer-timeline:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--bu-primary, #1976d2) !important;
+}
+
+.balanceui-videotrimmer-handle {
+  border-radius: var(--bu-radius-sm, 0.25rem);
+  transition: 
+    width 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.balanceui-videotrimmer-handle:hover:not(:disabled) {
+  width: 1rem !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  transform: translateX(-50%) scale(1.05) !important;
+  background-color: var(--bu-primary-dark, #1565c0) !important;
+}
+
+.balanceui-videotrimmer-handle:active:not(:disabled) {
+  width: 1rem !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4) !important;
+  transform: translateX(-50%) scale(0.98) !important;
+}
+
+.balanceui-videotrimmer-handle-focused {
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+.balanceui-videotrimmer-handle:focus {
+  outline: none;
+}
+
+.balanceui-videotrimmer-handle:focus-visible {
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+.balanceui-videotrimmer-play-button {
+  transition: 
+    background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.balanceui-videotrimmer-play-button:hover:not(:disabled) {
+  background-color: var(--bu-primary-dark, #1565c0) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  transform: translateY(-1px);
+}
+
+.balanceui-videotrimmer-play-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) !important;
+}
+
+.balanceui-videotrimmer-play-button:focus {
+  outline: none;
+}
+
+.balanceui-videotrimmer-play-button:focus-visible {
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.5), 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.balanceui-videotrimmer-trim-button {
+  transition: 
+    background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.balanceui-videotrimmer-trim-button:hover:not(:disabled) {
+  background-color: var(--bu-primary-dark, #1565c0) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25) !important;
+  transform: translateY(-2px);
+}
+
+.balanceui-videotrimmer-trim-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+.balanceui-videotrimmer-trim-button:focus {
+  outline: none;
+}
+
+.balanceui-videotrimmer-trim-button:focus-visible {
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.5), 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.balanceui-videotrimmer-trim-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Loading animation */
+@keyframes balanceui-videotrimmer-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.balanceui-videotrimmer-timeline-loading {
+  animation: balanceui-videotrimmer-pulse 1.5s ease-in-out infinite;
+}
+
+/* Selected range animation */
+@keyframes balanceui-videotrimmer-range-highlight {
+  0% {
+    box-shadow: 0 0 0 0 rgba(25, 118, 210, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(25, 118, 210, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(25, 118, 210, 0);
+  }
+}
+
+.balanceui-videotrimmer-selected-range {
+  animation: balanceui-videotrimmer-range-highlight 2s ease-in-out infinite;
+}
+

@@ -1,0 +1,91 @@
+name: Deploy Website to Vercel
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'balanceui-website/**'
+      - 'src/**'
+      - 'package.json'
+      - '.github/workflows/deploy-website.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'balanceui-website/**'
+      - 'src/**'
+      - 'package.json'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Build core package
+        run: |
+          npm run build
+          npm pack
+          ls -la balanceui-core-*.tgz
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Pull Vercel Environment Information
+        id: vercel-pull
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--yes'
+          working-directory: ./balanceui-website
+
+      - name: Install website dependencies
+        working-directory: ./balanceui-website
+        run: |
+          npm install
+          npm install ../balanceui-core-*.tgz
+
+      - name: Build website
+        working-directory: ./balanceui-website
+        run: npm run build
+        env:
+          VERCEL: 1
+
+      - name: Deploy Project to Vercel
+        id: vercel-deploy
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+          working-directory: ./balanceui-website
+
+      - name: Comment PR with deployment URL
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '🚀 Website deployed to Vercel!\n\nPreview: ${{ steps.vercel-deploy.outputs.preview-url }}\nProduction: ${{ steps.vercel-deploy.outputs.preview-url }}'
+            })
+

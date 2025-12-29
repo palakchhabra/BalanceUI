@@ -1,0 +1,54 @@
+.balanceui-checkbox {
+  position: relative;
+  overflow: hidden;
+}
+
+.balanceui-checkbox::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background-color: rgba(25, 118, 210, 0.1);
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease;
+}
+
+.balanceui-checkbox:not(.balanceui-checkbox-disabled):hover::before {
+  width: 200%;
+  height: 200%;
+}
+
+.balanceui-checkbox-check-icon,
+.balanceui-checkbox-indeterminate-icon {
+  animation: balanceui-checkbox-check 0.2s ease-out;
+  transform-origin: center;
+}
+
+@keyframes balanceui-checkbox-check {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.balanceui-checkbox:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2), 0 0 0 3px var(--bu-primary, #1976d2);
+}
+
+.balanceui-checkbox-error:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(211, 47, 47, 0.2), 0 0 0 3px var(--bu-error, #d32f2f);
+}
+
+.balanceui-checkbox-label {
+  line-height: 1.5;
+}
+

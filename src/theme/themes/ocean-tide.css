@@ -1,0 +1,29 @@
+[data-bu-theme="ocean-tide"], html[data-bu-theme="ocean-tide"] {
+  /* Ocean Tide - Tranquil combination */
+  --bu-bg: #fefcfb;
+  --bu-surface: #ffffff;
+  --bu-surface-variant: #f0f9ff;
+  
+  --bu-fg: #1e293b;
+  --bu-fg-secondary: #475569;
+  --bu-muted: #64748b;
+  
+  --bu-primary: #0c4a6e;
+  --bu-primary-light: #0284c7;
+  --bu-primary-dark: #075985;
+  --bu-on-primary: #ffffff;
+  
+  --bu-border: #bae6fd;
+  --bu-border-hover: #7dd3fc;
+  --bu-soft: rgba(12, 74, 110, 0.08);
+  
+  --bu-tonal-bg: #e0f2fe;
+  --bu-tonal-fg: #0c4a6e;
+  
+  --bu-disabled: #cbd5e1;
+  --bu-error: #dc2626;
+  --bu-success: #16a34a;
+  --bu-warning: #f59e0b;
+  --bu-info: #0284c7;
+}
+

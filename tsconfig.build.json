@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": true,
+
+    "outDir": "dist",
+    "rootDir": "src",
+
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+
+    "jsx": "react-jsx",
+
+    "skipLibCheck": true
+  },
+  "files": ["src/index.types.ts"]
+}

@@ -1,0 +1,29 @@
+[data-bu-theme="coastal-morning"], html[data-bu-theme="coastal-morning"] {
+  /* Coastal Morning - Tranquil combination */
+  --bu-bg: #fefcfb;
+  --bu-surface: #ffffff;
+  --bu-surface-variant: #f0fdfa;
+  
+  --bu-fg: #1e293b;
+  --bu-fg-secondary: #475569;
+  --bu-muted: #64748b;
+  
+  --bu-primary: #0ea5e9;
+  --bu-primary-light: #38bdf8;
+  --bu-primary-dark: #0284c7;
+  --bu-on-primary: #ffffff;
+  
+  --bu-border: #bae6fd;
+  --bu-border-hover: #7dd3fc;
+  --bu-soft: rgba(14, 165, 233, 0.08);
+  
+  --bu-tonal-bg: #e0f2fe;
+  --bu-tonal-fg: #0c4a6e;
+  
+  --bu-disabled: #cbd5e1;
+  --bu-error: #dc2626;
+  --bu-success: #16a34a;
+  --bu-warning: #f59e0b;
+  --bu-info: #0ea5e9;
+}
+

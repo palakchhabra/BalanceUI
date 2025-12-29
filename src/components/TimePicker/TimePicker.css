@@ -1,0 +1,37 @@
+.balanceui-timepicker-container {
+  position: relative;
+}
+
+.balanceui-timepicker-input {
+  display: flex;
+  align-items: center;
+  min-height: 2.5rem;
+}
+
+.balanceui-timepicker-input.balanceui-timepicker-error {
+  border-color: var(--bu-error, #d32f2f) !important;
+}
+
+.balanceui-timepicker-dropdown {
+  animation: balanceui-fade-in 0.2s ease-out;
+}
+
+@keyframes balanceui-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.balanceui-timepicker-item {
+  user-select: none;
+}
+
+.balanceui-timepicker-item:hover {
+  background-color: var(--bu-surface-variant, rgba(0, 0, 0, 0.05)) !important;
+}
+

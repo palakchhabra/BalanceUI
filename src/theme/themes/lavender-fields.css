@@ -1,0 +1,29 @@
+[data-bu-theme="lavender-fields"], html[data-bu-theme="lavender-fields"] {
+  /* Lavender Fields - Romantic combination */
+  --bu-bg: #fafaf9;
+  --bu-surface: #ffffff;
+  --bu-surface-variant: #faf5ff;
+  
+  --bu-fg: #1e1b2e;
+  --bu-fg-secondary: #4c4757;
+  --bu-muted: #5b5566;
+  
+  --bu-primary: #8b5cf6;
+  --bu-primary-light: #a78bfa;
+  --bu-primary-dark: #7c3aed;
+  --bu-on-primary: #ffffff;
+  
+  --bu-border: #e9d5ff;
+  --bu-border-hover: #c4b5fd;
+  --bu-soft: rgba(139, 92, 246, 0.08);
+  
+  --bu-tonal-bg: #ede9fe;
+  --bu-tonal-fg: #5b21b6;
+  
+  --bu-disabled: #c4b5fd;
+  --bu-error: #dc2626;
+  --bu-success: #16a34a;
+  --bu-warning: #f59e0b;
+  --bu-info: #8b5cf6;
+}
+

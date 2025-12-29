@@ -1,0 +1,101 @@
+/* Shimmer animation for loading states */
+@keyframes bu-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+/* Fade in animation */
+@keyframes bu-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Slide down animation */
+@keyframes bu-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide up animation */
+@keyframes bu-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Scale in animation */
+@keyframes bu-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Spin animation for loaders */
+@keyframes bu-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Pulse animation */
+@keyframes bu-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Utility classes */
+.bu-animate-fade-in {
+  animation: bu-fade-in var(--bu-transition-base) ease-out;
+}
+
+.bu-animate-slide-down {
+  animation: bu-slide-down var(--bu-transition-base) ease-out;
+}
+
+.bu-animate-slide-up {
+  animation: bu-slide-up var(--bu-transition-base) ease-out;
+}
+
+.bu-animate-scale-in {
+  animation: bu-scale-in var(--bu-transition-base) ease-out;
+}
+
+.bu-animate-spin {
+  animation: bu-spin 1s linear infinite;
+}
+
+.bu-animate-pulse {
+  animation: bu-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+

@@ -1,0 +1,27 @@
+.balanceui-toolbar-item {
+  position: relative;
+}
+
+.balanceui-toolbar-item:not(:disabled):hover {
+  background-color: var(--bu-surface-variant, rgba(0, 0, 0, 0.05)) !important;
+}
+
+.balanceui-toolbar-item.balanceui-toolbar-active:not(:disabled):hover {
+  background-color: var(--bu-primary-light, rgba(25, 118, 210, 0.15)) !important;
+}
+
+.balanceui-toolbar-item:focus-visible {
+  outline: 2px solid var(--bu-primary, #1976d2);
+  outline-offset: 2px;
+}
+
+.balanceui-toolbar-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.balanceui-toolbar-label {
+  white-space: nowrap;
+}
+

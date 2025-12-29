@@ -1,0 +1,58 @@
+/* Button hover and active states */
+button.balanceui-button:not(:disabled):hover {
+  transform: translateY(-1px);
+}
+
+button.balanceui-button:not(:disabled):active {
+  transform: translateY(0);
+}
+
+/* Solid variant hover */
+button.balanceui-button[data-variant="solid"]:not(:disabled):hover {
+  background-color: var(--bu-primary-dark, #1565c0) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Stroke variant hover */
+button.balanceui-button[data-variant="stroke"]:not(:disabled):hover {
+  background-color: var(--bu-soft, rgba(0, 0, 0, 0.04));
+  border-color: var(--bu-primary, #1976d2);
+}
+
+/* Soft variant hover */
+button.balanceui-button[data-variant="soft"]:not(:disabled):hover {
+  background-color: var(--bu-tonal-bg, #e3f2fd);
+  opacity: 0.9;
+}
+
+/* Float variant hover */
+button.balanceui-button[data-variant="float"]:not(:disabled):hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  transform: translateY(-2px);
+}
+
+/* Bare variant hover */
+button.balanceui-button[data-variant="bare"]:not(:disabled):hover {
+  background-color: var(--bu-soft, rgba(0, 0, 0, 0.04));
+}
+
+/* Pulse variants hover */
+button.balanceui-button[data-variant="pulse"]:not(:disabled):hover,
+button.balanceui-button[data-variant="pulse-mini"]:not(:disabled):hover,
+button.balanceui-button[data-variant="pulse-extend"]:not(:disabled):hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important;
+  transform: translateY(-2px) scale(1.05);
+}
+
+button.balanceui-button[data-variant="pulse"]:not(:disabled):active,
+button.balanceui-button[data-variant="pulse-mini"]:not(:disabled):active,
+button.balanceui-button[data-variant="pulse-extend"]:not(:disabled):active {
+  transform: translateY(0) scale(1);
+}
+
+/* Focus states */
+button.balanceui-button:focus-visible {
+  outline: 2px solid var(--bu-primary, #1976d2);
+  outline-offset: 2px;
+}
+

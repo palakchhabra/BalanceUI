@@ -1,0 +1,29 @@
+[data-bu-theme="frozen-lake"], html[data-bu-theme="frozen-lake"] {
+  /* Frozen Lake - Tranquil combination */
+  --bu-bg: #0f172a;
+  --bu-surface: #1e293b;
+  --bu-surface-variant: #334155;
+  
+  --bu-fg: #f1f5f9;
+  --bu-fg-secondary: #cbd5e1;
+  --bu-muted: #94a3b8;
+  
+  --bu-primary: #06b6d4;
+  --bu-primary-light: #22d3ee;
+  --bu-primary-dark: #0891b2;
+  --bu-on-primary: #0c1220;
+  
+  --bu-border: #475569;
+  --bu-border-hover: #64748b;
+  --bu-soft: rgba(6, 182, 212, 0.15);
+  
+  --bu-tonal-bg: #164e63;
+  --bu-tonal-fg: #67e8f9;
+  
+  --bu-disabled: #475569;
+  --bu-error: #ef4444;
+  --bu-success: #22c55e;
+  --bu-warning: #f59e0b;
+  --bu-info: #06b6d4;
+}
+

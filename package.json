@@ -1,0 +1,91 @@
+{
+  "name": "@balanceui/core",
+  "version": "1.0.0",
+  "description": "A modern, accessible React component library built with TypeScript",
+  "keywords": [
+    "react",
+    "component-library",
+    "ui-components",
+    "typescript",
+    "accessible",
+    "open-source"
+  ],
+  "author": "BalanceUI Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/palakchhabra/BalanceUI.git"
+  },
+  "bugs": {
+    "url": "https://github.com/palakchhabra/BalanceUI/issues"
+  },
+  "homepage": "https://github.com/palakchhabra/BalanceUI#readme",
+  "type": "module",
+  "main": "./dist/balanceui.cjs.js",
+  "module": "./dist/balanceui.es.js",
+  "types": "./dist/index.types.d.ts",
+  "sideEffects": [
+    "*.css"
+  ],
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.types.d.ts",
+      "import": "./dist/balanceui.es.js",
+      "require": "./dist/balanceui.cjs.js"
+    },
+    "./theme/theme-contract.css": "./dist/theme/theme-contract.css",
+    "./theme/*": "./dist/theme/*"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist/index.types.d.ts"
+      ]
+    }
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "scripts": {
+    "build:js": "vite build",
+    "build:types": "tsc -p tsconfig.build.json",
+    "build": "npm run build:js && npm run build:types",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "test:run": "vitest --run",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "validate": "node scripts/validate-package.mjs",
+    "check-exports": "node scripts/check-exports.mjs",
+    "pre-push": "node scripts/pre-push-check.mjs",
+    "prepublishOnly": "npm run build && npm run validate && npm run test:run",
+    "lint": "echo 'Add ESLint configuration'"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "^8.6.14",
+    "@storybook/addon-interactions": "^8.6.14",
+    "@storybook/react": "^10.1.10",
+    "@storybook/react-vite": "^10.1.10",
+    "@storybook/test": "^8.6.14",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.1",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^25.0.3",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
+    "husky": "^9.0.11",
+    "jsdom": "^27.4.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "storybook": "^10.1.10",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.0",
+    "vitest": "^4.0.16"
+  }
+}

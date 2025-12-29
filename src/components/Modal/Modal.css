@@ -1,0 +1,30 @@
+.balanceui-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--bu-z-modal, 1050);
+  animation: bu-fade-in var(--bu-transition-base);
+  backdrop-filter: blur(4px);
+}
+
+.balanceui-modal {
+  background: var(--bu-surface, #ffffff);
+  border-radius: var(--bu-radius-lg, 8px);
+  box-shadow: var(--bu-elevation-8);
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+  animation: bu-scale-in var(--bu-transition-base);
+  position: relative;
+}
+
+.balanceui-modal:focus {
+  outline: none;
+}
+

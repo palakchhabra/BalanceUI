@@ -1,0 +1,26 @@
+.balanceui-drawer {
+  animation: balanceui-drawer-slide-in 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes balanceui-drawer-slide-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.balanceui-drawer-handle {
+  cursor: grab;
+  user-select: none;
+}
+
+.balanceui-drawer-handle:active {
+  cursor: grabbing;
+}
+
+.balanceui-drawer-content {
+  padding: 1.5rem;
+}
+

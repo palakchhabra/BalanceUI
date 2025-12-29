@@ -1,0 +1,134 @@
+.balanceui-tree {
+  font-family: var(--bu-font-family);
+  font-size: var(--bu-font-size-md, 14px);
+  color: var(--bu-fg, rgba(0, 0, 0, 0.87));
+  line-height: 1.5;
+}
+
+.balanceui-tree-node {
+  padding-left: 16px;
+  cursor: pointer;
+  user-select: none;
+  transition: 
+    background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  border-radius: 4px;
+  margin: 2px 0;
+}
+
+.balanceui-tree-node:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.balanceui-tree-node.selected {
+  background-color: var(--bu-tonal-bg, #e8e5df);
+  color: var(--bu-primary, #1f2937);
+}
+
+.balanceui-tree-node.selected .balanceui-tree-content {
+  font-weight: var(--bu-font-weight-semibold, 600);
+}
+
+/* Color propagation for selected nodes */
+.balanceui-tree-node.selected .balanceui-tree-toggle {
+  color: var(--bu-primary, #1f2937);
+}
+
+.balanceui-tree-node.propagated {
+  color: var(--bu-primary, #1f2937);
+}
+
+.balanceui-tree-node.propagated .balanceui-tree-toggle {
+  color: var(--bu-primary, #1f2937);
+}
+
+.balanceui-tree-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: var(--bu-radius-sm, 4px);
+  min-height: 28px;
+}
+
+.balanceui-tree-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  color: var(--bu-muted, #6b7280);
+  transition: transform var(--bu-transition-base), color var(--bu-transition-fast);
+  flex-shrink: 0;
+  cursor: pointer;
+  border-radius: var(--bu-radius-sm, 4px);
+}
+
+.balanceui-tree-toggle:hover {
+  color: var(--bu-primary, #1f2937);
+  background: var(--bu-hover-bg-light, rgba(0, 0, 0, 0.02));
+}
+
+.balanceui-tree-toggle.expanded {
+  transform: rotate(90deg);
+}
+
+.balanceui-tree-icon {
+  transition: transform var(--bu-transition-base);
+}
+
+.balanceui-tree-spacer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--bu-muted, #6b7280);
+  opacity: 0.4;
+}
+
+.balanceui-tree-icon-default {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--bu-muted, #6b7280);
+  margin-right: 4px;
+  transition: color var(--bu-transition-fast);
+}
+
+.balanceui-tree-node:hover .balanceui-tree-icon-default {
+  color: var(--bu-primary, #1f2937);
+}
+
+.balanceui-tree-content {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.balanceui-tree-children {
+  margin-left: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.balanceui-tree-virtual-container {
+  position: relative;
+  overflow: auto;
+  will-change: scroll-position;
+}
+
+.balanceui-tree-virtual-spacer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
