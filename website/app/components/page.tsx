@@ -54,6 +54,12 @@ const components = [
     href: "/components/select",
   },
   {
+    name: "MultiSelect",
+    description: "Multi-select dropdown with Material Design chips/tags UI",
+    category: "Forms",
+    href: "/components/multiselect",
+  },
+  {
     name: "TextArea",
     description: "Multi-line text input component",
     category: "Forms",
@@ -233,7 +239,7 @@ export default function ComponentsPage() {
       : components.filter((component) => component.category === selectedCategory);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:ml-64">
       <div className="mb-8 sm:mb-12">
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl" style={{ color: "#000000" }}>
           Components
@@ -246,46 +252,100 @@ export default function ComponentsPage() {
       </div>
 
       <div className="mb-6 flex flex-wrap gap-2 sm:mb-8">
-        {categories.map((category) => (
+        {categories.map((category, index) => (
           <button
             key={category}
             onClick={() => setSelectedCategory(category)}
             style={{
-              padding: "0.375rem 0.75rem",
+              padding: "0.5rem 1rem",
               cursor: "pointer",
-              fontSize: "0.75rem",
+              fontSize: "0.875rem",
               border: "none",
-              background: "transparent",
+              background: selectedCategory === category
+                ? "var(--bu-primary, #1976d2)"
+                : "transparent",
+              color: selectedCategory === category
+                ? "var(--bu-on-primary, #ffffff)"
+                : "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))",
+              borderRadius: "var(--bu-radius-md, 4px)",
+              fontWeight: selectedCategory === category ? 500 : 400,
+              transition: "all 200ms cubic-bezier(0.4, 0, 0.2, 1)",
+              position: "relative",
+              overflow: "hidden",
+              animation: `balanceui-fade-in 200ms cubic-bezier(0.4, 0, 0.2, 1) ${index * 30}ms both`,
             }}
             className="sm:p-2 sm:text-sm"
+            onMouseEnter={(e) => {
+              if (selectedCategory !== category) {
+                e.currentTarget.style.backgroundColor = "rgba(0, 0, 0, 0.04)";
+                e.currentTarget.style.color = "var(--bu-fg, rgba(0, 0, 0, 0.87))";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (selectedCategory !== category) {
+                e.currentTarget.style.backgroundColor = "transparent";
+                e.currentTarget.style.color = "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))";
+              }
+            }}
           >
-            <Badge
-              variant={selectedCategory === category ? "solid" : "outline"}
-            >
-              {category}
-            </Badge>
+            {category}
           </button>
         ))}
       </div>
 
       <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {filteredComponents.map((component) => (
-          <Link key={component.name} href={component.href} className="group">
+        {filteredComponents.map((component, index) => (
+          <Link
+            key={component.href}
+            href={component.href}
+            className="group"
+            style={{
+              animation: `balanceui-fade-in 300ms cubic-bezier(0.4, 0, 0.2, 1) ${index * 50}ms both`,
+              textDecoration: "none",
+            }}
+          >
             <Card
               variant="elevated"
               elevation={2}
+              hoverable={true}
               style={{
-                padding: "1rem",
+                padding: "clamp(1rem, 2vw, 1.5rem)",
                 height: "100%",
                 display: "flex",
                 flexDirection: "column",
-                transition: "all 0.3s ease",
+                transition: "all 280ms cubic-bezier(0.4, 0, 0.2, 1)",
                 cursor: "pointer",
+                position: "relative",
+                overflow: "hidden",
               }}
-              className="group-hover:shadow-lg group-hover:-translate-y-1 sm:p-6"
+              className="group-hover:elevation-4"
+              onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
+                const target = e.currentTarget;
+                target.style.transform = "translateY(-4px)";
+                target.style.boxShadow = 
+                  "0px 4px 5px -2px rgba(0, 0, 0, 0.2), " +
+                  "0px 7px 10px 1px rgba(0, 0, 0, 0.14), " +
+                  "0px 2px 16px 1px rgba(0, 0, 0, 0.12)";
+              }}
+              onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
+                const target = e.currentTarget;
+                target.style.transform = "translateY(0)";
+                target.style.boxShadow = 
+                  "0px 3px 1px -2px rgba(0, 0, 0, 0.2), " +
+                  "0px 2px 2px 0px rgba(0, 0, 0, 0.14), " +
+                  "0px 1px 5px 0px rgba(0, 0, 0, 0.12)";
+              }}
             >
               <div className="flex items-start justify-between gap-2">
-                <h3 className="text-base font-semibold sm:text-lg lg:text-xl" style={{ color: "#000000" }}>
+                <h3 
+                  className="text-base font-semibold sm:text-lg lg:text-xl"
+                  style={{ 
+                    color: "var(--bu-fg, rgba(0, 0, 0, 0.87))",
+                    fontWeight: 500,
+                    letterSpacing: "-0.01em",
+                    transition: "color 200ms ease",
+                  }}
+                >
                   {component.name}
                 </h3>
                 <Badge
@@ -293,17 +353,40 @@ export default function ComponentsPage() {
                   style={{
                     fontSize: "0.625rem",
                     padding: "0.125rem 0.375rem",
+                    transition: "all 200ms ease",
                   }}
                   className="sm:text-xs sm:p-1"
                 >
                   {component.category}
                 </Badge>
               </div>
-              <p className="mt-2 flex-1 text-xs sm:text-sm" style={{ color: "#333333" }}>
+              <p 
+                className="mt-2 flex-1 text-xs sm:text-sm"
+                style={{ 
+                  color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))",
+                  lineHeight: 1.5,
+                  transition: "color 200ms ease",
+                }}
+              >
                 {component.description}
               </p>
-              <div className="mt-3 text-xs font-medium sm:mt-4 sm:text-sm" style={{ color: "#000000" }}>
-                View Details →
+              <div 
+                className="mt-3 text-xs font-medium sm:mt-4 sm:text-sm flex items-center gap-1"
+                style={{ 
+                  color: "var(--bu-primary, #1976d2)",
+                  transition: "all 200ms ease",
+                }}
+              >
+                <span>View Details</span>
+                <span 
+                  style={{
+                    display: "inline-block",
+                    transition: "transform 200ms ease",
+                  }}
+                  className="group-hover:translate-x-1"
+                >
+                  →
+                </span>
               </div>
             </Card>
           </Link>

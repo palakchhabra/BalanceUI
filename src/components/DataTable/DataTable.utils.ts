@@ -18,3 +18,30 @@ export const sortData = <T,>(
   });
 };
 
+export const filterData = <T,>(
+  data: T[],
+  filters: Record<string, string | number | null>,
+  columns?: any[]
+): T[] => {
+  if (!filters || Object.keys(filters).length === 0) return data;
+
+  return data.filter((row: any) => {
+    return Object.entries(filters).every(([columnId, filterValue]) => {
+      if (filterValue === null || filterValue === "" || filterValue === undefined) {
+        return true; // No filter applied for this column
+      }
+
+      const col = columns?.find((c) => c.id === columnId);
+      if (!col) return true;
+
+      const cellValue = col.accessor ? row[col.accessor] : null;
+      if (cellValue === null || cellValue === undefined) return false;
+
+      // Simple text filter (case-insensitive)
+      const cellStr = String(cellValue).toLowerCase();
+      const filterStr = String(filterValue).toLowerCase();
+      return cellStr.includes(filterStr);
+    });
+  });
+};
+

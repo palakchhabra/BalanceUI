@@ -103,18 +103,10 @@ export function ThemeSelector() {
                       style={{ backgroundColor: t.color }}
                     />
                     <span className="truncate">{t.label}</span>
+                    {isSelected && (
+                      <span className="ml-auto text-xs" aria-label="Selected theme">✓</span>
+                    )}
                   </div>
-                  <input
-                    type="checkbox"
-                    checked={isSelected}
-                    readOnly
-                    className="w-4 h-4 cursor-pointer flex-shrink-0 ml-2"
-                    style={{ 
-                      accentColor: isSelected ? "#ffffff" : "#000000",
-                      filter: isSelected ? "brightness(0) invert(1)" : "none"
-                    }}
-                    aria-label={`Select ${t.label} theme`}
-                  />
                 </button>
               );
             })}

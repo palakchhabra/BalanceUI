@@ -1,5 +1,8 @@
+/* Video Trimmer Component - Material Design Style */
+
 .balanceui-videotrimmer {
   width: 100%;
+  max-width: 100%;
 }
 
 .balanceui-videotrimmer-disabled {
@@ -7,9 +10,58 @@
   opacity: 0.6;
 }
 
+/* Label */
+.balanceui-videotrimmer-label {
+  transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Preview Area - Responsive */
+.balanceui-videotrimmer-preview {
+  width: 100%;
+  position: relative;
+}
+
+.balanceui-videotrimmer-video {
+  transition: border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.balanceui-videotrimmer-audio-placeholder {
+  transition: border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Loading Overlay */
+.balanceui-videotrimmer-loading-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: var(--bu-radius-md, 0.375rem);
+  z-index: 10;
+  color: #fff;
+  font-size: 0.875rem;
+}
+
+.balanceui-videotrimmer-loading-text {
+  position: relative;
+  z-index: 2;
+  font-weight: 500;
+}
+
+/* Controls Container */
+.balanceui-videotrimmer-controls {
+  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Timeline */
 .balanceui-videotrimmer-timeline {
   user-select: none;
   position: relative;
+  transition: border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .balanceui-videotrimmer-timeline:hover:not(:disabled) {
@@ -21,6 +73,22 @@
   box-shadow: 0 0 0 2px var(--bu-primary, #1976d2) !important;
 }
 
+.balanceui-videotrimmer-timeline:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--bu-primary, #1976d2) !important;
+}
+
+/* Timeline Overlays */
+.balanceui-videotrimmer-overlay-left,
+.balanceui-videotrimmer-overlay-right {
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.balanceui-videotrimmer-selected-range {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Handles - Material Design Elevation */
 .balanceui-videotrimmer-handle {
   border-radius: var(--bu-radius-sm, 0.25rem);
   transition: 
@@ -56,6 +124,12 @@
   box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2) !important;
 }
 
+/* Playhead Indicator */
+.balanceui-videotrimmer-playhead {
+  transition: left 0.1s linear;
+}
+
+/* Play Button - Material Design */
 .balanceui-videotrimmer-play-button {
   transition: 
     background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
@@ -82,6 +156,7 @@
   box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.5), 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 }
 
+/* Trim Button - Material Design Elevated */
 .balanceui-videotrimmer-trim-button {
   transition: 
     background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
@@ -115,34 +190,49 @@
   opacity: 0.6;
 }
 
-/* Loading animation */
-@keyframes balanceui-videotrimmer-pulse {
-  0%, 100% {
+/* Error & Helper Text */
+.balanceui-videotrimmer-error {
+  animation: balanceui-videotrimmer-error-fade-in 0.2s ease;
+}
+
+.balanceui-videotrimmer-helper {
+  transition: color 0.2s ease;
+}
+
+@keyframes balanceui-videotrimmer-error-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
     opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
+    transform: translateY(0);
   }
 }
 
-.balanceui-videotrimmer-timeline-loading {
-  animation: balanceui-videotrimmer-pulse 1.5s ease-in-out infinite;
+/* Responsive Design */
+@media (max-width: 640px) {
+  .balanceui-videotrimmer-controls {
+    padding: 1rem;
+  }
+
+  .balanceui-videotrimmer-timeline {
+    height: 3.5rem;
+  }
+
+  .balanceui-videotrimmer-time-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .balanceui-videotrimmer-play-button {
+    width: 100%;
+  }
 }
 
-/* Selected range animation */
-@keyframes balanceui-videotrimmer-range-highlight {
-  0% {
-    box-shadow: 0 0 0 0 rgba(25, 118, 210, 0.4);
-  }
-  50% {
-    box-shadow: 0 0 0 4px rgba(25, 118, 210, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(25, 118, 210, 0);
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .balanceui-videotrimmer-loading-overlay {
+    background-color: rgba(0, 0, 0, 0.7);
   }
 }
-
-.balanceui-videotrimmer-selected-range {
-  animation: balanceui-videotrimmer-range-highlight 2s ease-in-out infinite;
-}
-

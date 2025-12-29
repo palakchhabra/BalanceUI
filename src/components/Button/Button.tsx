@@ -20,6 +20,7 @@ export const Button = ({
       disabled={disabled}
       className={`balanceui-button ${className || ''}`}
       data-variant={variant}
+      data-size={size}
       style={{
         ...getButtonStyles(variant, size, rounded, disabled),
         ...style, // user overrides last (intentional)

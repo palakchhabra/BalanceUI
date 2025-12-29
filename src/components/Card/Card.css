@@ -1,102 +1,272 @@
+/* Card Component - Material Design Refactored */
+
 .balanceui-card {
-  font-family: var(--bu-font-family);
+  font-family: var(--bu-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
   background: var(--bu-surface, #ffffff);
   border-radius: var(--bu-radius-lg, 12px);
   transition: 
-    box-shadow var(--bu-transition-base),
-    transform var(--bu-transition-fast);
+    box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* Elevated variant - Material UI style */
+/* ================================
+   ELEVATED VARIANT - Material Design Elevation
+   ================================ */
+
 .balanceui-card-elevated {
   border: none;
+  background: var(--bu-surface, #ffffff);
 }
 
+/* Material Design Elevation System */
 .balanceui-card-elevation-0 {
   box-shadow: none;
 }
 
 .balanceui-card-elevation-1 {
-  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
-              0px 1px 1px 0px rgba(0, 0, 0, 0.14),
-              0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  box-shadow: 
+    0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 3px 0px rgba(0, 0, 0, 0.12);
 }
 
 .balanceui-card-elevation-2 {
-  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
-              0px 2px 2px 0px rgba(0, 0, 0, 0.14),
-              0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  box-shadow: 
+    0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 5px 0px rgba(0, 0, 0, 0.12);
 }
 
 .balanceui-card-elevation-3 {
-  box-shadow: 0px 3px 3px -2px rgba(0, 0, 0, 0.2),
-              0px 3px 4px 0px rgba(0, 0, 0, 0.14),
-              0px 1px 8px 0px rgba(0, 0, 0, 0.12);
+  box-shadow: 
+    0px 3px 3px -2px rgba(0, 0, 0, 0.2),
+    0px 3px 4px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 8px 0px rgba(0, 0, 0, 0.12);
 }
 
 .balanceui-card-elevation-4 {
-  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
-              0px 4px 5px 0px rgba(0, 0, 0, 0.14),
-              0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  box-shadow: 
+    0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+    0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 }
 
 .balanceui-card-elevation-5 {
-  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
-              0px 5px 8px 0px rgba(0, 0, 0, 0.14),
-              0px 1px 14px 0px rgba(0, 0, 0, 0.12);
+  box-shadow: 
+    0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+    0px 5px 8px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 14px 0px rgba(0, 0, 0, 0.12);
 }
 
 .balanceui-card-elevation-6 {
-  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2),
-              0px 6px 10px 0px rgba(0, 0, 0, 0.14),
-              0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+  box-shadow: 
+    0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+    0px 6px 10px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 18px 0px rgba(0, 0, 0, 0.12);
 }
 
 .balanceui-card-elevation-7 {
-  box-shadow: 0px 4px 5px -2px rgba(0, 0, 0, 0.2),
-              0px 7px 10px 1px rgba(0, 0, 0, 0.14),
-              0px 2px 16px 1px rgba(0, 0, 0, 0.12);
+  box-shadow: 
+    0px 4px 5px -2px rgba(0, 0, 0, 0.2),
+    0px 7px 10px 1px rgba(0, 0, 0, 0.14),
+    0px 2px 16px 1px rgba(0, 0, 0, 0.12);
 }
 
 .balanceui-card-elevation-8 {
-  box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
-              0px 8px 10px 1px rgba(0, 0, 0, 0.14),
-              0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+  box-shadow: 
+    0px 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0px 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0px 3px 14px 2px rgba(0, 0, 0, 0.12);
 }
 
-/* Outlined variant */
+/* ================================
+   OUTLINED VARIANT
+   ================================ */
+
 .balanceui-card-outlined {
   border: 1px solid var(--bu-border, rgba(0, 0, 0, 0.12));
   box-shadow: none;
+  background: var(--bu-surface, #ffffff);
 }
 
-/* Filled variant */
+.balanceui-card-outlined:hover {
+  border-color: var(--bu-primary, #1976d2);
+}
+
+/* ================================
+   FILLED VARIANT
+   ================================ */
+
 .balanceui-card-filled {
-  background: var(--bu-soft, rgba(0, 0, 0, 0.04));
+  background: var(--bu-surface-variant, rgba(0, 0, 0, 0.04));
   border: none;
   box-shadow: none;
 }
 
-/* Hover effect for clickable cards */
-.balanceui-card[onclick] {
-  cursor: pointer;
+.balanceui-card-filled:hover {
+  background: var(--bu-surface-variant-hover, rgba(0, 0, 0, 0.08));
 }
 
-.balanceui-card[onclick]:hover {
+/* ================================
+   FLAT VARIANT - No shadow, no border
+   ================================ */
+
+.balanceui-card-flat {
+  background: var(--bu-surface, #ffffff);
+  border: none;
+  box-shadow: none;
+}
+
+.balanceui-card-flat:hover {
+  background: var(--bu-surface-variant, rgba(0, 0, 0, 0.04));
+}
+
+/* ================================
+   GRADIENT VARIANT
+   ================================ */
+
+.balanceui-card-gradient {
+  border: none;
+  box-shadow: 
+    0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+    0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  color: var(--bu-on-primary, #ffffff);
+}
+
+.balanceui-card-gradient:hover {
+  box-shadow: 
+    0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+    0px 5px 8px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 14px 0px rgba(0, 0, 0, 0.12);
+}
+
+/* ================================
+   CLICKABLE & HOVER STATES
+   ================================ */
+
+.balanceui-card-clickable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.balanceui-card-clickable:focus-visible {
+  outline: 2px solid var(--bu-primary, #1976d2);
+  outline-offset: 2px;
+}
+
+/* Hover elevation increase for clickable elevated cards */
+.balanceui-card-clickable.balanceui-card-elevated.balanceui-card-hovered {
   transform: translateY(-2px);
 }
 
-.balanceui-card[onclick]:hover.balanceui-card-elevation-1 {
-  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
-              0px 2px 2px 0px rgba(0, 0, 0, 0.14),
-              0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+.balanceui-card-clickable.balanceui-card-elevation-1.balanceui-card-hovered {
+  box-shadow: 
+    0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 5px 0px rgba(0, 0, 0, 0.12);
 }
 
-.balanceui-card[onclick]:hover.balanceui-card-elevation-2 {
-  box-shadow: 0px 3px 3px -2px rgba(0, 0, 0, 0.2),
-              0px 3px 4px 0px rgba(0, 0, 0, 0.14),
-              0px 1px 8px 0px rgba(0, 0, 0, 0.12);
+.balanceui-card-clickable.balanceui-card-elevation-2.balanceui-card-hovered {
+  box-shadow: 
+    0px 3px 3px -2px rgba(0, 0, 0, 0.2),
+    0px 3px 4px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 8px 0px rgba(0, 0, 0, 0.12);
 }
 
+.balanceui-card-clickable.balanceui-card-elevation-3.balanceui-card-hovered {
+  box-shadow: 
+    0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+    0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+}
+
+.balanceui-card-clickable.balanceui-card-elevation-4.balanceui-card-hovered {
+  box-shadow: 
+    0px 3px 5px -1px rgba(0, 0, 0, 0.2),
+    0px 5px 8px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 14px 0px rgba(0, 0, 0, 0.12);
+}
+
+.balanceui-card-clickable.balanceui-card-elevation-5.balanceui-card-hovered,
+.balanceui-card-clickable.balanceui-card-elevation-6.balanceui-card-hovered,
+.balanceui-card-clickable.balanceui-card-elevation-7.balanceui-card-hovered,
+.balanceui-card-clickable.balanceui-card-elevation-8.balanceui-card-hovered {
+  box-shadow: 
+    0px 4px 5px -2px rgba(0, 0, 0, 0.2),
+    0px 7px 10px 1px rgba(0, 0, 0, 0.14),
+    0px 2px 16px 1px rgba(0, 0, 0, 0.12);
+}
+
+/* Active state for clickable cards */
+.balanceui-card-clickable:active {
+  transform: translateY(0);
+  transition: transform 100ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ================================
+   TYPOGRAPHY & SPACING (Unified)
+   ================================ */
+
+.balanceui-card h1,
+.balanceui-card h2,
+.balanceui-card h3,
+.balanceui-card h4,
+.balanceui-card h5,
+.balanceui-card h6 {
+  margin: 0;
+  font-weight: 500;
+  color: var(--bu-fg, #000000);
+  line-height: 1.5;
+}
+
+.balanceui-card p {
+  margin: 0;
+  color: var(--bu-fg-secondary, rgba(0, 0, 0, 0.6));
+  line-height: 1.6;
+}
+
+.balanceui-card-gradient h1,
+.balanceui-card-gradient h2,
+.balanceui-card-gradient h3,
+.balanceui-card-gradient h4,
+.balanceui-card-gradient h5,
+.balanceui-card-gradient h6,
+.balanceui-card-gradient p {
+  color: var(--bu-on-primary, #ffffff);
+}
+
+/* ================================
+   RESPONSIVE DESIGN
+   ================================ */
+
+@media (max-width: 640px) {
+  .balanceui-card {
+    border-radius: var(--bu-radius-md, 8px);
+  }
+}
+
+/* ================================
+   DARK MODE SUPPORT
+   ================================ */
+
+@media (prefers-color-scheme: dark) {
+  .balanceui-card-outlined {
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .balanceui-card-filled {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .balanceui-card-flat:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
