@@ -21,9 +21,11 @@
   --bu-tonal-fg: #000000;
   
   --bu-disabled: #999999;
-  --bu-error: #000000;
-  --bu-success: #000000;
-  --bu-warning: #333333;
-  --bu-info: #000000;
+  /* Material Design colors - maintaining contrast in monochrome theme */
+  --bu-error: #d32f2f; /* Material Red 700 */
+  --bu-success: #2e7d32; /* Material Green 800 */
+  --bu-warning: #f57c00; /* Material Orange 700 */
+  --bu-info: #1976d2; /* Material Blue 700 */
+  --bu-danger: #d32f2f; /* Alias for error */
 }
 

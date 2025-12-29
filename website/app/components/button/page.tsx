@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function ButtonPage() {
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:ml-64">
       <div className="mb-6 sm:mb-8">
         <Link
           href="/components"

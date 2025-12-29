@@ -5,6 +5,7 @@ export * from './Toggle';
 export * from './Progress';
 export * from './Input';
 export * from './Select';
+export * from './MultiSelect';
 export * from './Dialog';
 export * from './Modal';
 export * from './FormField';

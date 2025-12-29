@@ -1,10 +1,85 @@
+/* Toggle Component - Material Design Style */
+
 .balanceui-toggle {
   position: relative;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.balanceui-toggle-checked .balanceui-toggle-track {
+  opacity: 1 !important;
+}
+
+.balanceui-toggle-disabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+}
+
+.balanceui-toggle-focused {
+  outline: none;
 }
 
 .balanceui-toggle:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2), 0 0 0 3px var(--bu-primary, #1976d2);
-  border-radius: 10px;
 }
 
+.balanceui-toggle:focus-visible .balanceui-toggle-track {
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2), 0 0 0 4px rgba(25, 118, 210, 0.1);
+}
+
+/* Ripple Effect */
+.balanceui-toggle-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(25, 118, 210, 0.2);
+  transform: scale(0);
+  pointer-events: none;
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 1;
+}
+
+.balanceui-toggle-ripple-active {
+  transform: scale(1);
+  opacity: 0;
+}
+
+/* Track */
+.balanceui-toggle-track {
+  transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Knob */
+.balanceui-toggle-knob {
+  transition: left 200ms cubic-bezier(0.4, 0, 0.2, 1),
+              transform 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover States */
+.balanceui-toggle:not(.balanceui-toggle-disabled):hover .balanceui-toggle-knob {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 0 8px rgba(0, 0, 0, 0.05);
+}
+
+.balanceui-toggle-checked:not(.balanceui-toggle-disabled):hover .balanceui-toggle-knob {
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.4), 0 0 0 8px rgba(25, 118, 210, 0.1);
+}
+
+/* Active/Pressed State */
+.balanceui-toggle:not(.balanceui-toggle-disabled):active .balanceui-toggle-knob {
+  transform: scale(0.95);
+}
+
+/* Focus Ring */
+.balanceui-toggle-focused:not(.balanceui-toggle-disabled) .balanceui-toggle-track {
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2), 0 0 0 4px rgba(25, 118, 210, 0.1);
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .balanceui-toggle:not(.balanceui-toggle-checked) .balanceui-toggle-track {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+}

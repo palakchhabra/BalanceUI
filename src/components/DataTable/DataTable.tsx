@@ -9,9 +9,11 @@ import {
   emptyStyle,
 } from "./DataTable.styles";
 import { DataTableProps } from "./DataTable.types";
-import { sortData } from "./DataTable.utils";
+import { sortData, filterData } from "./DataTable.utils";
 import { ShimmerTable } from "../Shimmer/ShimmerTable";
 import { Checkbox } from "../Checkbox/Checkbox";
+import { Pagination } from "../Pagination/Pagination";
+import { PageSizeSelector } from "../PageSizeSelector/PageSizeSelector";
 import "./DataTable.css";
 
 const ROW_HEIGHT = 42;
@@ -23,6 +25,9 @@ export const DataTable = <T,>({
   data,
   loading,
   sorting,
+  pagination,
+  filters,
+  onFilterChange,
   stickyColumns = [],
   height,
   className,
@@ -33,6 +38,7 @@ export const DataTable = <T,>({
   getRowId = (row: T, index: number) => index,
   showRecordCount = false,
   recordCountLabel = "Records",
+  emptyMessage = "No data",
 }: DataTableProps<T>) => {
   const [scrollTop, setScrollTop] = useState(0);
   const [internalSelectedRows, setInternalSelectedRows] = useState<T[]>([]);
@@ -41,12 +47,35 @@ export const DataTable = <T,>({
   const isControlled = controlledSelectedRows !== undefined;
   const selectedRows = isControlled ? controlledSelectedRows : internalSelectedRows;
 
-  const sortedRows = useMemo(() => {
-    if (sorting?.mode === "client" && sorting.sort) {
-      return sortData(data, sorting.sort, columns);
+  // Apply filters (client-side only)
+  const filteredRows = useMemo(() => {
+    if (filters && Object.keys(filters).length > 0 && pagination?.mode === "client") {
+      return filterData(data, filters, columns);
     }
     return data;
-  }, [data, sorting, columns]);
+  }, [data, filters, columns, pagination?.mode]);
+
+  // Apply sorting (client-side only)
+  const sortedRows = useMemo(() => {
+    if (sorting?.mode === "client" && sorting.sort) {
+      return sortData(filteredRows, sorting.sort, columns);
+    }
+    return filteredRows;
+  }, [filteredRows, sorting, columns]);
+
+  // Apply pagination (client-side only)
+  const paginatedRows = useMemo(() => {
+    if (pagination?.mode === "client") {
+      const start = (pagination.page - 1) * pagination.pageSize;
+      const end = start + pagination.pageSize;
+      return sortedRows.slice(start, end);
+    }
+    return sortedRows;
+  }, [sortedRows, pagination]);
+
+  // For display, use paginated rows if client-side pagination, otherwise use sorted rows
+  const displayRows = pagination?.mode === "client" ? paginatedRows : sortedRows;
+  const totalRows = pagination?.mode === "client" ? sortedRows.length : (pagination?.total ?? sortedRows.length);
 
   const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
     setScrollTop(e.currentTarget.scrollTop);
@@ -68,13 +97,13 @@ export const DataTable = <T,>({
   );
 
   const shouldVirtualize = useMemo(
-    () => height !== undefined && sortedRows.length > 100,
-    [height, sortedRows.length]
+    () => height !== undefined && displayRows.length > 100,
+    [height, displayRows.length]
   );
 
   const visibleRange = useMemo(() => {
-    if (!shouldVirtualize || sortedRows.length === 0) {
-      return { start: 0, end: sortedRows.length };
+    if (!shouldVirtualize || displayRows.length === 0) {
+      return { start: 0, end: displayRows.length };
     }
 
     const start = Math.max(
@@ -82,23 +111,23 @@ export const DataTable = <T,>({
       Math.floor((scrollTop - HEADER_HEIGHT) / ROW_HEIGHT) - OVERSCAN
     );
     const end = Math.min(
-      sortedRows.length,
+      displayRows.length,
       Math.ceil(
         (scrollTop + (height || 0) - HEADER_HEIGHT) / ROW_HEIGHT
       ) + OVERSCAN
     );
 
     return { start, end };
-  }, [scrollTop, height, sortedRows.length, shouldVirtualize]);
+  }, [scrollTop, height, displayRows.length, shouldVirtualize]);
 
   const visibleRows = useMemo(
-    () => sortedRows.slice(visibleRange.start, visibleRange.end),
-    [sortedRows, visibleRange.start, visibleRange.end]
+    () => displayRows.slice(visibleRange.start, visibleRange.end),
+    [displayRows, visibleRange.start, visibleRange.end]
   );
 
   const totalHeight = useMemo(
-    () => sortedRows.length * ROW_HEIGHT,
-    [sortedRows.length]
+    () => displayRows.length * ROW_HEIGHT,
+    [displayRows.length]
   );
 
   const offsetY = useMemo(
@@ -170,7 +199,7 @@ export const DataTable = <T,>({
     );
   }
 
-  if (sortedRows.length === 0) {
+  if (displayRows.length === 0 && !loading) {
     return (
       <div
         className={`balanceui-datatable-wrapper ${className || ""}`}
@@ -178,7 +207,7 @@ export const DataTable = <T,>({
       >
         <div className="balanceui-datatable-scroll-container" style={scrollContainerStyle}>
           <div className="balanceui-datatable-empty" style={emptyStyle}>
-            No data
+            {emptyMessage}
           </div>
         </div>
       </div>
@@ -198,13 +227,30 @@ export const DataTable = <T,>({
             fontSize: "0.875rem",
             color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))",
             backgroundColor: "var(--bu-surface-variant, rgba(0, 0, 0, 0.02))",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "0.5rem",
           }}
         >
-          {recordCountLabel}: {sortedRows.length}
-          {selectable && selectedRows.length > 0 && (
-            <span style={{ marginLeft: "1rem", color: "var(--bu-primary, #1976d2)" }}>
-              ({selectedRows.length} selected)
-            </span>
+          <span>
+            {recordCountLabel}: {totalRows}
+            {selectable && selectedRows.length > 0 && (
+              <span style={{ marginLeft: "0.5rem", color: "var(--bu-primary, #1976d2)" }}>
+                ({selectedRows.length} selected)
+              </span>
+            )}
+          </span>
+          {pagination?.showPageSizeSelector && pagination && (
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <span style={{ fontSize: "0.75rem" }}>Rows per page:</span>
+              <PageSizeSelector
+                value={pagination.pageSize}
+                options={pagination.pageSizeOptions || [10, 20, 50, 100]}
+                onChange={(newPageSize) => pagination.onChange(1, newPageSize)}
+              />
+            </div>
           )}
         </div>
       )}
@@ -239,7 +285,7 @@ export const DataTable = <T,>({
                 <th
                   key={col.id}
                   className={`balanceui-datatable-th ${
-                    sorting ? `sortable ${getSortClass(col.id)}` : ""
+                    sorting && col.sortable !== false ? `sortable ${getSortClass(col.id)}` : ""
                   } ${
                     stickyColumns.includes(i)
                       ? "balanceui-datatable-sticky balanceui-datatable-sticky-left"
@@ -247,12 +293,13 @@ export const DataTable = <T,>({
                   }`}
                   style={{
                     ...thStyle,
+                    cursor: sorting && col.sortable !== false ? "pointer" : "default",
                     ...(stickyColumns.includes(i) ? stickyCellStyle(0) : {}),
                     ...(col.width 
                       ? { width: `${col.width}px`, minWidth: `${col.width}px`, maxWidth: `${col.width}px` } 
                       : { width: `${100 / columns.length}%` }),
                   }}
-                  onClick={() => sorting && handleSort(col.id)}
+                  onClick={() => sorting && col.sortable !== false && handleSort(col.id)}
                 >
                   {col.header}
                 </th>
@@ -273,9 +320,10 @@ export const DataTable = <T,>({
                 )}
                 {visibleRows.map((row, ri) => {
                   const actualIndex = visibleRange.start + ri;
+                  const rowId = getRowId(row, actualIndex);
                   return (
                     <tr
-                      key={actualIndex}
+                      key={rowId}
                       className="balanceui-datatable-virtual-row"
                       style={{ height: ROW_HEIGHT }}
                     >
@@ -339,8 +387,10 @@ export const DataTable = <T,>({
                 )}
               </>
             ) : (
-              sortedRows.map((row, ri) => (
-                <tr key={ri}>
+              displayRows.map((row, ri) => {
+                const rowId = getRowId(row, ri);
+                return (
+                <tr key={rowId}>
                   {selectable && (
                     <td
                       style={{
@@ -382,11 +432,38 @@ export const DataTable = <T,>({
                     </td>
                   ))}
                 </tr>
-              ))
+                );
+              })
             )}
           </tbody>
         </table>
       </div>
+      {pagination && (
+        <div
+          style={{
+            padding: "0.75rem 1rem",
+            borderTop: "1px solid var(--bu-border, rgba(0, 0, 0, 0.1))",
+            backgroundColor: "var(--bu-surface-variant, rgba(0, 0, 0, 0.02))",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "1rem",
+          }}
+        >
+          <Pagination
+            page={pagination.page}
+            pageSize={pagination.pageSize}
+            total={totalRows}
+            onChange={(newPage) => pagination.onChange(newPage, pagination.pageSize)}
+          />
+          {!pagination.showPageSizeSelector && (
+            <div style={{ fontSize: "0.875rem", color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>
+              Showing {((pagination.page - 1) * pagination.pageSize) + 1} to {Math.min(pagination.page * pagination.pageSize, totalRows)} of {totalRows}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

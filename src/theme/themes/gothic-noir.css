@@ -22,6 +22,7 @@
   
   --bu-disabled: #475569;
   --bu-error: #ef4444;
+  --bu-danger: #ef4444; /* Material Design alias */
   --bu-success: #22c55e;
   --bu-warning: #f59e0b;
   --bu-info: #3b82f6;

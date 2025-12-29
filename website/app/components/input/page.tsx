@@ -2,8 +2,13 @@
 
 import { Card, Badge, Input, FormField } from "@balanceui/core";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function InputPage() {
+  const [emailValue, setEmailValue] = useState("");
+  const [passwordValue, setPasswordValue] = useState("");
+  const [nameValue, setNameValue] = useState("");
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
       <div className="mb-6 sm:mb-8">
@@ -25,79 +30,318 @@ export default function InputPage() {
           </Badge>
         </div>
         <p className="mt-3 text-base text-gray-600 dark:text-gray-400 sm:mt-4 sm:text-lg">
-          A versatile text input component with validation, error states, and focus handling.
+          Material Design-inspired input component with floating labels, validation, and error states.
         </p>
       </div>
 
       <div className="grid gap-8 lg:grid-cols-3 lg:gap-12">
         <div className="lg:col-span-2">
-          <section className="mb-8 sm:mb-12">
+          <section id="examples" className="mb-8 sm:mb-12">
             <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white sm:mb-6 sm:text-2xl">
               Examples
             </h2>
 
+            {/* Floating Labels */}
             <Card variant="elevated" elevation={2} style={{ padding: "1.5rem", marginBottom: "1.5rem" }} className="sm:p-8 sm:mb-8">
               <h3 className="mb-3 text-base font-semibold text-gray-900 dark:text-white sm:mb-4 sm:text-lg">
-                Basic Input
+                Floating Labels (Material Design)
               </h3>
-              <div className="space-y-3 sm:space-y-4">
-                <Input placeholder="Enter text..." style={{ width: "100%" }} />
+              <div className="space-y-4 sm:space-y-6">
                 <Input
-                  placeholder="Disabled input"
+                  label="Name"
+                  floatingLabel
+                  value={nameValue}
+                  onChange={(e) => setNameValue(e.target.value)}
+                  placeholder="Enter your name"
+                />
+                <Input
+                  label="Email"
+                  type="email"
+                  floatingLabel
+                  value={emailValue}
+                  onChange={(e) => setEmailValue(e.target.value)}
+                  placeholder="Enter your email"
+                />
+                <Input
+                  label="Password"
+                  type="password"
+                  floatingLabel
+                  value={passwordValue}
+                  onChange={(e) => setPasswordValue(e.target.value)}
+                  placeholder="Enter password"
+                />
+                <Input
+                  label="Disabled Field"
+                  floatingLabel
                   disabled
-                  style={{ width: "100%" }}
+                  defaultValue="Disabled value"
                 />
               </div>
             </Card>
 
+            {/* Email Validation */}
+            <Card variant="elevated" elevation={2} style={{ padding: "1.5rem", marginBottom: "1.5rem" }} className="sm:p-8 sm:mb-8">
+              <h3 className="mb-3 text-base font-semibold text-gray-900 dark:text-white sm:mb-4 sm:text-lg">
+                Email Validation (Auto-disappears on valid)
+              </h3>
+              <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+                The error message automatically disappears when a valid email is entered.
+              </p>
+              <div className="space-y-4 sm:space-y-6">
+                <Input
+                  label="Email Address"
+                  type="email"
+                  floatingLabel
+                  helperText="Enter a valid email address"
+                  placeholder="example@email.com"
+                />
+                <Input
+                  label="Email with Error"
+                  type="email"
+                  floatingLabel
+                  error="Please enter a valid email address"
+                  defaultValue="invalid-email"
+                />
+              </div>
+            </Card>
+
+            {/* Basic Input */}
+            <Card variant="elevated" elevation={2} style={{ padding: "1.5rem", marginBottom: "1.5rem" }} className="sm:p-8 sm:mb-8">
+              <h3 className="mb-3 text-base font-semibold text-gray-900 dark:text-white sm:mb-4 sm:text-lg">
+                Basic Input (No Floating Label)
+              </h3>
+              <div className="space-y-3 sm:space-y-4">
+                <Input placeholder="Enter text..." />
+                <Input
+                  placeholder="Disabled input"
+                  disabled
+                />
+                <Input
+                  placeholder="Read-only input"
+                  readOnly
+                  defaultValue="Read-only value"
+                />
+              </div>
+            </Card>
+
+            {/* Input Types */}
             <Card variant="elevated" elevation={2} style={{ padding: "1.5rem", marginBottom: "1.5rem" }} className="sm:p-8 sm:mb-8">
               <h3 className="mb-3 text-base font-semibold text-gray-900 dark:text-white sm:mb-4 sm:text-lg">
                 Input Types
               </h3>
-              <div className="space-y-3 sm:space-y-4">
-                <Input type="email" placeholder="Email" style={{ width: "100%" }} />
-                <Input type="password" placeholder="Password" style={{ width: "100%" }} />
-                <Input type="number" placeholder="Number" style={{ width: "100%" }} />
-                <Input type="tel" placeholder="Phone" style={{ width: "100%" }} />
+              <div className="space-y-4 sm:space-y-6">
+                <Input
+                  label="Email"
+                  type="email"
+                  floatingLabel
+                  helperText="We'll never share your email"
+                />
+                <Input
+                  label="Password"
+                  type="password"
+                  floatingLabel
+                />
+                <Input
+                  label="Number"
+                  type="number"
+                  floatingLabel
+                  helperText="Enter a number"
+                />
+                <Input
+                  label="Phone"
+                  type="tel"
+                  floatingLabel
+                  placeholder="+1 (555) 000-0000"
+                />
+                <Input
+                  label="URL"
+                  type="url"
+                  floatingLabel
+                  placeholder="https://example.com"
+                />
               </div>
             </Card>
 
+            {/* Variants */}
+            <Card variant="elevated" elevation={2} style={{ padding: "1.5rem", marginBottom: "1.5rem" }} className="sm:p-8 sm:mb-8">
+              <h3 className="mb-3 text-base font-semibold text-gray-900 dark:text-white sm:mb-4 sm:text-lg">
+                Variants
+              </h3>
+              <div className="space-y-4 sm:space-y-6">
+                <Input
+                  label="Outline (Default)"
+                  variant="outline"
+                  floatingLabel
+                  defaultValue="Outline variant"
+                />
+                <Input
+                  label="Solid"
+                  variant="solid"
+                  floatingLabel
+                  defaultValue="Solid variant"
+                />
+                <Input
+                  label="Soft"
+                  variant="soft"
+                  floatingLabel
+                  defaultValue="Soft variant"
+                />
+              </div>
+            </Card>
+
+            {/* With Adornments */}
+            <Card variant="elevated" elevation={2} style={{ padding: "1.5rem", marginBottom: "1.5rem" }} className="sm:p-8 sm:mb-8">
+              <h3 className="mb-3 text-base font-semibold text-gray-900 dark:text-white sm:mb-4 sm:text-lg">
+                With Adornments
+              </h3>
+              <div className="space-y-4 sm:space-y-6">
+                <Input
+                  label="Search"
+                  floatingLabel
+                  startAdornment={<span>🔍</span>}
+                  placeholder="Search..."
+                />
+                <Input
+                  label="Price"
+                  type="number"
+                  floatingLabel
+                  startAdornment={<span>$</span>}
+                  placeholder="0.00"
+                />
+                <Input
+                  label="Website"
+                  type="url"
+                  floatingLabel
+                  startAdornment={<span>🌐</span>}
+                  endAdornment={<span>✓</span>}
+                  placeholder="https://"
+                />
+              </div>
+            </Card>
+
+            {/* Error States */}
+            <Card variant="elevated" elevation={2} style={{ padding: "1.5rem", marginBottom: "1.5rem" }} className="sm:p-8 sm:mb-8">
+              <h3 className="mb-3 text-base font-semibold text-gray-900 dark:text-white sm:mb-4 sm:text-lg">
+                Error States
+              </h3>
+              <div className="space-y-4 sm:space-y-6">
+                <Input
+                  label="Email"
+                  type="email"
+                  floatingLabel
+                  error="This email is already taken"
+                  defaultValue="test@example.com"
+                />
+                <Input
+                  label="Password"
+                  type="password"
+                  floatingLabel
+                  error="Password must be at least 8 characters"
+                  defaultValue="123"
+                />
+                <Input
+                  label="Required Field"
+                  floatingLabel
+                  error={true}
+                  placeholder="This field is required"
+                />
+              </div>
+            </Card>
+
+            {/* With FormField */}
             <Card variant="elevated" elevation={2} style={{ padding: "1.5rem" }} className="sm:p-8">
               <h3 className="mb-3 text-base font-semibold text-gray-900 dark:text-white sm:mb-4 sm:text-lg">
-                With FormField
+                With FormField (Legacy Support)
               </h3>
               <div className="space-y-3 sm:space-y-4">
-                <FormField label="Email" required>
-                  <Input type="email" placeholder="Enter your email" style={{ width: "100%" }} />
+                <FormField label="Email" required helperText="Enter your email address">
+                  <Input type="email" placeholder="Enter your email" />
                 </FormField>
                 <FormField label="Password" error="Password is required" required>
-                  <Input type="password" placeholder="Enter password" style={{ width: "100%" }} />
+                  <Input type="password" placeholder="Enter password" />
                 </FormField>
               </div>
             </Card>
           </section>
 
-          <section className="mb-8 sm:mb-12">
+          <section id="usage" className="mb-8 sm:mb-12">
             <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white sm:mb-6 sm:text-2xl">
               Usage
             </h2>
-            <div className="overflow-x-auto rounded-lg bg-gray-900 p-4 sm:p-6">
-              <pre className="text-xs text-gray-100 sm:text-sm">
-                <code>{`import { Input, FormField } from '@balanceui/core'
+            
+            <Card variant="elevated" elevation={2} style={{ padding: "1.5rem", marginBottom: "1.5rem" }} className="sm:p-8 sm:mb-8">
+              <h3 className="mb-3 text-base font-semibold text-gray-900 dark:text-white sm:mb-4 sm:text-lg">
+                Floating Label Input
+              </h3>
+              <div className="overflow-x-auto rounded-lg bg-gray-900 p-4 sm:p-6">
+                <pre className="text-xs text-gray-100 sm:text-sm">
+                  <code>{`import { Input } from '@balanceui/core'
 
 function MyForm() {
   return (
-    <FormField label="Email" error="Invalid email">
-      <Input
-        type="email"
-        placeholder="Enter your email"
-        style={{ width: '100%' }}
-      />
-    </FormField>
+    <Input
+      label="Email"
+      type="email"
+      floatingLabel
+      helperText="Enter your email address"
+      placeholder="example@email.com"
+    />
   )
 }`}</code>
-              </pre>
-            </div>
+                </pre>
+              </div>
+            </Card>
+
+            <Card variant="elevated" elevation={2} style={{ padding: "1.5rem", marginBottom: "1.5rem" }} className="sm:p-8 sm:mb-8">
+              <h3 className="mb-3 text-base font-semibold text-gray-900 dark:text-white sm:mb-4 sm:text-lg">
+                With Validation
+              </h3>
+              <div className="overflow-x-auto rounded-lg bg-gray-900 p-4 sm:p-6">
+                <pre className="text-xs text-gray-100 sm:text-sm">
+                  <code>{`import { Input } from '@balanceui/core'
+
+function MyForm() {
+  const [email, setEmail] = useState("")
+  
+  return (
+    <Input
+      label="Email"
+      type="email"
+      floatingLabel
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      error={email && !email.includes('@') ? 'Invalid email' : undefined}
+      helperText="Email validation auto-disappears on valid input"
+    />
+  )
+}`}</code>
+                </pre>
+              </div>
+            </Card>
+
+            <Card variant="elevated" elevation={2} style={{ padding: "1.5rem" }} className="sm:p-8">
+              <h3 className="mb-3 text-base font-semibold text-gray-900 dark:text-white sm:mb-4 sm:text-lg">
+                With Adornments
+              </h3>
+              <div className="overflow-x-auto rounded-lg bg-gray-900 p-4 sm:p-6">
+                <pre className="text-xs text-gray-100 sm:text-sm">
+                  <code>{`import { Input } from '@balanceui/core'
+
+function MyForm() {
+  return (
+    <Input
+      label="Price"
+      type="number"
+      floatingLabel
+      startAdornment={<span>$</span>}
+      endAdornment={<span>USD</span>}
+      placeholder="0.00"
+    />
+  )
+}`}</code>
+                </pre>
+              </div>
+            </Card>
           </section>
         </div>
 

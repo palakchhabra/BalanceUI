@@ -6,6 +6,10 @@ export interface Column<T> {
   accessor?: keyof T;
   width?: number;
   render?: (row: T) => React.ReactNode;
+  sortable?: boolean;
+  filterable?: boolean;
+  filterType?: "text" | "select" | "date" | "number";
+  filterOptions?: { label: string; value: string | number }[];
 }
 
 export interface SortingConfig {
@@ -17,12 +21,29 @@ export interface SortingConfig {
   onChange: (sort: SortingConfig["sort"]) => void;
 }
 
+export interface PaginationConfig {
+  mode: "client" | "server";
+  page: number;
+  pageSize: number;
+  total?: number; // Required for server mode
+  onChange: (page: number, pageSize: number) => void;
+  showPageSizeSelector?: boolean;
+  pageSizeOptions?: number[];
+}
+
+export interface FilterConfig {
+  [columnId: string]: string | number | null;
+}
+
 export interface DataTableProps<T> {
   columns: Column<T>[];
   data: T[];
 
   loading?: boolean;
   sorting?: SortingConfig;
+  pagination?: PaginationConfig;
+  filters?: FilterConfig;
+  onFilterChange?: (filters: FilterConfig) => void;
 
   stickyColumns?: number[];
   height?: number;
@@ -37,4 +58,5 @@ export interface DataTableProps<T> {
   getRowId?: (row: T, index: number) => string | number;
   showRecordCount?: boolean;
   recordCountLabel?: string;
+  emptyMessage?: string;
 }

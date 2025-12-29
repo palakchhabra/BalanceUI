@@ -1,5 +1,9 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { VideoTrimmerProps } from "./VideoTrimmer.types";
+import { useVideoTrimmerMedia } from "./useVideoTrimmerMedia";
+import { useVideoTrimmerTimeline } from "./useVideoTrimmerTimeline";
+import { useVideoTrimmerFrames } from "./useVideoTrimmerFrames";
+import { Shimmer } from "../Shimmer";
 import "./VideoTrimmer.css";
 
 export const VideoTrimmer = ({
@@ -18,204 +22,79 @@ export const VideoTrimmer = ({
   "aria-label": ariaLabel,
   "aria-describedby": ariaDescribedBy,
 }: VideoTrimmerProps) => {
-  const [duration, setDuration] = useState(0);
-  const [startTime, setStartTime] = useState(0);
-  const [endTime, setEndTime] = useState(0);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [isDragging, setIsDragging] = useState<"start" | "end" | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [frames, setFrames] = useState<string[]>([]);
-  const [isGeneratingFrames, setIsGeneratingFrames] = useState(false);
-  const [isVideoLoading, setIsVideoLoading] = useState(false);
-  const [errorState, setErrorState] = useState<string | null>(null);
   const [isTrimming, setIsTrimming] = useState(false);
-  const [focusedHandle, setFocusedHandle] = useState<"start" | "end" | null>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const timelineRef = useRef<HTMLDivElement>(null);
-  const frameCanvasRef = useRef<HTMLCanvasElement | null>(null);
-  const startHandleRef = useRef<HTMLDivElement>(null);
-  const endHandleRef = useRef<HTMLDivElement>(null);
+  const [trimError, setTrimError] = useState<string | null>(null);
 
-  const srcUrl = typeof src === "string" ? src : URL.createObjectURL(src);
-  
   // Generate unique IDs for accessibility
-  const id = `videotrimmer-${Math.random().toString(36).substr(2, 9)}`;
-  const errorId = error || errorState ? `${id}-error` : undefined;
-  const helperId = helperText ? `${id}-helper` : undefined;
-  const describedBy = [errorId, helperId, ariaDescribedBy].filter(Boolean).join(" ") || undefined;
+  const id = useMemo(() => `videotrimmer-${Math.random().toString(36).substr(2, 9)}`, []);
 
+  // Media handling hook
+  const {
+    srcUrl,
+    duration,
+    currentTime,
+    isVideoLoading,
+    errorState: mediaError,
+    videoRef,
+    audioRef,
+    setCurrentTime,
+    play,
+    pause,
+    seek,
+    isPlaying,
+  } = useVideoTrimmerMedia({
+    src,
+    format,
+    onError: (error) => setTrimError(error),
+  });
+
+  // Timeline handling hook
+  const {
+    startTime,
+    endTime,
+    isDragging,
+    focusedHandle,
+    timelineRef,
+    startHandleRef,
+    endHandleRef,
+    setStartTime,
+    setEndTime,
+    handleMouseDown,
+    handleKeyDown,
+    handleTimelineClick,
+    setFocusedHandle,
+  } = useVideoTrimmerTimeline({
+    duration,
+    minDuration,
+    maxDuration,
+    disabled,
+    onStartTimeChange: (time) => {
+      setCurrentTime(time);
+    },
+  });
+
+  // Frame generation hook
+  const { frames, isGeneratingFrames } = useVideoTrimmerFrames({
+    video: videoRef.current,
+    duration,
+    format,
+  });
+
+  // Auto-pause when reaching end time
   useEffect(() => {
-    const media = format === "video" ? videoRef.current : audioRef.current;
-    if (!media) return;
-
-    const handleLoadStart = () => {
-      setIsVideoLoading(true);
-    };
-
-    const handleLoadedMetadata = async () => {
-      setIsVideoLoading(false);
-      setErrorState(null);
-      const mediaDuration = media.duration;
-      if (isNaN(mediaDuration) || mediaDuration <= 0) {
-        setErrorState("Invalid media file. Could not load duration.");
-        return;
-      }
-      setDuration(mediaDuration);
-      setEndTime(Math.min(mediaDuration, maxDuration || mediaDuration));
-      
-      // Generate frames for video timeline asynchronously
-      if (format === "video" && videoRef.current) {
-        // Don't await - let it run in background
-        generateFrames(videoRef.current, mediaDuration).catch((err) => {
-          console.error("Error generating frames:", err);
-          setErrorState("Failed to generate video preview frames.");
-        });
-      }
-    };
-    
-    const handleError = () => {
-      setIsVideoLoading(false);
-      setErrorState("Failed to load media file. Please check the file format and try again.");
-    };
-
-    const handleTimeUpdate = () => {
-      const current = media.currentTime;
-      setCurrentTime(current);
-      if (current >= endTime) {
-        media.pause();
-        setIsPlaying(false);
-        media.currentTime = startTime;
-      }
-    };
-
-    media.addEventListener("loadstart", handleLoadStart);
-    media.addEventListener("loadedmetadata", handleLoadedMetadata);
-    media.addEventListener("timeupdate", handleTimeUpdate);
-    media.addEventListener("error", handleError);
-
-    return () => {
-      media.removeEventListener("loadstart", handleLoadStart);
-      media.removeEventListener("loadedmetadata", handleLoadedMetadata);
-      media.removeEventListener("timeupdate", handleTimeUpdate);
-      media.removeEventListener("error", handleError);
-    };
-  }, [format, endTime, startTime, maxDuration]);
-
-  useEffect(() => {
-    return () => {
-      if (typeof src !== "string" && srcUrl) {
-        URL.revokeObjectURL(srcUrl);
-      }
-    };
-  }, [src, srcUrl]);
-
-  const handleTimelineClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (disabled || !timelineRef.current) return;
-    const rect = timelineRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const percentage = x / rect.width;
-    const time = percentage * duration;
-
-    if (Math.abs(time - startTime) < Math.abs(time - endTime)) {
-      const newStart = Math.max(0, Math.min(time, endTime - minDuration));
-      setStartTime(newStart);
-      const media = format === "video" ? videoRef.current : audioRef.current;
-      if (media) media.currentTime = newStart;
-    } else {
-      const newEnd = Math.min(duration, Math.max(time, startTime + minDuration));
-      setEndTime(newEnd);
+    if (isPlaying && currentTime >= endTime) {
+      pause();
+      seek(startTime);
     }
-  };
+  }, [currentTime, endTime, startTime, isPlaying, pause, seek]);
 
-  const handleMouseDown = (type: "start" | "end") => {
+  const handlePlayPause = async () => {
     if (disabled) return;
-    setIsDragging(type);
-  };
-  
-  const handleKeyDown = (e: React.KeyboardEvent, type: "start" | "end") => {
-    if (disabled) return;
-    
-    const step = duration / 100; // 1% of duration
-    let newTime: number;
-    
-    if (type === "start") {
-      if (e.key === "ArrowRight") {
-        newTime = Math.min(startTime + step, endTime - minDuration);
-        setStartTime(newTime);
-        const media = format === "video" ? videoRef.current : audioRef.current;
-        if (media) media.currentTime = newTime;
-        e.preventDefault();
-      } else if (e.key === "ArrowLeft") {
-        newTime = Math.max(0, startTime - step);
-        setStartTime(newTime);
-        const media = format === "video" ? videoRef.current : audioRef.current;
-        if (media) media.currentTime = newTime;
-        e.preventDefault();
-      }
-    } else {
-      if (e.key === "ArrowRight") {
-        newTime = Math.min(duration, endTime + step);
-        setEndTime(newTime);
-        e.preventDefault();
-      } else if (e.key === "ArrowLeft") {
-        newTime = Math.max(startTime + minDuration, endTime - step);
-        setEndTime(newTime);
-        e.preventDefault();
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (!isDragging) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!timelineRef.current || !duration) return;
-      const rect = timelineRef.current.getBoundingClientRect();
-      const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
-      const time = (x / rect.width) * duration;
-
-      if (isDragging === "start") {
-        const newStart = Math.max(0, Math.min(time, endTime - minDuration));
-        setStartTime(newStart);
-        const media = format === "video" ? videoRef.current : audioRef.current;
-        if (media) media.currentTime = newStart;
-      } else {
-        const newEnd = Math.min(duration, Math.max(time, startTime + minDuration));
-        setEndTime(newEnd);
-      }
-    };
-
-    const handleMouseUp = () => {
-      setIsDragging(null);
-    };
-
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-    };
-  }, [isDragging, duration, startTime, endTime, minDuration, format]);
-
-  const handlePlayPause = () => {
-    if (disabled) return;
-    const media = format === "video" ? videoRef.current : audioRef.current;
-    if (!media) return;
-
     if (isPlaying) {
-      media.pause();
-      setIsPlaying(false);
+      pause();
     } else {
-      media.currentTime = startTime;
-      media.play().catch((err) => {
-        console.error("Error playing media:", err);
-        setErrorState("Failed to play media. Please check your browser's autoplay settings.");
-        setIsPlaying(false);
-      });
-      setIsPlaying(true);
+      await seek(startTime);
+      await play();
     }
   };
 
@@ -223,41 +102,38 @@ export const VideoTrimmer = ({
     if (!onTrim || disabled || isTrimming) return;
 
     setIsTrimming(true);
-    setErrorState(null);
+    setTrimError(null);
 
     try {
-      // For video trimming, we'll use canvas to extract frames
-      // For audio, we'll use Web Audio API
       if (format === "video" && videoRef.current) {
         const canvas = document.createElement("canvas");
         canvas.width = videoRef.current.videoWidth;
         canvas.height = videoRef.current.videoHeight;
         const ctx = canvas.getContext("2d");
 
-        if (!ctx) return;
+        if (!ctx) {
+          throw new Error("Failed to get canvas context");
+        }
 
         const video = videoRef.current;
         const originalTime = video.currentTime;
-        video.currentTime = startTime;
-
-        await new Promise((resolve) => {
-          video.addEventListener("seeked", resolve, { once: true });
-        });
+        await seek(startTime);
 
         ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
         canvas.toBlob(
           (blob) => {
             if (blob) {
               onTrim(blob, startTime, endTime);
+            } else {
+              setTrimError("Failed to create trimmed video blob");
             }
           },
           "video/webm",
           quality
         );
 
-        video.currentTime = originalTime;
+        await seek(originalTime);
       } else if (format === "audio" && audioRef.current) {
-        // For audio, create a trimmed version using Web Audio API
         const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
         const response = await fetch(srcUrl);
         const arrayBuffer = await response.arrayBuffer();
@@ -286,84 +162,9 @@ export const VideoTrimmer = ({
       }
     } catch (error) {
       console.error("Error trimming media:", error);
-      setErrorState(error instanceof Error ? error.message : "Failed to trim media. Please try again.");
+      setTrimError(error instanceof Error ? error.message : "Failed to trim media. Please try again.");
     } finally {
       setIsTrimming(false);
-    }
-  };
-
-  const generateFrames = async (video: HTMLVideoElement, duration: number) => {
-    if (!duration || duration <= 0 || !video.videoWidth || !video.videoHeight) {
-      return;
-    }
-    
-    setIsGeneratingFrames(true);
-    
-    // Reduce number of frames for better performance - use 12 instead of 20
-    const numFrames = Math.min(12, Math.floor(duration / 2)); // Max 12 frames, or 1 per 2 seconds
-    const frameTimes: number[] = [];
-    const frameUrls: string[] = [];
-    
-    for (let i = 0; i < numFrames; i++) {
-      frameTimes.push((duration / (numFrames + 1)) * (i + 1)); // Skip first frame (0s)
-    }
-    
-    // Use smaller canvas for thumbnails to improve performance
-    const canvas = document.createElement("canvas");
-    const scale = 0.3; // Scale down to 30% for thumbnails
-    canvas.width = Math.floor((video.videoWidth || 160) * scale);
-    canvas.height = Math.floor((video.videoHeight || 90) * scale);
-    const ctx = canvas.getContext("2d", { willReadFrequently: false });
-    
-    if (!ctx) {
-      setIsGeneratingFrames(false);
-      return;
-    }
-    
-    const originalTime = video.currentTime;
-    const originalMuted = video.muted;
-    video.muted = true;
-    
-    try {
-      // Generate frames with small delays to prevent blocking
-      for (let i = 0; i < frameTimes.length; i++) {
-        const time = frameTimes[i];
-        video.currentTime = time;
-        
-        await new Promise((resolve) => {
-          const onSeeked = () => {
-            video.removeEventListener("seeked", onSeeked);
-            try {
-              ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-              // Use lower quality for faster encoding
-              const dataUrl = canvas.toDataURL("image/jpeg", 0.6);
-              frameUrls.push(dataUrl);
-            } catch (err) {
-              console.warn("Error drawing frame:", err);
-            }
-            resolve(null);
-          };
-          video.addEventListener("seeked", onSeeked, { once: true });
-          
-          // Timeout fallback
-          setTimeout(() => {
-            video.removeEventListener("seeked", onSeeked);
-            resolve(null);
-          }, 500);
-        });
-        
-        // Small delay between frames to prevent UI blocking
-        if (i < frameTimes.length - 1) {
-          await new Promise(resolve => setTimeout(resolve, 10));
-        }
-      }
-    } catch (error) {
-      console.error("Error generating frames:", error);
-    } finally {
-      video.currentTime = originalTime;
-      video.muted = originalMuted;
-      setFrames(frameUrls);
-      setIsGeneratingFrames(false);
     }
   };
 
@@ -377,13 +178,15 @@ export const VideoTrimmer = ({
   const endPercent = duration > 0 ? (endTime / duration) * 100 : 0;
   const currentPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
 
-  const displayError = error || errorState;
-  
+  const displayError = error || mediaError || trimError;
+  const errorId = displayError ? `${id}-error` : undefined;
+  const helperId = helperText ? `${id}-helper` : undefined;
+  const describedBy = [errorId, helperId, ariaDescribedBy].filter(Boolean).join(" ") || undefined;
+
   return (
     <div
-      ref={containerRef}
       className={`balanceui-videotrimmer ${disabled ? "balanceui-videotrimmer-disabled" : ""} ${className || ""}`}
-      style={{ 
+      style={{
         ...style,
         opacity: disabled ? 0.6 : 1,
         pointerEvents: disabled ? "none" : "auto",
@@ -396,90 +199,105 @@ export const VideoTrimmer = ({
       {label && (
         <label
           htmlFor={id}
+          className="balanceui-videotrimmer-label"
           style={{
             display: "block",
-            marginBottom: "0.5rem",
+            marginBottom: "0.75rem",
             fontSize: "0.875rem",
             fontWeight: 500,
             color: displayError ? "var(--bu-error, #d32f2f)" : "var(--bu-fg, #000)",
+            transition: "color 0.2s ease",
           }}
         >
           {label}
         </label>
       )}
-      {format === "video" ? (
-        <div style={{ position: "relative", width: "100%" }}>
-          {isVideoLoading && (
-            <div
+
+      {/* Video/Audio Preview Area - Responsive & Compact */}
+      <div className="balanceui-videotrimmer-preview">
+        {format === "video" ? (
+          <div style={{ position: "relative", width: "100%", borderRadius: "var(--bu-radius-md, 0.375rem)", overflow: "hidden", minHeight: "clamp(200px, 40vh, 400px)" }}>
+            {isVideoLoading && (
+              <div className="balanceui-videotrimmer-loading-overlay" style={{ position: "absolute", inset: 0, zIndex: 10 }}>
+                <Shimmer 
+                  variant="card" 
+                  width="100%" 
+                  height="100%" 
+                  style={{ position: "absolute", inset: 0, borderRadius: "var(--bu-radius-md, 0.375rem)" }} 
+                />
+                <div className="balanceui-videotrimmer-loading-text" style={{ position: "relative", zIndex: 11 }}>
+                  Loading video...
+                </div>
+              </div>
+            )}
+            <video
+              ref={videoRef}
+              src={srcUrl}
+              className="balanceui-videotrimmer-video"
               style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                width: "100%",
+                maxHeight: "clamp(200px, 40vh, 400px)",
+                minHeight: "clamp(200px, 40vh, 400px)",
+                display: "block",
                 borderRadius: "var(--bu-radius-md, 0.375rem)",
-                zIndex: 10,
-                color: "#fff",
-                fontSize: "0.875rem",
+                border: displayError
+                  ? "2px solid var(--bu-error, #d32f2f)"
+                  : "1px solid var(--bu-border, rgba(0, 0, 0, 0.12))",
+                boxShadow: displayError
+                  ? "0 0 0 1px var(--bu-error, #d32f2f)"
+                  : "0 2px 8px rgba(0, 0, 0, 0.08)",
+                backgroundColor: "#000",
+                objectFit: "contain",
+                opacity: isVideoLoading ? 0.3 : 1,
+                transition: "opacity 0.3s ease",
               }}
-            >
-              Loading video...
-            </div>
-          )}
-          <video
-            ref={videoRef}
-            src={srcUrl}
+              playsInline
+              preload="metadata"
+              aria-label="Video preview"
+            />
+          </div>
+        ) : (
+          <div
+            className="balanceui-videotrimmer-audio-placeholder"
             style={{
               width: "100%",
-              maxHeight: "400px",
+              height: "clamp(120px, 20vh, 200px)",
+              backgroundColor: "var(--bu-surface-variant, rgba(0, 0, 0, 0.05))",
               borderRadius: "var(--bu-radius-md, 0.375rem)",
-              border: displayError 
-                ? "1px solid var(--bu-error, #d32f2f)" 
+              border: displayError
+                ? "2px solid var(--bu-error, #d32f2f)"
                 : "1px solid var(--bu-border, rgba(0, 0, 0, 0.12))",
-              boxShadow: displayError
-                ? "0 0 0 1px var(--bu-error, #d32f2f)"
-                : "0 4px 12px rgba(0, 0, 0, 0.1)",
-              backgroundColor: "#000",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))",
+              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
+              gap: "0.5rem",
             }}
-            playsInline
-            preload="metadata"
-            aria-label="Video preview"
-          />
-        </div>
-      ) : (
-        <div
-          style={{
-            width: "100%",
-            height: "200px",
-            backgroundColor: "var(--bu-surface-variant, rgba(0, 0, 0, 0.05))",
-            borderRadius: "var(--bu-radius-md, 0.375rem)",
-            border: "1px solid var(--bu-border, rgba(0, 0, 0, 0.12))",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))",
-            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
-          }}
-        >
-          Audio File
-        </div>
-      )}
-      <audio ref={audioRef} src={srcUrl} style={{ display: "none" }} />
+          >
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor" style={{ opacity: 0.5 }}>
+              <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
+            </svg>
+            <span style={{ fontSize: "0.875rem", fontWeight: 500 }}>Audio File</span>
+          </div>
+        )}
+        <audio ref={audioRef} src={srcUrl} style={{ display: "none" }} />
+      </div>
 
+      {/* Timeline Controls Container */}
       <div
+        className="balanceui-videotrimmer-controls"
         style={{
-          marginTop: "1rem",
-          padding: "1.5rem",
+          marginTop: "1.25rem",
+          padding: "clamp(1rem, 2vw, 1.5rem)",
           backgroundColor: "var(--bu-surface, #fff)",
           borderRadius: "var(--bu-radius-md, 0.375rem)",
           border: "1px solid var(--bu-border, rgba(0, 0, 0, 0.12))",
           boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
         }}
       >
+        {/* Timeline */}
         <div
           ref={timelineRef}
           className="balanceui-videotrimmer-timeline"
@@ -492,10 +310,8 @@ export const VideoTrimmer = ({
                 const x = rect.width / 2;
                 const percentage = x / rect.width;
                 const time = percentage * duration;
-                const newStart = Math.max(0, Math.min(time, endTime - minDuration));
-                setStartTime(newStart);
-                const media = format === "video" ? videoRef.current : audioRef.current;
-                if (media) media.currentTime = newStart;
+                setStartTime(time);
+                setCurrentTime(time);
               }
             }
           }}
@@ -508,15 +324,15 @@ export const VideoTrimmer = ({
           aria-disabled={disabled}
           style={{
             position: "relative",
-            height: "5rem",
+            height: "clamp(3.5rem, 6vw, 5rem)",
             backgroundColor: "var(--bu-surface-variant, rgba(0, 0, 0, 0.05))",
             borderRadius: "var(--bu-radius-md, 0.375rem)",
             cursor: disabled ? "not-allowed" : "pointer",
-            marginBottom: "1.5rem",
+            marginBottom: "1.25rem",
             overflow: "hidden",
             display: "flex",
             border: displayError
-              ? "1px solid var(--bu-error, #d32f2f)"
+              ? "2px solid var(--bu-error, #d32f2f)"
               : "1px solid var(--bu-border, rgba(0, 0, 0, 0.12))",
             boxShadow: displayError
               ? "0 0 0 1px var(--bu-error, #d32f2f)"
@@ -524,62 +340,48 @@ export const VideoTrimmer = ({
             transition: "all 0.2s ease",
             outline: "none",
           }}
-          onFocus={(e) => {
-            if (!disabled) {
-              e.currentTarget.style.boxShadow = "0 0 0 2px var(--bu-primary, #1976d2)";
-            }
-          }}
-          onBlur={(e) => {
-            e.currentTarget.style.boxShadow = displayError
-              ? "0 0 0 1px var(--bu-error, #d32f2f)"
-              : "inset 0 2px 4px rgba(0, 0, 0, 0.06)";
-          }}
         >
-          {format === "video" && (
+          {/* Shimmer loading for frame generation */}
+          {format === "video" && isGeneratingFrames && frames.length === 0 && (
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "var(--bu-surface-variant, rgba(0, 0, 0, 0.05))",
+                zIndex: 1,
+              }}
+            >
+              <Shimmer variant="rectangular" width="100%" height="100%" />
+            </div>
+          )}
+
+          {/* Video frames preview */}
+          {format === "video" && frames.length > 0 && (
             <>
-              {isGeneratingFrames && frames.length === 0 && (
-                <div
+              {frames.map((frame, index) => (
+                <img
+                  key={index}
+                  src={frame}
+                  alt={`Frame ${index}`}
                   style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    backgroundColor: "var(--bu-surface-variant, rgba(0, 0, 0, 0.05))",
-                    color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))",
-                    fontSize: "0.75rem",
-                    zIndex: 1,
+                    flex: 1,
+                    height: "100%",
+                    objectFit: "cover",
+                    display: "block",
                   }}
-                >
-                  Generating preview...
-                </div>
-              )}
-              {frames.length > 0 && (
-                <>
-                  {frames.map((frame, index) => (
-                    <img
-                      key={index}
-                      src={frame}
-                      alt={`Frame ${index}`}
-                      style={{
-                        flex: 1,
-                        height: "100%",
-                        objectFit: "cover",
-                        display: "block",
-                      }}
-                      loading="lazy"
-                    />
-                  ))}
-                </>
-              )}
+                  loading="lazy"
+                />
+              ))}
             </>
           )}
+
           {/* Darken unselected parts - left side */}
           {startPercent > 0 && (
             <div
+              className="balanceui-videotrimmer-overlay-left"
               style={{
                 position: "absolute",
                 left: 0,
@@ -592,9 +394,11 @@ export const VideoTrimmer = ({
               }}
             />
           )}
+
           {/* Darken unselected parts - right side */}
           {endPercent < 100 && (
             <div
+              className="balanceui-videotrimmer-overlay-right"
               style={{
                 position: "absolute",
                 right: 0,
@@ -607,8 +411,10 @@ export const VideoTrimmer = ({
               }}
             />
           )}
+
           {/* Selected range border highlight */}
           <div
+            className="balanceui-videotrimmer-selected-range"
             style={{
               position: "absolute",
               left: `${startPercent}%`,
@@ -621,6 +427,7 @@ export const VideoTrimmer = ({
               transition: "all 0.2s ease",
             }}
           />
+
           {/* Start handle */}
           <div
             ref={startHandleRef}
@@ -638,7 +445,9 @@ export const VideoTrimmer = ({
             aria-valuemax={endTime - minDuration}
             aria-valuenow={startTime}
             aria-disabled={disabled}
-            className={`balanceui-videotrimmer-handle balanceui-videotrimmer-handle-start ${focusedHandle === "start" ? "balanceui-videotrimmer-handle-focused" : ""}`}
+            className={`balanceui-videotrimmer-handle balanceui-videotrimmer-handle-start ${
+              focusedHandle === "start" ? "balanceui-videotrimmer-handle-focused" : ""
+            }`}
             style={{
               position: "absolute",
               left: `${startPercent}%`,
@@ -650,9 +459,10 @@ export const VideoTrimmer = ({
               transform: "translateX(-50%)",
               zIndex: 3,
               borderRadius: "var(--bu-radius-sm, 0.25rem)",
-              boxShadow: focusedHandle === "start"
-                ? "0 0 0 3px rgba(25, 118, 210, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2)"
-                : "0 2px 8px rgba(0, 0, 0, 0.2)",
+              boxShadow:
+                focusedHandle === "start"
+                  ? "0 0 0 3px rgba(25, 118, 210, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2)"
+                  : "0 2px 8px rgba(0, 0, 0, 0.2)",
               transition: "all 0.2s ease",
               outline: "none",
             }}
@@ -665,11 +475,12 @@ export const VideoTrimmer = ({
                 transform: "translate(-50%, -50%)",
                 width: "3px",
                 height: "60%",
-                backgroundColor: "rgba(255, 255, 255, 0.8)",
+                backgroundColor: "rgba(255, 255, 255, 0.9)",
                 borderRadius: "2px",
               }}
             />
           </div>
+
           {/* End handle */}
           <div
             ref={endHandleRef}
@@ -687,7 +498,9 @@ export const VideoTrimmer = ({
             aria-valuemax={duration}
             aria-valuenow={endTime}
             aria-disabled={disabled}
-            className={`balanceui-videotrimmer-handle balanceui-videotrimmer-handle-end ${focusedHandle === "end" ? "balanceui-videotrimmer-handle-focused" : ""}`}
+            className={`balanceui-videotrimmer-handle balanceui-videotrimmer-handle-end ${
+              focusedHandle === "end" ? "balanceui-videotrimmer-handle-focused" : ""
+            }`}
             style={{
               position: "absolute",
               left: `${endPercent}%`,
@@ -699,9 +512,10 @@ export const VideoTrimmer = ({
               transform: "translateX(-50%)",
               zIndex: 3,
               borderRadius: "var(--bu-radius-sm, 0.25rem)",
-              boxShadow: focusedHandle === "end"
-                ? "0 0 0 3px rgba(25, 118, 210, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2)"
-                : "0 2px 8px rgba(0, 0, 0, 0.2)",
+              boxShadow:
+                focusedHandle === "end"
+                  ? "0 0 0 3px rgba(25, 118, 210, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2)"
+                  : "0 2px 8px rgba(0, 0, 0, 0.2)",
               transition: "all 0.2s ease",
               outline: "none",
             }}
@@ -714,13 +528,15 @@ export const VideoTrimmer = ({
                 transform: "translate(-50%, -50%)",
                 width: "3px",
                 height: "60%",
-                backgroundColor: "rgba(255, 255, 255, 0.8)",
+                backgroundColor: "rgba(255, 255, 255, 0.9)",
                 borderRadius: "2px",
               }}
             />
           </div>
+
           {/* Current time indicator */}
           <div
+            className="balanceui-videotrimmer-playhead"
             style={{
               position: "absolute",
               left: `${currentPercent}%`,
@@ -741,8 +557,8 @@ export const VideoTrimmer = ({
                 top: 0,
                 left: "50%",
                 transform: "translateX(-50%)",
-                width: "0",
-                height: "0",
+                width: 0,
+                height: 0,
                 borderLeft: "6px solid transparent",
                 borderRight: "6px solid transparent",
                 borderTop: "8px solid #fff",
@@ -752,15 +568,25 @@ export const VideoTrimmer = ({
           </div>
         </div>
 
+        {/* Time Display & Play Button */}
         <div
+          className="balanceui-videotrimmer-time-controls"
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
             marginBottom: "1rem",
+            gap: "1rem",
+            flexWrap: "wrap",
           }}
         >
-          <div style={{ fontSize: "0.875rem", color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>
+          <div
+            style={{
+              fontSize: "0.875rem",
+              color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))",
+              fontWeight: 500,
+            }}
+          >
             {formatTime(startTime)} - {formatTime(endTime)}
           </div>
           <button
@@ -773,7 +599,7 @@ export const VideoTrimmer = ({
               padding: "0.625rem 1.25rem",
               border: "none",
               borderRadius: "var(--bu-radius-md, 0.375rem)",
-              backgroundColor: disabled 
+              backgroundColor: disabled
                 ? "var(--bu-disabled, rgba(0, 0, 0, 0.12))"
                 : "var(--bu-primary, #1976d2)",
               color: "#fff",
@@ -783,12 +609,14 @@ export const VideoTrimmer = ({
               boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
               transition: "all 0.2s ease",
               opacity: disabled ? 0.6 : 1,
+              minWidth: "80px",
             }}
           >
             {isPlaying ? "Pause" : "Play"}
           </button>
         </div>
 
+        {/* Trim Button */}
         {onTrim && (
           <button
             type="button"
@@ -811,36 +639,49 @@ export const VideoTrimmer = ({
               boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
               transition: "all 0.2s ease",
               opacity: disabled || isTrimming ? 0.6 : 1,
+              position: "relative",
+              overflow: "hidden",
             }}
           >
-            {isTrimming ? "Trimming..." : "Trim & Download"}
+            {isTrimming ? (
+              <>
+                <Shimmer variant="text" width="100%" height="100%" style={{ position: "absolute", inset: 0 }} />
+                <span style={{ position: "relative", zIndex: 1 }}>Trimming...</span>
+              </>
+            ) : (
+              "Trim & Download"
+            )}
           </button>
         )}
       </div>
-      
+
+      {/* Error Message */}
       {displayError && (
         <div
           id={errorId}
           role="alert"
+          className="balanceui-videotrimmer-error"
           style={{
-            marginTop: "0.5rem",
+            marginTop: "0.75rem",
             fontSize: "0.75rem",
             color: "var(--bu-error, #d32f2f)",
             display: "flex",
             alignItems: "center",
-            gap: "0.25rem",
+            gap: "0.5rem",
           }}
         >
           <span>⚠</span>
           <span>{displayError}</span>
         </div>
       )}
-      
+
+      {/* Helper Text */}
       {helperText && !displayError && (
         <div
           id={helperId}
+          className="balanceui-videotrimmer-helper"
           style={{
-            marginTop: "0.5rem",
+            marginTop: "0.75rem",
             fontSize: "0.75rem",
             color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))",
           }}
@@ -851,4 +692,3 @@ export const VideoTrimmer = ({
     </div>
   );
 };
-

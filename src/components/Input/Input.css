@@ -1,3 +1,24 @@
+/* Input Wrapper */
+.balanceui-input-wrapper {
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.balanceui-input-fullwidth {
+  width: 100%;
+}
+
+/* Input Container */
+.balanceui-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Container states handled by child elements */
+
+/* Base Input Styles */
 .balanceui-input {
   font-family: var(--bu-font-family);
   font-size: var(--bu-font-size-md, 14px);
@@ -10,10 +31,22 @@
 }
 
 .balanceui-input::placeholder {
-  color: var(--bu-muted, #6b7280);
+  color: transparent;
+  opacity: 0;
+  transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.balanceui-input:not(.balanceui-input-with-label)::placeholder {
+  color: var(--bu-muted, rgba(0, 0, 0, 0.54));
   opacity: 0.7;
 }
 
+/* Floating Label Input - show placeholder when not focused and empty */
+.balanceui-input-with-label:not(:focus):placeholder-shown::placeholder {
+  color: transparent;
+}
+
+/* Focus States */
 .balanceui-input:focus,
 .balanceui-input-focused {
   border-color: var(--bu-primary, #1976d2);
@@ -26,25 +59,111 @@
   box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2), 0 0 0 1px var(--bu-primary, #1976d2);
 }
 
+/* Error States */
+.balanceui-input-error,
+.balanceui-input-container-error .balanceui-input {
+  border-color: var(--bu-error, #d32f2f);
+}
+
+.balanceui-input-error:focus,
+.balanceui-input-container-error .balanceui-input:focus {
+  border-color: var(--bu-error, #d32f2f);
+  box-shadow: 0 0 0 1px var(--bu-error, #d32f2f);
+}
+
+/* Disabled States */
 .balanceui-input:disabled {
-  opacity: var(--bu-disabled-opacity, 0.5);
+  opacity: 0.6;
   cursor: not-allowed;
-  background: var(--bu-soft, #f3f4f6);
+  background: var(--bu-surface-variant, rgba(0, 0, 0, 0.05));
+  border-color: var(--bu-border, rgba(0, 0, 0, 0.12));
 }
 
 .balanceui-input:read-only {
-  background: var(--bu-soft, #f3f4f6);
+  background: var(--bu-surface-variant, rgba(0, 0, 0, 0.05));
   cursor: default;
 }
 
-/* Solid variant specific */
+/* Floating Label */
+.balanceui-input-label {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--bu-font-size-md, 14px);
+  color: var(--bu-fg-secondary, rgba(0, 0, 0, 0.6));
+  pointer-events: none;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+  line-height: 1;
+  background: transparent;
+  padding: 0;
+}
+
+.balanceui-input-label-floating {
+  top: 8px;
+  transform: none;
+  font-size: var(--bu-font-size-xs, 11px);
+  background: var(--bu-surface, #ffffff);
+  padding: 0 4px;
+  color: var(--bu-primary, #1976d2);
+}
+
+.balanceui-input-container-focused .balanceui-input-label:not(.balanceui-input-label-floating) {
+  color: var(--bu-primary, #1976d2);
+}
+
+.balanceui-input-label-error {
+  color: var(--bu-error, #d32f2f);
+}
+
+.balanceui-input-label-floating.balanceui-input-label-error {
+  color: var(--bu-error, #d32f2f);
+}
+
+/* Adornments */
+.balanceui-input-adornment {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bu-fg-secondary, rgba(0, 0, 0, 0.6));
+  font-size: var(--bu-font-size-md, 14px);
+  flex-shrink: 0;
+}
+
+.balanceui-input-adornment-start {
+  padding-left: 12px;
+  padding-right: 8px;
+}
+
+.balanceui-input-adornment-end {
+  padding-left: 8px;
+  padding-right: 12px;
+}
+
+/* Helper Text & Error Messages */
+.balanceui-input-helper {
+  margin-top: 4px;
+  padding: 0 12px;
+  font-size: var(--bu-font-size-xs, 11px);
+  line-height: 1.4;
+  color: var(--bu-fg-secondary, rgba(0, 0, 0, 0.6));
+  min-height: 16px;
+  transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.balanceui-input-helper-error {
+  color: var(--bu-error, #d32f2f);
+}
+
+/* Variant Specific Styles */
 .balanceui-input[data-variant="solid"] {
   background: var(--bu-surface-variant, rgba(0, 0, 0, 0.05));
   color: var(--bu-fg);
   border-color: var(--bu-border);
 }
 
-.balanceui-input[data-variant="solid"]::placeholder {
+.balanceui-input[data-variant="solid"]:not(.balanceui-input-with-label)::placeholder {
   color: var(--bu-fg-secondary);
   opacity: 0.7;
 }
@@ -55,3 +174,24 @@
   border-color: var(--bu-primary, #1976d2);
 }
 
+.balanceui-input[data-variant="soft"] {
+  background: var(--bu-soft, rgba(0, 0, 0, 0.04));
+  border-color: transparent;
+}
+
+.balanceui-input[data-variant="soft"]:focus,
+.balanceui-input[data-variant="soft"].balanceui-input-focused {
+  background: var(--bu-surface, #ffffff);
+  border-color: var(--bu-primary, #1976d2);
+  box-shadow: 0 0 0 1px var(--bu-primary, #1976d2);
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .balanceui-input,
+  .balanceui-input-label,
+  .balanceui-input-container,
+  .balanceui-input-helper {
+    transition: none;
+  }
+}

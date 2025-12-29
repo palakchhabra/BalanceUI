@@ -4,132 +4,187 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-black/10 bg-white/80 backdrop-blur-sm dark:border-white/20 dark:bg-black/80">
+    <footer 
+      className="border-t"
+      style={{
+        borderColor: "var(--bu-border, rgba(0, 0, 0, 0.12))",
+        backgroundColor: "var(--bu-surface, #ffffff)",
+        boxShadow: "0px -2px 4px -1px rgba(0, 0, 0, 0.1)",
+      }}
+    >
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand Section */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <div className="flex items-center space-x-2">
-              <span className="text-2xl">⚖️</span>
-              <span className="text-xl font-bold text-gray-900 dark:text-white">
+            <div className="flex items-center space-x-2" style={{ marginBottom: "1rem" }}>
+              <span className="text-2xl" style={{ transition: "transform 200ms ease" }}>⚖️</span>
+              <span 
+                className="text-xl font-medium"
+                style={{ 
+                  color: "var(--bu-fg, rgba(0, 0, 0, 0.87))",
+                  letterSpacing: "-0.01em",
+                }}
+              >
                 BalanceUI
               </span>
             </div>
-            <p className="mt-4 text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+            <p 
+              className="text-sm leading-relaxed"
+              style={{ 
+                color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))",
+                lineHeight: 1.6,
+              }}
+            >
               A modern, accessible React component library built with TypeScript
-              and best practices.
+              and Material Design principles.
             </p>
           </div>
 
           {/* Resources Section */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900 dark:text-white">
+            <h3 
+              className="text-sm font-semibold uppercase tracking-wider"
+              style={{ 
+                color: "var(--bu-fg, rgba(0, 0, 0, 0.87))",
+                fontWeight: 500,
+                letterSpacing: "0.1em",
+                marginBottom: "1rem",
+              }}
+            >
               Resources
             </h3>
-            <ul className="mt-4 space-y-3">
-              <li>
-                <Link
-                  href="/docs"
-                  className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                >
-                  Documentation
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/components"
-                  className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                >
-                  Components
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/examples"
-                  className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                >
-                  Examples
-                </Link>
-              </li>
+            <ul className="space-y-2">
+              {[
+                { href: "/docs", label: "Documentation" },
+                { href: "/components", label: "Components" },
+                { href: "/examples", label: "Examples" },
+              ].map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-sm transition-all duration-200 inline-block"
+                    style={{
+                      color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))",
+                      textDecoration: "none",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = "var(--bu-primary, #1976d2)";
+                      e.currentTarget.style.transform = "translateX(4px)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))";
+                      e.currentTarget.style.transform = "translateX(0)";
+                    }}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Community Section */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900 dark:text-white">
+            <h3 
+              className="text-sm font-semibold uppercase tracking-wider"
+              style={{ 
+                color: "var(--bu-fg, rgba(0, 0, 0, 0.87))",
+                fontWeight: 500,
+                letterSpacing: "0.1em",
+                marginBottom: "1rem",
+              }}
+            >
               Community
             </h3>
-            <ul className="mt-4 space-y-3">
-              <li>
-                <a
-                  href="https://github.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                >
-                  GitHub
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://twitter.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                >
-                  Twitter
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://discord.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                >
-                  Discord
-                </a>
-              </li>
+            <ul className="space-y-2">
+              {[
+                { href: "https://github.com", label: "GitHub" },
+                { href: "https://twitter.com", label: "Twitter" },
+                { href: "https://discord.com", label: "Discord" },
+              ].map((item) => (
+                <li key={item.href}>
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm transition-all duration-200 inline-block"
+                    style={{
+                      color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))",
+                      textDecoration: "none",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = "var(--bu-primary, #1976d2)";
+                      e.currentTarget.style.transform = "translateX(4px)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))";
+                      e.currentTarget.style.transform = "translateX(0)";
+                    }}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Legal Section */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-900 dark:text-white">
+            <h3 
+              className="text-sm font-semibold uppercase tracking-wider"
+              style={{ 
+                color: "var(--bu-fg, rgba(0, 0, 0, 0.87))",
+                fontWeight: 500,
+                letterSpacing: "0.1em",
+                marginBottom: "1rem",
+              }}
+            >
               Legal
             </h3>
-            <ul className="mt-4 space-y-3">
-              <li>
-                <Link
-                  href="/privacy"
-                  className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                >
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/terms"
-                  className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                >
-                  Terms of Service
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/license"
-                  className="text-sm text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-                >
-                  License
-                </Link>
-              </li>
+            <ul className="space-y-2">
+              {[
+                { href: "/privacy", label: "Privacy Policy" },
+                { href: "/terms", label: "Terms of Service" },
+                { href: "/license", label: "License" },
+              ].map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-sm transition-all duration-200 inline-block"
+                    style={{
+                      color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))",
+                      textDecoration: "none",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = "var(--bu-primary, #1976d2)";
+                      e.currentTarget.style.transform = "translateX(4px)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))";
+                      e.currentTarget.style.transform = "translateX(0)";
+                    }}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
 
         {/* Copyright Section */}
-        <div className="mt-8 border-t border-black/10 pt-6 dark:border-white/20 sm:mt-10 sm:pt-8">
-          <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+        <div 
+          className="mt-8 border-t pt-6 sm:mt-10 sm:pt-8"
+          style={{ 
+            borderColor: "var(--bu-border, rgba(0, 0, 0, 0.12))",
+          }}
+        >
+          <p 
+            className="text-center text-sm"
+            style={{ 
+              color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))",
+            }}
+          >
             © {currentYear} BalanceUI. All rights reserved.
           </p>
         </div>

@@ -1,58 +1,185 @@
-/* Button hover and active states */
+/* Button Component - Material Design Enhanced */
+
+button.balanceui-button {
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+/* Ripple Effect Container */
+button.balanceui-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+  pointer-events: none;
+  opacity: 0;
+}
+
+button.balanceui-button:active::before {
+  width: 300px;
+  height: 300px;
+  opacity: 1;
+  transition: width 0s, height 0s, opacity 0.3s;
+}
+
+/* Hover and Active States - Material Design Elevation */
 button.balanceui-button:not(:disabled):hover {
   transform: translateY(-1px);
 }
 
 button.balanceui-button:not(:disabled):active {
   transform: translateY(0);
+  transition: transform 100ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Solid variant hover */
+/* Solid variant - Material Filled Button */
+button.balanceui-button[data-variant="solid"]:not(:disabled) {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
 button.balanceui-button[data-variant="solid"]:not(:disabled):hover {
   background-color: var(--bu-primary-dark, #1565c0) !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25), 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
-/* Stroke variant hover */
+button.balanceui-button[data-variant="solid"]:not(:disabled):active {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Stroke variant - Material Outlined Button */
+button.balanceui-button[data-variant="stroke"]:not(:disabled) {
+  border-width: 1.5px;
+}
+
 button.balanceui-button[data-variant="stroke"]:not(:disabled):hover {
-  background-color: var(--bu-soft, rgba(0, 0, 0, 0.04));
-  border-color: var(--bu-primary, #1976d2);
+  background-color: rgba(25, 118, 210, 0.04) !important;
+  border-color: var(--bu-primary, #1976d2) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Soft variant hover */
+button.balanceui-button[data-variant="stroke"]:not(:disabled):active {
+  background-color: rgba(25, 118, 210, 0.08) !important;
+}
+
+/* Soft variant - Material Tonal Button */
 button.balanceui-button[data-variant="soft"]:not(:disabled):hover {
-  background-color: var(--bu-tonal-bg, #e3f2fd);
-  opacity: 0.9;
+  background-color: var(--bu-tonal-bg-hover, rgba(25, 118, 210, 0.12)) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Float variant hover */
+button.balanceui-button[data-variant="soft"]:not(:disabled):active {
+  background-color: var(--bu-tonal-bg-active, rgba(25, 118, 210, 0.16)) !important;
+}
+
+/* Float variant - Material Elevated Button */
+button.balanceui-button[data-variant="float"]:not(:disabled) {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
 button.balanceui-button[data-variant="float"]:not(:disabled):hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 2px 4px rgba(0, 0, 0, 0.15) !important;
   transform: translateY(-2px);
 }
 
-/* Bare variant hover */
-button.balanceui-button[data-variant="bare"]:not(:disabled):hover {
-  background-color: var(--bu-soft, rgba(0, 0, 0, 0.04));
+button.balanceui-button[data-variant="float"]:not(:disabled):active {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15), 0 0 1px rgba(0, 0, 0, 0.1) !important;
+  transform: translateY(0);
 }
 
-/* Pulse variants hover */
+/* Bare variant - Material Text Button */
+button.balanceui-button[data-variant="bare"]:not(:disabled):hover {
+  background-color: rgba(25, 118, 210, 0.04) !important;
+}
+
+button.balanceui-button[data-variant="bare"]:not(:disabled):active {
+  background-color: rgba(25, 118, 210, 0.08) !important;
+}
+
+/* Glyph variant - Material Icon Button */
+button.balanceui-button[data-variant="glyph"]:not(:disabled):hover {
+  background-color: rgba(25, 118, 210, 0.08) !important;
+}
+
+button.balanceui-button[data-variant="glyph"]:not(:disabled):active {
+  background-color: rgba(25, 118, 210, 0.12) !important;
+  transform: scale(0.95);
+}
+
+/* Pulse variants - Material FAB */
+button.balanceui-button[data-variant="pulse"]:not(:disabled),
+button.balanceui-button[data-variant="pulse-mini"]:not(:disabled),
+button.balanceui-button[data-variant="pulse-extend"]:not(:disabled) {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25), 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
 button.balanceui-button[data-variant="pulse"]:not(:disabled):hover,
 button.balanceui-button[data-variant="pulse-mini"]:not(:disabled):hover,
 button.balanceui-button[data-variant="pulse-extend"]:not(:disabled):hover {
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important;
-  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+  transform: translateY(-2px) scale(1.02);
 }
 
 button.balanceui-button[data-variant="pulse"]:not(:disabled):active,
 button.balanceui-button[data-variant="pulse-mini"]:not(:disabled):active,
 button.balanceui-button[data-variant="pulse-extend"]:not(:disabled):active {
   transform: translateY(0) scale(1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), 0 2px 6px rgba(0, 0, 0, 0.15) !important;
 }
 
-/* Focus states */
+/* Focus States - Material Design Focus Ring */
 button.balanceui-button:focus-visible {
-  outline: 2px solid var(--bu-primary, #1976d2);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2), 0 0 0 4px rgba(25, 118, 210, 0.1) !important;
 }
 
+/* Disabled State */
+button.balanceui-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+  pointer-events: none;
+}
+
+/* Size-specific adjustments */
+button.balanceui-button[data-size="sm"] {
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+button.balanceui-button[data-size="md"] {
+  font-weight: 500;
+  letter-spacing: 0.015em;
+}
+
+button.balanceui-button[data-size="lg"] {
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* Smooth transitions for all interactive states */
+button.balanceui-button {
+  transition: 
+    background-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  button.balanceui-button[data-variant="bare"]:not(:disabled):hover {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  button.balanceui-button[data-variant="glyph"]:not(:disabled):hover {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+  }
+}

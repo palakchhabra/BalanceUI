@@ -1,8 +1,166 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, DragEvent } from "react";
 import { VideoTrimmer, Card, Badge, Button } from "@balanceui/core";
 import Link from "next/link";
+
+// Compact File Upload Component with Drag & Drop - Refactored for better UX
+function CompactFileUpload({
+  accept,
+  onFileSelect,
+  label,
+  icon,
+}: {
+  accept: string;
+  onFileSelect: (file: File) => void;
+  label: string;
+  icon: React.ReactNode;
+}) {
+  const [isDragging, setIsDragging] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith(accept.split("/")[0])) {
+      setIsLoading(true);
+      setTimeout(() => {
+        onFileSelect(file);
+        setIsLoading(false);
+      }, 100);
+    }
+  };
+
+  const handleClick = () => {
+    if (!isLoading) {
+      fileInputRef.current?.click();
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setIsLoading(true);
+      setTimeout(() => {
+        onFileSelect(file);
+        setIsLoading(false);
+      }, 100);
+    }
+  };
+
+  return (
+    <div
+      onClick={handleClick}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+      className="cursor-pointer transition-all duration-200"
+      style={{
+        border: `2px dashed ${isDragging ? "var(--bu-primary, #1976d2)" : "var(--bu-border, rgba(0, 0, 0, 0.12))"}`,
+        borderRadius: "var(--bu-radius-md, 0.375rem)",
+        padding: "clamp(0.75rem, 2vw, 1rem)",
+        backgroundColor: isDragging
+          ? "rgba(25, 118, 210, 0.04)"
+          : "var(--bu-surface-variant, rgba(0, 0, 0, 0.02))",
+        textAlign: "center",
+        transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+        boxShadow: isDragging ? "0 4px 12px rgba(25, 118, 210, 0.15)" : "0 1px 3px rgba(0, 0, 0, 0.08)",
+        minHeight: "clamp(100px, 15vh, 140px)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept={accept}
+        onChange={handleFileChange}
+        style={{ display: "none" }}
+        disabled={isLoading}
+      />
+      {isLoading ? (
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem" }}>
+          <div
+            style={{
+              width: "32px",
+              height: "32px",
+              border: "3px solid var(--bu-primary, #1976d2)",
+              borderTopColor: "transparent",
+              borderRadius: "50%",
+              animation: "spin 0.8s linear infinite",
+            }}
+          />
+          <p style={{ fontSize: "0.75rem", color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>Loading...</p>
+        </div>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "clamp(0.5rem, 1.5vw, 0.75rem)" }}>
+          <div
+            style={{
+              width: "clamp(36px, 5vw, 40px)",
+              height: "clamp(36px, 5vw, 40px)",
+              borderRadius: "50%",
+              backgroundColor: "var(--bu-primary, #1976d2)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#fff",
+              fontSize: "clamp(18px, 3vw, 20px)",
+              transition: "transform 0.2s ease, background-color 0.2s ease",
+              transform: isDragging ? "scale(1.1)" : "scale(1)",
+            }}
+          >
+            {icon}
+          </div>
+          <div>
+            <p
+              style={{
+                fontSize: "clamp(0.75rem, 2vw, 0.875rem)",
+                fontWeight: 500,
+                color: "var(--bu-fg, #000)",
+                marginBottom: "0.125rem",
+              }}
+            >
+              {label}
+            </p>
+            <p
+              style={{
+                fontSize: "clamp(0.625rem, 1.5vw, 0.75rem)",
+                color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))",
+              }}
+            >
+              Click or drag to upload
+            </p>
+          </div>
+        </div>
+      )}
+      <style jsx>{`
+        @keyframes spin {
+          to {
+            transform: rotate(360deg);
+          }
+        }
+      `}</style>
+    </div>
+  );
+}
 
 export default function VideoTrimmerPage() {
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
@@ -10,15 +168,14 @@ export default function VideoTrimmerPage() {
   const [disabled, setDisabled] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>, type: "video" | "audio") => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setError(null);
-      if (type === "video") {
-        setVideoSrc(URL.createObjectURL(file));
-      } else {
-        setAudioSrc(URL.createObjectURL(file));
-      }
+  const handleFileSelect = (file: File, type: "video" | "audio") => {
+    setError(null);
+    if (type === "video") {
+      if (videoSrc) URL.revokeObjectURL(videoSrc);
+      setVideoSrc(URL.createObjectURL(file));
+    } else {
+      if (audioSrc) URL.revokeObjectURL(audioSrc);
+      setAudioSrc(URL.createObjectURL(file));
     }
   };
 
@@ -29,65 +186,86 @@ export default function VideoTrimmerPage() {
       endTime,
       duration: endTime - startTime,
     });
-    // You can download or process the trimmed blob here
     const url = URL.createObjectURL(trimmedBlob);
     const a = document.createElement("a");
     a.href = url;
     a.download = `trimmed-${Date.now()}.${videoSrc ? "mp4" : "mp3"}`;
     a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const clearVideo = () => {
+    if (videoSrc) URL.revokeObjectURL(videoSrc);
+    setVideoSrc(null);
+  };
+
+  const clearAudio = () => {
+    if (audioSrc) URL.revokeObjectURL(audioSrc);
+    setAudioSrc(null);
   };
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-      <div className="mb-8">
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:ml-64">
+      <div className="mb-6 sm:mb-8">
         <Link
           href="/components"
-          className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+          className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white transition-colors"
         >
           ← Back to Components
         </Link>
       </div>
 
-      <div className="mb-12">
-        <div className="flex items-center gap-3">
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
+      <div className="mb-8 sm:mb-12">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
             VideoTrimmer
           </h1>
-          <Badge variant="solid" style={{ fontSize: "0.875rem" }}>
+          <Badge variant="solid" style={{ fontSize: "0.875rem", alignSelf: "flex-start", sm: { alignSelf: "auto" } }}>
             Media
           </Badge>
         </div>
-        <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
-          A powerful video and audio trimmer component similar to Instagram's trimmer.
-          Allows users to select start and end points, preview the trimmed section,
-          and export the trimmed media.
+        <p className="mt-3 sm:mt-4 text-base sm:text-lg text-gray-600 dark:text-gray-400">
+          A powerful video and audio trimmer component with Material Design styling. Select start and end points,
+          preview the trimmed section, and export the trimmed media.
         </p>
       </div>
 
-      <div className="grid gap-12 lg:grid-cols-3">
+      <div className="grid gap-8 lg:grid-cols-3 lg:gap-12">
         <div className="lg:col-span-2">
-          <section className="mb-12">
-            <h2 className="mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+          <section id="examples" className="mb-8 sm:mb-12">
+            <h2 className="mb-4 sm:mb-6 text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white">
               Examples
             </h2>
 
-            <Card variant="elevated" elevation={2} style={{ padding: "2rem", marginBottom: "2rem" }}>
-              <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-                Video Trimmer
-              </h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Select a video file:
-                  </label>
-                  <input
-                    type="file"
-                    accept="video/*"
-                    onChange={(e) => handleFileSelect(e, "video")}
-                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-black file:text-white hover:file:bg-gray-800 dark:file:bg-white dark:file:text-black dark:hover:file:bg-gray-200"
-                  />
-                </div>
+            {/* Video Trimmer Example */}
+            <Card
+              variant="elevated"
+              elevation={2}
+              style={{ padding: "clamp(1rem, 3vw, 1.5rem)", marginBottom: "1.5rem" }}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
+                  Video Trimmer
+                </h3>
                 {videoSrc && (
+                  <Button variant="stroke" size="sm" onClick={clearVideo}>
+                    Clear
+                  </Button>
+                )}
+              </div>
+              <div className="space-y-4">
+                {!videoSrc ? (
+                  <CompactFileUpload
+                    accept="video/*"
+                    onFileSelect={(file) => handleFileSelect(file, "video")}
+                    label="Upload Video"
+                    icon={
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17 10.5V7a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h12a1 1 0 001-1v-3.5l4 4v-11l-4 4z" />
+                      </svg>
+                    }
+                  />
+                ) : (
                   <VideoTrimmer
                     src={videoSrc}
                     format="video"
@@ -100,33 +278,38 @@ export default function VideoTrimmerPage() {
                     error={error || undefined}
                   />
                 )}
-                {!videoSrc && (
-                  <div className="rounded-lg border-2 border-dashed border-gray-300 p-12 text-center dark:border-gray-700">
-                    <p className="text-gray-500 dark:text-gray-400">
-                      Select a video file to see the trimmer
-                    </p>
-                  </div>
-                )}
               </div>
             </Card>
 
-            <Card variant="elevated" elevation={2} style={{ padding: "2rem", marginBottom: "2rem" }}>
-              <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-                Audio Trimmer
-              </h3>
-              <div className="space-y-4">
-                <div>
-                  <label className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Select an audio file:
-                  </label>
-                  <input
-                    type="file"
-                    accept="audio/*"
-                    onChange={(e) => handleFileSelect(e, "audio")}
-                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-black file:text-white hover:file:bg-gray-800 dark:file:bg-white dark:file:text-black dark:hover:file:bg-gray-200"
-                  />
-                </div>
+            {/* Audio Trimmer Example */}
+            <Card
+              variant="elevated"
+              elevation={2}
+              style={{ padding: "clamp(1rem, 3vw, 1.5rem)", marginBottom: "1.5rem" }}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white">
+                  Audio Trimmer
+                </h3>
                 {audioSrc && (
+                  <Button variant="stroke" size="sm" onClick={clearAudio}>
+                    Clear
+                  </Button>
+                )}
+              </div>
+              <div className="space-y-4">
+                {!audioSrc ? (
+                  <CompactFileUpload
+                    accept="audio/*"
+                    onFileSelect={(file) => handleFileSelect(file, "audio")}
+                    label="Upload Audio"
+                    icon={
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
+                      </svg>
+                    }
+                  />
+                ) : (
                   <VideoTrimmer
                     src={audioSrc}
                     format="audio"
@@ -138,34 +321,29 @@ export default function VideoTrimmerPage() {
                     disabled={disabled}
                   />
                 )}
-                {!audioSrc && (
-                  <div className="rounded-lg border-2 border-dashed border-gray-300 p-12 text-center dark:border-gray-700">
-                    <p className="text-gray-500 dark:text-gray-400">
-                      Select an audio file to see the trimmer
-                    </p>
-                  </div>
-                )}
               </div>
             </Card>
 
-            <Card variant="elevated" elevation={2} style={{ padding: "2rem", marginBottom: "2rem" }}>
-              <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-                With Custom Duration Limits & Controls
+            {/* Custom Duration Limits Example */}
+            <Card variant="elevated" elevation={2} style={{ padding: "clamp(1rem, 3vw, 1.5rem)", marginBottom: "1.5rem" }}>
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                Custom Duration Limits & Controls
               </h3>
               <div className="space-y-4">
                 <p className="text-sm text-gray-600 dark:text-gray-400">
                   Example with minimum 5 seconds and maximum 15 seconds duration
                 </p>
-                <div className="flex gap-4">
-                  <Button
-                    variant="stroke"
-                    size="sm"
-                    onClick={() => setDisabled(!disabled)}
-                  >
+                <div className="flex flex-wrap gap-2">
+                  <Button variant="stroke" size="sm" onClick={() => setDisabled(!disabled)}>
                     {disabled ? "Enable" : "Disable"} Trimmer
                   </Button>
+                  {videoSrc && (
+                    <Button variant="stroke" size="sm" onClick={clearVideo}>
+                      Clear Video
+                    </Button>
+                  )}
                 </div>
-                {videoSrc && (
+                {videoSrc ? (
                   <VideoTrimmer
                     src={videoSrc}
                     format="video"
@@ -176,24 +354,28 @@ export default function VideoTrimmerPage() {
                     helperText="Minimum 5s, Maximum 15s"
                     disabled={disabled}
                   />
-                )}
-                {!videoSrc && (
-                  <div className="rounded-lg border-2 border-dashed border-gray-300 p-8 text-center dark:border-gray-700">
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Select a video file first
-                    </p>
-                  </div>
+                ) : (
+                  <CompactFileUpload
+                    accept="video/*"
+                    onFileSelect={(file) => handleFileSelect(file, "video")}
+                    label="Upload Video for Custom Duration Example"
+                    icon={
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17 10.5V7a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h12a1 1 0 001-1v-3.5l4 4v-11l-4 4z" />
+                      </svg>
+                    }
+                  />
                 )}
               </div>
             </Card>
           </section>
 
-          <section className="mb-12">
-            <h2 className="mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+          <section id="usage" className="mb-8 sm:mb-12">
+            <h2 className="mb-4 sm:mb-6 text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white">
               Usage
             </h2>
-            <div className="overflow-x-auto rounded-lg bg-gray-900 p-6">
-              <pre className="text-sm text-gray-100">
+            <div className="overflow-x-auto rounded-lg bg-gray-900 p-4 sm:p-6">
+              <pre className="text-xs sm:text-sm text-gray-100">
                 <code>{`import { VideoTrimmer } from '@balanceui/core'
 import { useState } from 'react'
 
@@ -217,6 +399,7 @@ function VideoEditor() {
     a.href = url
     a.download = 'trimmed-video.mp4'
     a.click()
+    URL.revokeObjectURL(url)
   }
 
   return (
@@ -238,139 +421,167 @@ function VideoEditor() {
             </div>
           </section>
 
-          <section>
-            <h2 className="mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+          <section id="props">
+            <h2 className="mb-4 sm:mb-6 text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white">
               Props
             </h2>
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto rounded-lg border border-gray-200 dark:border-gray-700">
               <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead className="bg-gray-50 dark:bg-gray-800">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
                       Prop
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
                       Type
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
                       Default
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
                       Description
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
                   <tr>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
                       src
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                       string | File
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                       required
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <td className="px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                       Video or audio source (URL string or File object)
                     </td>
                   </tr>
                   <tr>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
                       format
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                       "video" | "audio"
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                       "video"
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <td className="px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                       Media format type
                     </td>
                   </tr>
                   <tr>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
                       onTrim
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                       (blob: Blob, startTime: number, endTime: number) =&gt; void
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                       undefined
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <td className="px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                       Callback when trim is completed
                     </td>
                   </tr>
                   <tr>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
                       minDuration
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                       number
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                       1
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <td className="px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                       Minimum trim duration in seconds
                     </td>
                   </tr>
                   <tr>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
                       maxDuration
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                       number
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                       undefined
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <td className="px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                       Maximum trim duration in seconds
                     </td>
                   </tr>
                   <tr>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
                       quality
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                       number
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                       0.8
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <td className="px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                       Video quality (0-1) for export
                     </td>
                   </tr>
                   <tr>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
-                      className
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
+                      disabled
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-                      string
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                      boolean
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-                      undefined
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                      false
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-                      Additional CSS classes
+                    <td className="px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                      Disable the trimmer controls
                     </td>
                   </tr>
                   <tr>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
-                      style
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
+                      label
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-                      React.CSSProperties
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                      string
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                       undefined
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-                      Inline styles
+                    <td className="px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                      Label text for the trimmer
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
+                      helperText
+                    </td>
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                      string
+                    </td>
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                      undefined
+                    </td>
+                    <td className="px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                      Helper text displayed below the trimmer
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
+                      error
+                    </td>
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                      string
+                    </td>
+                    <td className="whitespace-nowrap px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                      undefined
+                    </td>
+                    <td className="px-4 sm:px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                      Error message to display
                     </td>
                   </tr>
                 </tbody>
@@ -380,34 +591,37 @@ function VideoEditor() {
         </div>
 
         <div className="lg:col-span-1">
-          <Card variant="elevated" elevation={2} style={{ padding: "1.5rem", position: "sticky", top: "6rem" }}>
-            <h3 className="mb-4 font-semibold text-gray-900 dark:text-white">
-              Quick Links
-            </h3>
+          <Card
+            variant="elevated"
+            elevation={2}
+            style={{ padding: "1.25rem", position: "sticky", top: "6rem" }}
+            className="hidden lg:block"
+          >
+            <h3 className="mb-4 font-semibold text-gray-900 dark:text-white">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link
+                <a
                   href="#examples"
-                  className="text-sm text-black hover:text-gray-800 dark:text-white dark:hover:text-gray-200"
+                  className="text-sm text-black hover:text-gray-800 dark:text-white dark:hover:text-gray-200 transition-colors"
                 >
                   Examples
-                </Link>
+                </a>
               </li>
               <li>
-                <Link
+                <a
                   href="#usage"
-                  className="text-sm text-black hover:text-gray-800 dark:text-white dark:hover:text-gray-200"
+                  className="text-sm text-black hover:text-gray-800 dark:text-white dark:hover:text-gray-200 transition-colors"
                 >
                   Usage
-                </Link>
+                </a>
               </li>
               <li>
-                <Link
+                <a
                   href="#props"
-                  className="text-sm text-black hover:text-gray-800 dark:text-white dark:hover:text-gray-200"
+                  className="text-sm text-black hover:text-gray-800 dark:text-white dark:hover:text-gray-200 transition-colors"
                 >
                   Props
-                </Link>
+                </a>
               </li>
             </ul>
           </Card>
@@ -416,4 +630,3 @@ function VideoEditor() {
     </div>
   );
 }
-
