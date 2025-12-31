@@ -66,8 +66,9 @@ describe('ButtonToggle', () => {
 
   it('shows selected state', () => {
     render(<ButtonToggle options={defaultOptions} value="option1" />);
-    const option1 = screen.getByText('Option 1');
-    expect(option1).toHaveAttribute('aria-pressed', 'true');
+    const option1Text = screen.getByText('Option 1');
+    const button = option1Text.closest('button');
+    expect(button).toHaveAttribute('aria-pressed', 'true');
   });
 });
 
