@@ -59,6 +59,7 @@ export const Checkbox = ({
   style,
   error,
   helperText,
+  "aria-label": ariaLabel,
 }: CheckboxProps) => {
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
   const isControlled = controlledChecked !== undefined;
@@ -93,7 +94,7 @@ export const Checkbox = ({
           aria-disabled={disabled}
           aria-describedby={describedBy}
           aria-invalid={!!error}
-          aria-label={label ? undefined : props["aria-label"]}
+          aria-label={label ? undefined : ariaLabel}
           onClick={handleChange}
           style={checkboxStyle(variant, size, checked, disabled, indeterminate)}
           className={`balanceui-checkbox ${checked ? "balanceui-checkbox-checked" : ""} ${indeterminate ? "balanceui-checkbox-indeterminate" : ""} ${disabled ? "balanceui-checkbox-disabled" : ""} ${error ? "balanceui-checkbox-error" : ""}`}
