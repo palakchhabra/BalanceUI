@@ -2,14 +2,16 @@ name: CI
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: ['**']
   pull_request:
-    branches: [ main, develop ]
+    branches: ['**']
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Only run build on default branches (main/develop)
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' || github.base_ref == 'main' || github.base_ref == 'develop'
     
     steps:
     - uses: actions/checkout@v4
@@ -79,6 +81,8 @@ jobs:
 
   visual-tests:
     needs: [build]
+    # Only run visual tests on default branches (main/develop) after build succeeds
+    if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' || github.base_ref == 'main' || github.base_ref == 'develop') && needs.build.result == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 60
     
