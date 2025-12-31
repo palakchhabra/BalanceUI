@@ -3,8 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Drawer } from "@balanceui/core";
+import { Drawer, Shimmer } from "@balanceui/core";
 import { ThemeSelector } from "./ThemeSelector";
+import { useLoading } from "./LoadingProvider";
+import { SearchBar } from "./SearchBar";
+import { UserProfile } from "./UserProfile";
 
 const navItems = [
   { href: "/", label: "Home" },
@@ -16,6 +19,7 @@ const navItems = [
 export function Navigation() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isLoading } = useLoading();
 
   return (
     <>
@@ -24,88 +28,115 @@ export function Navigation() {
         style={{
           backgroundColor: "var(--bu-surface, #ffffff)",
           borderBottom: "1px solid var(--bu-border, rgba(0, 0, 0, 0.12))",
-          boxShadow: "0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12)",
-          transition: "all 200ms cubic-bezier(0.4, 0, 0.2, 1)",
+          boxShadow: "var(--bu-elevation-4)",
+          transition: "var(--bu-transition-elevation)",
         }}
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
-              <Link
-                href="/"
-                className="flex items-center space-x-2 text-xl font-medium transition-all duration-200"
-                style={{
-                  color: "var(--bu-fg, rgba(0, 0, 0, 0.87))",
-                  textDecoration: "none",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.opacity = "0.87";
-                  e.currentTarget.style.transform = "translateY(-1px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.opacity = "1";
-                  e.currentTarget.style.transform = "translateY(0)";
-                }}
-              >
-                <span className="text-2xl" style={{ transition: "transform 200ms ease" }}>⚖️</span>
-                <span style={{ fontWeight: 500, letterSpacing: "-0.01em" }}>BalanceUI</span>
-              </Link>
+              {isLoading ? (
+                <div className="flex items-center space-x-2">
+                  <Shimmer variant="circular" width="32px" height="32px" />
+                  <Shimmer variant="text" width="120px" height="24px" />
+                </div>
+              ) : (
+                <Link
+                  href="/"
+                  className="flex items-center space-x-2 text-xl font-medium transition-all duration-200"
+                  style={{
+                    color: "var(--bu-fg, rgba(0, 0, 0, 0.87))",
+                    textDecoration: "none",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.opacity = "0.87";
+                    e.currentTarget.style.transform = "translateY(-1px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.opacity = "1";
+                    e.currentTarget.style.transform = "translateY(0)";
+                  }}
+                >
+                  <span className="text-2xl" style={{ transition: "transform 200ms ease" }}>⚖️</span>
+                  <span style={{ fontWeight: 500, letterSpacing: "-0.01em" }}>BalanceUI</span>
+                </Link>
+              )}
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex md:items-center md:space-x-4">
-              {navItems.map((item) => {
-                const isActive = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href));
-                return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="relative px-3 py-2 text-sm font-medium rounded-md transition-all duration-200"
-                    style={{
-                      color: isActive 
-                        ? "var(--bu-primary, #1976d2)" 
-                        : "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))",
-                      backgroundColor: isActive 
-                        ? "rgba(25, 118, 210, 0.08)" 
-                        : "transparent",
-                      textDecoration: "none",
-                      position: "relative",
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isActive) {
-                        e.currentTarget.style.backgroundColor = "rgba(0, 0, 0, 0.04)";
-                        e.currentTarget.style.color = "var(--bu-fg, rgba(0, 0, 0, 0.87))";
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isActive) {
-                        e.currentTarget.style.backgroundColor = "transparent";
-                        e.currentTarget.style.color = "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))";
-                      }
-                    }}
-                  >
-                    {item.label}
-                    {isActive && (
-                      <span
+            <div className="hidden md:flex md:items-center md:space-x-4 flex-1 justify-center mx-4">
+              {isLoading ? (
+                <>
+                  {[1, 2, 3, 4].map((i) => (
+                    <Shimmer key={i} variant="text" width="80px" height="32px" style={{ borderRadius: "6px" }} />
+                  ))}
+                </>
+              ) : (
+                <>
+                  {navItems.map((item) => {
+                    const isActive = pathname === item.href || (item.href !== "/" && pathname?.startsWith(item.href));
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        className="relative px-3 py-2 text-sm font-medium rounded-md transition-all duration-200"
                         style={{
-                          position: "absolute",
-                          bottom: 0,
-                          left: "50%",
-                          transform: "translateX(-50%)",
-                          width: "24px",
-                          height: "2px",
-                          backgroundColor: "var(--bu-primary, #1976d2)",
-                          borderRadius: "2px 2px 0 0",
-                          animation: "balanceui-nav-indicator 200ms cubic-bezier(0.4, 0, 0.2, 1)",
+                          color: isActive 
+                            ? "var(--bu-primary, #1976d2)" 
+                            : "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))",
+                          backgroundColor: isActive 
+                            ? "rgba(25, 118, 210, 0.08)" 
+                            : "transparent",
+                          textDecoration: "none",
+                          position: "relative",
                         }}
-                      />
-                    )}
-                  </Link>
-                );
-              })}
-              <div className="ml-2">
-                <ThemeSelector />
-              </div>
+                        onMouseEnter={(e) => {
+                          if (!isActive) {
+                            e.currentTarget.style.backgroundColor = "rgba(0, 0, 0, 0.04)";
+                            e.currentTarget.style.color = "var(--bu-fg, rgba(0, 0, 0, 0.87))";
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!isActive) {
+                            e.currentTarget.style.backgroundColor = "transparent";
+                            e.currentTarget.style.color = "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))";
+                          }
+                        }}
+                      >
+                        {item.label}
+                        {isActive && (
+                          <span
+                            style={{
+                              position: "absolute",
+                              bottom: 0,
+                              left: "50%",
+                              transform: "translateX(-50%)",
+                              width: "24px",
+                              height: "2px",
+                              backgroundColor: "var(--bu-primary, #1976d2)",
+                              borderRadius: "2px 2px 0 0",
+                              animation: "balanceui-nav-indicator 200ms cubic-bezier(0.4, 0, 0.2, 1)",
+                            }}
+                          />
+                        )}
+                      </Link>
+                    );
+                  })}
+                </>
+              )}
+            </div>
+
+            {/* Right side: Search, Theme, User */}
+            <div className="hidden md:flex md:items-center md:space-x-2">
+              {!isLoading && (
+                <>
+                  <div className="w-64">
+                    <SearchBar />
+                  </div>
+                  <ThemeSelector />
+                  <UserProfile />
+                </>
+              )}
             </div>
 
             {/* Mobile menu button */}

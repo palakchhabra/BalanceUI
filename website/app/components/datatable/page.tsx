@@ -1,8 +1,9 @@
 "use client";
 
-import { Card, Badge, DataTable, Button, Input } from "@balanceui/core";
+import { Card, Badge, DataTable, Button, Input, Toggle } from "@balanceui/core";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useMetrics } from "@/hooks/useMetrics";
 
 interface User {
   id: string;
@@ -32,16 +33,32 @@ const generateMockUsers = (count: number): User[] => {
 const allUsers = generateMockUsers(150);
 
 export default function DataTablePage() {
+  const { trackComponentView, trackInteraction } = useMetrics();
+  
   const [clientPage, setClientPage] = useState(1);
   const [clientPageSize, setClientPageSize] = useState(10);
   const [clientSort, setClientSort] = useState<{ columnId: string; direction: "asc" | "desc" } | undefined>();
   const [clientFilters, setClientFilters] = useState<Record<string, string | number | null>>({});
+  
+  // Track component view
+  useEffect(() => {
+    trackComponentView("DataTable", { page: "datatable" });
+  }, [trackComponentView]);
 
   const [serverPage, setServerPage] = useState(1);
   const [serverPageSize, setServerPageSize] = useState(10);
   const [serverLoading, setServerLoading] = useState(false);
   const [serverData, setServerData] = useState<User[]>([]);
   const [serverTotal, setServerTotal] = useState(150);
+
+  // Auto-refresh state
+  const [autoRefreshPage, setAutoRefreshPage] = useState(1);
+  const [autoRefreshPageSize, setAutoRefreshPageSize] = useState(10);
+  const [autoRefreshLoading, setAutoRefreshLoading] = useState(false);
+  const [autoRefreshData, setAutoRefreshData] = useState<User[]>([]);
+  const [autoRefreshTotal, setAutoRefreshTotal] = useState(150);
+  const [autoRefreshEnabled, setAutoRefreshEnabled] = useState(false);
+  const [autoRefreshInterval, setAutoRefreshInterval] = useState(5000); // 5 seconds
 
   // Simulate server-side data fetching
   const fetchServerData = async (page: number, pageSize: number) => {
@@ -58,9 +75,32 @@ export default function DataTablePage() {
     setServerLoading(false);
   };
 
+  // Simulate auto-refresh data fetching
+  const fetchAutoRefreshData = async (page: number, pageSize: number) => {
+    setAutoRefreshLoading(true);
+    // Simulate API delay
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    
+    // Generate slightly different data to show refresh is working
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize;
+    const baseData = allUsers.slice(start, end);
+    
+    // Add some randomness to show data is refreshing
+    const data = baseData.map((user, idx) => ({
+      ...user,
+      status: idx % 3 === 0 ? (user.status === "Active" ? "Inactive" : "Active") : user.status,
+    }));
+    
+    setAutoRefreshData(data);
+    setAutoRefreshTotal(allUsers.length);
+    setAutoRefreshLoading(false);
+  };
+
   // Initial server data load
   useEffect(() => {
     fetchServerData(serverPage, serverPageSize);
+    fetchAutoRefreshData(autoRefreshPage, autoRefreshPageSize);
   }, []);
 
   const columns: any[] = [
@@ -221,6 +261,81 @@ export default function DataTablePage() {
                 }}
                 showRecordCount
                 recordCountLabel="Total Users"
+              />
+            </Card>
+
+            {/* Auto-Refresh Example */}
+            <Card variant="elevated" elevation={2} style={{ padding: "1.5rem", marginBottom: "1.5rem" }} className="sm:p-8 sm:mb-8">
+              <h3 className="mb-3 text-base font-semibold text-gray-900 dark:text-white sm:mb-4 sm:text-lg">
+                Auto-Refresh DataTable
+              </h3>
+              <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+                Automatically refreshes data at specified intervals. Perfect for real-time dashboards and live data monitoring.
+                The "Last refreshed" indicator appears in the top right when auto-refresh is enabled.
+              </p>
+              <div className="mb-4 flex flex-wrap items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <Toggle
+                    checked={autoRefreshEnabled}
+                    onChange={(checked) => {
+                      setAutoRefreshEnabled(checked);
+                      trackInteraction("DataTable", "toggle_auto_refresh", { enabled: checked });
+                    }}
+                  />
+                  <span className="text-sm" style={{ color: "var(--bu-fg, rgba(0, 0, 0, 0.87))" }}>
+                    Enable Auto-Refresh
+                  </span>
+                </div>
+                {autoRefreshEnabled && (
+                  <div className="flex items-center gap-2">
+                    <label className="text-sm" style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>
+                      Interval:
+                    </label>
+                    <select
+                      value={autoRefreshInterval}
+                      onChange={(e) => setAutoRefreshInterval(Number(e.target.value))}
+                      style={{
+                        padding: "0.5rem",
+                        borderRadius: "var(--bu-radius-md, 10px)",
+                        border: "1px solid var(--bu-border, rgba(0, 0, 0, 0.12))",
+                        fontSize: "0.875rem",
+                        backgroundColor: "var(--bu-surface, #ffffff)",
+                        color: "var(--bu-fg, rgba(0, 0, 0, 0.87))",
+                      }}
+                    >
+                      <option value={3000}>3 seconds</option>
+                      <option value={5000}>5 seconds</option>
+                      <option value={10000}>10 seconds</option>
+                      <option value={30000}>30 seconds</option>
+                      <option value={60000}>1 minute</option>
+                    </select>
+                  </div>
+                )}
+              </div>
+              <DataTable
+                columns={columns}
+                data={autoRefreshData}
+                loading={autoRefreshLoading}
+                pagination={{
+                  mode: "server",
+                  page: autoRefreshPage,
+                  pageSize: autoRefreshPageSize,
+                  total: autoRefreshTotal,
+                  onChange: (page, pageSize) => {
+                    setAutoRefreshPage(page);
+                    setAutoRefreshPageSize(pageSize);
+                    fetchAutoRefreshData(page, pageSize);
+                  },
+                  showPageSizeSelector: true,
+                  pageSizeOptions: [10, 20, 50, 100],
+                }}
+                showRecordCount
+                recordCountLabel="Total Users"
+                autoRefresh={{
+                  enabled: autoRefreshEnabled,
+                  interval: autoRefreshInterval,
+                  onRefresh: () => fetchAutoRefreshData(autoRefreshPage, autoRefreshPageSize),
+                }}
               />
             </Card>
 

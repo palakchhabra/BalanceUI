@@ -27,6 +27,9 @@ import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { StructuredData } from "@/components/StructuredData";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { LoadingProvider } from "@/components/LoadingProvider";
+import { CookieConsent } from "@/components/CookieConsent";
+import { MetricsProvider } from "@/components/MetricsProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -142,10 +145,15 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} antialiased`} style={{ backgroundColor: "#ffffff", color: "#000000" }}>
         <ThemeProvider>
-          <StructuredData />
-          <Navigation />
-          <main className="min-h-screen" style={{ backgroundColor: "#ffffff", color: "#000000" }}>{children}</main>
-          <Footer />
+          <LoadingProvider>
+            <MetricsProvider>
+              <StructuredData />
+              <Navigation />
+              <main className="min-h-screen" style={{ backgroundColor: "#ffffff", color: "#000000" }}>{children}</main>
+              <Footer />
+              <CookieConsent />
+            </MetricsProvider>
+          </LoadingProvider>
         </ThemeProvider>
       </body>
     </html>

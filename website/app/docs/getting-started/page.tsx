@@ -109,21 +109,17 @@ function App() {
 import '@balanceui/core/theme/theme-contract.css'
 import '@balanceui/core/theme/sky-white.css'
 
-function LoginForm() {
+function NewsletterForm() {
   return (
     <Card style={{ padding: '2rem', maxWidth: '400px' }}>
-      <h2>Login</h2>
+      <h2>Newsletter</h2>
       <Input 
-        placeholder="Email" 
-        style={{ marginBottom: '1rem' }} 
-      />
-      <Input 
-        type="password" 
-        placeholder="Password" 
+        type="email"
+        placeholder="Enter your email" 
         style={{ marginBottom: '1rem' }} 
       />
       <Button variant="solid" style={{ width: '100%' }}>
-        Sign In
+        Subscribe
       </Button>
     </Card>
   )
@@ -142,9 +138,17 @@ function LoginForm() {
               elevation={2}
               style={{
                 padding: "1.5rem",
-                transition: "all 0.3s ease",
+                transition: "var(--bu-transition-elevation)",
+                cursor: "pointer",
               }}
-              className="hover:shadow-lg hover:-translate-y-1"
+              onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
+                e.currentTarget.style.transform = "translateY(-4px)";
+                e.currentTarget.style.boxShadow = "var(--bu-elevation-4)";
+              }}
+              onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "var(--bu-elevation-2)";
+              }}
             >
               <h3 className="mb-2 font-semibold text-gray-900 dark:text-white">
                 Explore Components
@@ -163,9 +167,17 @@ function LoginForm() {
               elevation={2}
               style={{
                 padding: "1.5rem",
-                transition: "all 0.3s ease",
+                transition: "var(--bu-transition-elevation)",
+                cursor: "pointer",
               }}
-              className="hover:shadow-lg hover:-translate-y-1"
+              onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
+                e.currentTarget.style.transform = "translateY(-4px)";
+                e.currentTarget.style.boxShadow = "var(--bu-elevation-4)";
+              }}
+              onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "var(--bu-elevation-2)";
+              }}
             >
               <h3 className="mb-2 font-semibold text-gray-900 dark:text-white">
                 Check Examples
