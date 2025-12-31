@@ -42,6 +42,8 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(({
         aria-label={ariaLabel}
         aria-describedby={describedBy}
         aria-invalid={!!error}
+        aria-required={props.required}
+        aria-expanded={false}
         onFocus={(e) => {
           setFocused(true);
           props.onFocus?.(e);
@@ -49,6 +51,13 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(({
         onBlur={(e) => {
           setFocused(false);
           props.onBlur?.(e);
+        }}
+        onKeyDown={(e) => {
+          // Native select already handles arrow keys, but we can enhance with better feedback
+          if (e.key === 'Escape' && focused) {
+            e.currentTarget.blur();
+          }
+          props.onKeyDown?.(e);
         }}
         className={`balanceui-select ${focused ? "balanceui-select-focused" : ""} ${error ? "balanceui-select-error" : ""} ${className || ""}`}
         style={{

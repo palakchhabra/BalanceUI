@@ -35,6 +35,12 @@ export interface FilterConfig {
   [columnId: string]: string | number | null;
 }
 
+export interface AutoRefreshConfig {
+  enabled: boolean;
+  interval: number; // in milliseconds
+  onRefresh: () => void | Promise<void>;
+}
+
 export interface DataTableProps<T> {
   columns: Column<T>[];
   data: T[];
@@ -59,4 +65,5 @@ export interface DataTableProps<T> {
   showRecordCount?: boolean;
   recordCountLabel?: string;
   emptyMessage?: string;
+  autoRefresh?: AutoRefreshConfig;
 }

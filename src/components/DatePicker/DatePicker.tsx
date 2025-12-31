@@ -1,5 +1,6 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useId } from "react";
 import { DatePickerProps } from "./DatePicker.types";
+import { Input } from "../Input/Input";
 import {
   datePickerStyle,
   calendarStyle,
@@ -70,8 +71,8 @@ export const DatePicker = ({
   onRangeChange,
   placeholder = "Select date",
   disabled = false,
-  minDate,
-  maxDate,
+  minDate: externalMinDate,
+  maxDate: externalMaxDate,
   mode = "single",
   showTime = false,
   format,
@@ -80,23 +81,37 @@ export const DatePicker = ({
   label,
   error,
   helperText,
+  width = "100%",
+  showMinMaxInputs = false,
+  minDateLabel = "Min Date",
+  maxDateLabel = "Max Date",
+  onMinDateChange,
+  onMaxDateChange,
+  required,
+  ...props
 }: DatePickerProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [internalMinDate, setInternalMinDate] = useState<Date | null>(null);
+  const [internalMaxDate, setInternalMaxDate] = useState<Date | null>(null);
+  const minDate = externalMinDate || internalMinDate;
+  const maxDate = externalMaxDate || internalMaxDate;
+  
   const [currentMonth, setCurrentMonth] = useState(
     value || defaultValue || new Date()
   );
   const [selectedDate, setSelectedDate] = useState<Date | null>(
-    value || defaultValue || null
+    value || defaultValue || (mode === "single" ? new Date() : null)
   );
   const [rangeStart, setRangeStart] = useState<Date | null>(null);
   const [rangeEnd, setRangeEnd] = useState<Date | null>(null);
   const [focusedDateIndex, setFocusedDateIndex] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const calendarRef = useRef<HTMLDivElement>(null);
   
   // Generate unique IDs for accessibility
-  const id = `datepicker-${Math.random().toString(36).substr(2, 9)}`;
+  const generatedId = useId();
+  const id = `datepicker-${generatedId}`;
   const errorId = error ? `${id}-error` : undefined;
   const helperId = helperText ? `${id}-helper` : undefined;
   const describedBy = [errorId, helperId].filter(Boolean).join(" ") || undefined;
@@ -159,16 +174,33 @@ export const DatePicker = ({
     if (maxDate && date > maxDate) return;
 
     if (mode === "range") {
+      // If no start date or both dates are selected, start fresh
       if (!rangeStart || (rangeStart && rangeEnd)) {
         setRangeStart(date);
         setRangeEnd(null);
         onRangeChange?.(date, null);
       } else {
-        const start = date < rangeStart ? date : rangeStart;
-        const end = date > rangeStart ? date : rangeStart;
-        setRangeStart(start);
-        setRangeEnd(end);
-        onRangeChange?.(start, end);
+        // Check if selecting a date in the past or future relative to rangeStart
+        const isPast = date < rangeStart;
+        const isFuture = date > rangeStart;
+        
+        // If selecting a date that's not adjacent (more than 1 day difference), reset
+        const daysDiff = Math.abs((date.getTime() - rangeStart.getTime()) / (1000 * 60 * 60 * 24));
+        
+        // If selecting a date in the past when we have a start date, reset
+        // If selecting a date in the future that's not immediately after, reset
+        if (isPast || (isFuture && daysDiff > 1)) {
+          setRangeStart(date);
+          setRangeEnd(null);
+          onRangeChange?.(date, null);
+        } else {
+          // Normal range selection - complete the range
+          const start = date < rangeStart ? date : rangeStart;
+          const end = date > rangeStart ? date : rangeStart;
+          setRangeStart(start);
+          setRangeEnd(end);
+          onRangeChange?.(start, end);
+        }
       }
     } else {
       setSelectedDate(date);
@@ -280,9 +312,11 @@ export const DatePicker = ({
         ref={calendarRef}
         style={calendarStyle} 
         className="balanceui-datepicker-calendar"
+        id={`${id}-calendar`}
         role="dialog"
-        aria-label="Calendar"
+        aria-label={label ? `Calendar for ${label}` : "Calendar"}
         aria-modal="true"
+        aria-labelledby={label ? id : undefined}
       >
         <div style={calendarHeaderStyle}>
           <button
@@ -342,8 +376,12 @@ export const DatePicker = ({
             );
             const inRange =
               mode === "range" &&
+              rangeStart &&
+              rangeEnd &&
               isDateInRange(date, rangeStart, rangeEnd) &&
               !isSelected;
+            const isRangeStart = mode === "range" && rangeStart && isSameDay(date, rangeStart);
+            const isRangeEnd = mode === "range" && rangeEnd && isSameDay(date, rangeEnd);
 
             const isFocused = focusedDateIndex === index;
             
@@ -358,10 +396,17 @@ export const DatePicker = ({
                 onClick={() => handleDateSelect(date)}
                 onKeyDown={(e) => handleCalendarKeyDown(e, date, index)}
                 style={{
-                  ...dayCellStyle(isSelected, isToday, isDisabled),
-                  ...(inRange ? rangeCellStyle(true, false, false) : {}),
+                  ...dayCellStyle(isSelected || isRangeStart || isRangeEnd, isToday, isDisabled),
                 }}
-                className={`balanceui-datepicker-day-cell ${isFocused ? "balanceui-datepicker-day-focused" : ""}`}
+                className={`balanceui-datepicker-day-cell ${
+                  isFocused ? "balanceui-datepicker-day-focused" : ""
+                } ${
+                  inRange ? "balanceui-datepicker-in-range" : ""
+                } ${
+                  isRangeStart ? "balanceui-datepicker-range-start" : ""
+                } ${
+                  isRangeEnd ? "balanceui-datepicker-range-end" : ""
+                }`}
               >
                 {date.getDate()}
               </div>
@@ -413,36 +458,73 @@ export const DatePicker = ({
         : ""
       : formatDate(selectedDate, format);
 
+  const handleMinDateInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const dateStr = e.target.value;
+    if (dateStr) {
+      const date = new Date(dateStr);
+      if (!isNaN(date.getTime())) {
+        setInternalMinDate(date);
+        onMinDateChange?.(date);
+      }
+    } else {
+      setInternalMinDate(null);
+      onMinDateChange?.(null);
+    }
+  };
+
+  const handleMaxDateInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const dateStr = e.target.value;
+    if (dateStr) {
+      const date = new Date(dateStr);
+      if (!isNaN(date.getTime())) {
+        setInternalMaxDate(date);
+        onMaxDateChange?.(date);
+      }
+    } else {
+      setInternalMaxDate(null);
+      onMaxDateChange?.(null);
+    }
+  };
+
   return (
     <div
       ref={containerRef}
       className={`balanceui-datepicker-container ${className || ""}`}
-      style={{ position: "relative" as const, width: "100%" }}
+      style={{ position: "relative" as const, width: typeof width === "number" ? `${width}px` : width }}
     >
-      {label && (
-        <label
-          htmlFor={id}
-          style={{
-            display: "block",
-            marginBottom: "0.5rem",
-            fontSize: "0.875rem",
-            fontWeight: 500,
-            color: error ? "var(--bu-error, #d32f2f)" : "var(--bu-fg, #000)",
-          }}
-        >
-          {label}
-        </label>
+      {showMinMaxInputs && (
+        <div style={{ display: "flex", gap: "1rem", marginBottom: "1rem" }}>
+          <Input
+            type="date"
+            label={minDateLabel}
+            value={minDate ? minDate.toISOString().split("T")[0] : ""}
+            onChange={handleMinDateInputChange}
+            variant={variant === "solid" ? "filled" : variant === "soft" ? "outlined" : "outlined"}
+            fullWidth
+            style={{ flex: 1 }}
+          />
+          <Input
+            type="date"
+            label={maxDateLabel}
+            value={maxDate ? maxDate.toISOString().split("T")[0] : ""}
+            onChange={handleMaxDateInputChange}
+            variant={variant === "solid" ? "filled" : variant === "soft" ? "outlined" : "outlined"}
+            fullWidth
+            style={{ flex: 1 }}
+          />
+        </div>
       )}
-      <div
+      <Input
         ref={inputRef}
         id={id}
-        role="combobox"
-        aria-expanded={isOpen}
-        aria-haspopup="dialog"
-        aria-describedby={describedBy}
-        aria-invalid={!!error}
-        aria-label={label || "Date picker"}
-        tabIndex={disabled ? -1 : 0}
+        variant={variant === "solid" ? "filled" : variant === "soft" ? "outlined" : variant === "outline" ? "outlined" : "outlined"}
+        value={displayValue}
+        placeholder={placeholder}
+        disabled={disabled}
+        label={label}
+        error={error}
+        helperText={helperText}
+        readOnly
         onClick={() => !disabled && setIsOpen(!isOpen)}
         onKeyDown={(e) => {
           if (disabled) return;
@@ -452,44 +534,17 @@ export const DatePicker = ({
           }
         }}
         style={{
-          ...datePickerStyle(variant),
           ...style,
           cursor: disabled ? "not-allowed" : "pointer",
         }}
-        className={`balanceui-datepicker-input ${error ? "balanceui-datepicker-error" : ""}`}
-        aria-disabled={disabled}
-      >
-        {displayValue || placeholder}
-      </div>
-      {error && (
-        <div
-          id={errorId}
-          role="alert"
-          style={{
-            marginTop: "0.25rem",
-            fontSize: "0.75rem",
-            color: "var(--bu-error, #d32f2f)",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.25rem",
-          }}
-        >
-          <span>⚠</span>
-          <span>{error}</span>
-        </div>
-      )}
-      {helperText && !error && (
-        <div
-          id={helperId}
-          style={{
-            marginTop: "0.25rem",
-            fontSize: "0.75rem",
-            color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))",
-          }}
-        >
-          {helperText}
-        </div>
-      )}
+        fullWidth
+        aria-expanded={isOpen}
+        aria-haspopup="dialog"
+        aria-describedby={describedBy}
+        aria-invalid={!!error}
+        aria-required={required}
+        aria-controls={isOpen ? `${id}-calendar` : undefined}
+      />
       {isOpen && renderCalendar()}
     </div>
   );

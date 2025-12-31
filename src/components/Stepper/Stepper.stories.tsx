@@ -29,6 +29,13 @@ const steps = [
   { id: '4', label: 'Complete', description: 'You are all set!' },
 ];
 
+const stepsWithIcons = [
+  { id: '1', label: 'Account', description: 'Create your account', icon: 'user' },
+  { id: '2', label: 'Profile', description: 'Complete your profile', icon: 'account_circle' },
+  { id: '3', label: 'Verification', description: 'Verify your email', icon: 'check' },
+  { id: '4', label: 'Complete', description: 'You are all set!', icon: 'check' },
+];
+
 export const Default: Story = {
   args: {
     steps,
@@ -73,6 +80,92 @@ export const WithErrors: Story = {
   },
 };
 
+export const WithErrorsAndDisabled: Story = {
+  args: {
+    steps,
+    activeStep: 1,
+    errorSteps: [1],
+  },
+  render: (args) => (
+    <div>
+      <div style={{ marginBottom: '16px', color: 'var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))' }}>
+        When step 2 has an error, the connector turns red and steps 3 and 4 are disabled (not accessible).
+      </div>
+      <Stepper {...args} />
+    </div>
+  ),
+};
+
+export const MultipleErrors: Story = {
+  args: {
+    steps,
+    activeStep: 0,
+    errorSteps: [0, 2],
+  },
+  render: (args) => (
+    <div>
+      <div style={{ marginBottom: '16px', color: 'var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))' }}>
+        First error at step 1, so steps 2, 3, and 4 are disabled. Step 3 also has an error but is already disabled.
+      </div>
+      <Stepper {...args} />
+    </div>
+  ),
+};
+
+export const WithIcons: Story = {
+  args: {
+    steps: stepsWithIcons,
+    activeStep: 1,
+  },
+  render: (args) => (
+    <div>
+      <div style={{ marginBottom: '16px', color: 'var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))' }}>
+        Stepper with icons instead of numbers.
+      </div>
+      <Stepper {...args} />
+    </div>
+  ),
+};
+
+export const WithIconsCompleted: Story = {
+  args: {
+    steps: stepsWithIcons,
+    activeStep: 3,
+  },
+  render: (args) => (
+    <div>
+      <div style={{ marginBottom: '16px', color: 'var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))' }}>
+        Completed stepper with icons - completed steps show checkmark.
+      </div>
+      <Stepper {...args} />
+    </div>
+  ),
+};
+
+export const WithIconsAndErrors: Story = {
+  args: {
+    steps: stepsWithIcons,
+    activeStep: 1,
+    errorSteps: [1],
+  },
+  render: (args) => (
+    <div>
+      <div style={{ marginBottom: '16px', color: 'var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))' }}>
+        Stepper with icons and error state - error shows ✕ and next steps are disabled.
+      </div>
+      <Stepper {...args} />
+    </div>
+  ),
+};
+
+export const VerticalWithIcons: Story = {
+  args: {
+    steps: stepsWithIcons,
+    activeStep: 1,
+    orientation: 'vertical',
+  },
+};
+
 export const Interactive: Story = {
   args: {
     steps,
@@ -86,6 +179,31 @@ export const Interactive: Story = {
 export const DottedVariant: Story = {
   args: {
     steps,
+    activeStep: 1,
+    variant: 'dotted',
+  },
+};
+
+export const DottedWithError: Story = {
+  args: {
+    steps,
+    activeStep: 1,
+    variant: 'dotted',
+    errorSteps: [1],
+  },
+  render: (args) => (
+    <div>
+      <div style={{ marginBottom: '16px', color: 'var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))' }}>
+        Dotted variant with error - connector is red and next steps are disabled.
+      </div>
+      <Stepper {...args} />
+    </div>
+  ),
+};
+
+export const DottedWithIcons: Story = {
+  args: {
+    steps: stepsWithIcons,
     activeStep: 1,
     variant: 'dotted',
   },
@@ -120,4 +238,3 @@ export const VariantsComparison: Story = {
     );
   },
 };
-

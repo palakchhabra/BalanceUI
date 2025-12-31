@@ -1,10 +1,11 @@
-import { useState, useRef, useEffect, forwardRef } from "react";
+import { useState, useRef, useEffect, forwardRef, useId } from "react";
 import { InputProps } from "./Input.types";
 import { inputStyle, inputWrapperStyle, labelStyle, adornmentStyle } from "./Input.styles";
+import { Icon } from "../Icon/Icon";
 import "./Input.css";
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(({
-  variant = "outline",
+  variant = "outlined",
   style,
   className,
   onFocus,
@@ -27,8 +28,15 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
   const internalRef = useRef<HTMLInputElement>(null);
   const inputRef = (ref || internalRef) as React.RefObject<HTMLInputElement>;
   
-  // Determine if label should float
-  const hasValue = value !== undefined ? value !== "" : internalValue !== "";
+  // Determine if label should float - only when focused or has value
+  const currentValue = value !== undefined ? value : internalValue;
+  const hasValue = typeof currentValue === "string" 
+    ? currentValue.trim() !== "" 
+    : typeof currentValue === "number" 
+    ? true 
+    : Array.isArray(currentValue) 
+    ? currentValue.length > 0 
+    : currentValue != null;
   const shouldFloatLabel = floatingLabel && (focused || hasValue);
   const hasError = !!error;
   const errorMessage = typeof error === "string" ? error : undefined;
@@ -79,7 +87,38 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
     onChange?.(e);
   };
 
-  const inputId = props.id || `balanceui-input-${Math.random().toString(36).substr(2, 9)}`;
+  const handleNumberIncrement = () => {
+    if (type === "number" && inputRef.current) {
+      const currentValue = parseFloat(inputRef.current.value) || 0;
+      const step = parseFloat(props.step as string) || 1;
+      const max = props.max !== undefined ? parseFloat(props.max as string) : undefined;
+      const newValue = max !== undefined ? Math.min(max, currentValue + step) : currentValue + step;
+      inputRef.current.value = newValue.toString();
+      const syntheticEvent = {
+        target: inputRef.current,
+        currentTarget: inputRef.current,
+      } as React.ChangeEvent<HTMLInputElement>;
+      handleChange(syntheticEvent);
+    }
+  };
+
+  const handleNumberDecrement = () => {
+    if (type === "number" && inputRef.current) {
+      const currentValue = parseFloat(inputRef.current.value) || 0;
+      const step = parseFloat(props.step as string) || 1;
+      const min = props.min !== undefined ? parseFloat(props.min as string) : undefined;
+      const newValue = min !== undefined ? Math.max(min, currentValue - step) : currentValue - step;
+      inputRef.current.value = newValue.toString();
+      const syntheticEvent = {
+        target: inputRef.current,
+        currentTarget: inputRef.current,
+      } as React.ChangeEvent<HTMLInputElement>;
+      handleChange(syntheticEvent);
+    }
+  };
+
+  const generatedId = useId();
+  const inputId = props.id || `balanceui-input-${generatedId}`;
   const helperId = `${inputId}-helper`;
   const errorId = `${inputId}-error`;
   const describedBy = errorId || helperId || undefined;
@@ -91,16 +130,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
       className={`balanceui-input-wrapper ${fullWidth ? "balanceui-input-fullwidth" : ""}`}
       style={inputWrapperStyle(fullWidth)}
     >
-      {floatingLabel && label && (
-        <label
-          htmlFor={inputId}
-          className={`balanceui-input-label ${shouldFloatLabel ? "balanceui-input-label-floating" : ""} ${hasError || emailError ? "balanceui-input-label-error" : ""}`}
-          style={labelStyle(shouldFloatLabel, hasError || !!emailError)}
-        >
-          {label}
-        </label>
-      )}
-      
       <div
         className={`balanceui-input-container ${focused ? "balanceui-input-container-focused" : ""} ${hasError || emailError ? "balanceui-input-container-error" : ""}`}
         style={{
@@ -108,7 +137,18 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
           display: "flex",
           alignItems: "center",
         }}
+        data-variant={variant}
       >
+        {floatingLabel && label && (
+          <label
+            htmlFor={inputId}
+            className={`balanceui-input-label ${shouldFloatLabel ? "balanceui-input-label-floating" : ""} ${hasError || emailError ? "balanceui-input-label-error" : ""}`}
+            style={labelStyle(shouldFloatLabel, hasError || !!emailError, variant, !!startAdornment)}
+          >
+            {label}
+          </label>
+        )}
+        
         {startAdornment && (
           <div className="balanceui-input-adornment balanceui-input-adornment-start" style={adornmentStyle}>
             {startAdornment}
@@ -123,9 +163,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
           value={value !== undefined ? value : internalValue}
           data-variant={variant}
           data-floating-label={floatingLabel}
-          className={`balanceui-input ${focused ? "balanceui-input-focused" : ""} ${hasError || emailError ? "balanceui-input-error" : ""} ${floatingLabel ? "balanceui-input-with-label" : ""} ${className || ""}`}
+          className={`balanceui-input ${focused ? "balanceui-input-focused" : ""} ${hasError || emailError ? "balanceui-input-error" : ""} ${floatingLabel ? "balanceui-input-with-label" : ""} ${shouldFloatLabel ? "balanceui-input-label-floating" : ""} ${!hasValue && !focused && floatingLabel ? "balanceui-input-label-not-floating" : ""} ${className || ""}`}
           style={{
-            ...inputStyle(variant, floatingLabel, !!startAdornment, !!endAdornment),
+            ...inputStyle(variant, floatingLabel, !!startAdornment, !!endAdornment, type === "number"),
             ...style,
           }}
           onFocus={handleFocus}

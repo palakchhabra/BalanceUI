@@ -58,6 +58,7 @@ export const ButtonToggle = ({
     <div
       className={`balanceui-buttontoggle-group ${className || ""}`}
       style={{ ...buttonToggleGroupStyle(fullWidth), ...style }}
+      data-variant={variant}
       role="group"
     >
       {options.map((option, index) => {
@@ -79,13 +80,15 @@ export const ButtonToggle = ({
               isFirst,
               isLast
             )}
-            className={`balanceui-buttontoggle-item ${selected ? "balanceui-buttontoggle-selected" : ""}`}
+            className={`balanceui-buttontoggle-item ${selected ? "balanceui-buttontoggle-selected" : ""} ${isFirst ? "balanceui-buttontoggle-first" : ""} ${isLast ? "balanceui-buttontoggle-last" : ""}`}
             aria-pressed={selected}
           >
             {option.icon && (
               <span className="balanceui-buttontoggle-icon">{option.icon}</span>
             )}
-            {option.label}
+            <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+              {option.label}
+            </span>
           </button>
         );
       })}

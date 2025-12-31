@@ -4,6 +4,7 @@ export interface Step {
   id: string;
   label: string;
   description?: string;
+  icon?: string | React.ReactNode; // Icon name (string) or custom ReactNode
 }
 
 export interface StepperProps {

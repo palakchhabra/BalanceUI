@@ -18,5 +18,12 @@ export interface DatePickerProps {
   label?: string;
   error?: string;
   helperText?: string;
+  width?: string | number;
+  showMinMaxInputs?: boolean;
+  minDateLabel?: string;
+  maxDateLabel?: string;
+  onMinDateChange?: (date: Date | null) => void;
+  onMaxDateChange?: (date: Date | null) => void;
+  required?: boolean;
 }
 

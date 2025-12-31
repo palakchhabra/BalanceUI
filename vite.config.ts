@@ -15,6 +15,10 @@ export default defineConfig({
           "src/theme/theme-contract.css",
           "dist/theme/theme-contract.css"
         );
+        copyFileSync(
+          "src/theme/design-tokens.css",
+          "dist/theme/design-tokens.css"
+        );
       },
     },
   ],

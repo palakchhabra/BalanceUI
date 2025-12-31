@@ -4,11 +4,13 @@
   line-height: var(--bu-line-height-normal, 1.5);
   color: var(--bu-fg, rgba(0, 0, 0, 0.87));
   background: var(--bu-surface, #ffffff);
-  border: 1px solid var(--bu-border, rgba(0, 0, 0, 0.12));
+  border: none;
+  /* Using common class: .balanceui-border-radius-md */
   border-radius: var(--bu-radius-md, 4px);
   outline: none;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+  /* Using common class: .balanceui-transition-shadow (for box-shadow) */
   transition: 
-    border-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
     box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1),
     background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
@@ -19,28 +21,39 @@
   background-position: right 8px center;
 }
 
+.balanceui-select:hover:not(:disabled) {
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+}
+
 .balanceui-select:focus,
 .balanceui-select-focused {
-  border-color: var(--bu-primary, #1976d2);
-  box-shadow: 0 0 0 1px var(--bu-primary, #1976d2);
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12), 0 0 0 2px rgba(25, 118, 210, 0.2);
+  transition: box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .balanceui-select:focus-visible {
   outline: none;
-  border-color: var(--bu-primary, #1976d2);
-  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2), 0 0 0 1px var(--bu-primary, #1976d2);
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12), 0 0 0 3px rgba(25, 118, 210, 0.3);
+  transition: box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .balanceui-select-error,
 .balanceui-select.balanceui-select-error {
-  border-color: var(--bu-error, #d32f2f) !important;
-  box-shadow: 0 0 0 1px var(--bu-error, #d32f2f) !important;
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12), 0 0 0 1px var(--bu-error, #d32f2f) !important;
+}
+
+.balanceui-select-error:hover:not(:disabled) {
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12), 0 0 0 1px var(--bu-error, #d32f2f) !important;
 }
 
 .balanceui-select-error:focus,
 .balanceui-select-error.balanceui-select-focused {
-  border-color: var(--bu-error, #d32f2f) !important;
-  box-shadow: 0 0 0 2px rgba(211, 47, 47, 0.2), 0 0 0 1px var(--bu-error, #d32f2f) !important;
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12), 0 0 0 2px rgba(211, 47, 47, 0.2) !important;
+}
+
+.balanceui-select-error:focus-visible {
+  outline: none;
+  box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12), 0 0 0 3px rgba(211, 47, 47, 0.3) !important;
 }
 
 .balanceui-select:disabled {

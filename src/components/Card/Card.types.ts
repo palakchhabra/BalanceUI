@@ -11,4 +11,6 @@ export interface CardProps {
   style?: React.CSSProperties;
   onClick?: () => void;
   hoverable?: boolean;
+  onMouseEnter?: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onMouseLeave?: (e: React.MouseEvent<HTMLDivElement>) => void;
 }

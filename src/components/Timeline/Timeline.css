@@ -1,0 +1,221 @@
+/* Timeline Component - Material Design Style */
+
+.balanceui-timeline {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  position: relative;
+}
+
+/* Timeline Position Variants - styles are applied via item classes below */
+
+/* Timeline Item */
+.balanceui-timeline-item {
+  display: flex;
+  position: relative;
+  padding-bottom: 1.5rem;
+  min-height: 4rem;
+}
+
+.balanceui-timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+/* Timeline Separator (contains dot and connector) */
+.balanceui-timeline-separator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0 1rem;
+}
+
+/* Timeline Dot */
+.balanceui-timeline-dot {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+/* Filled variant */
+.balanceui-timeline-dot-filled {
+  border: none;
+}
+
+.balanceui-timeline-dot-filled.balanceui-timeline-dot-primary {
+  background-color: var(--bu-primary, #1976d2);
+  color: var(--bu-on-primary, #ffffff);
+}
+
+.balanceui-timeline-dot-filled.balanceui-timeline-dot-secondary {
+  background-color: var(--bu-secondary, #9c27b0);
+  color: var(--bu-on-secondary, #ffffff);
+}
+
+.balanceui-timeline-dot-filled.balanceui-timeline-dot-success {
+  background-color: var(--bu-success, #2e7d32);
+  color: var(--bu-on-success, #ffffff);
+}
+
+.balanceui-timeline-dot-filled.balanceui-timeline-dot-error {
+  background-color: var(--bu-error, #d32f2f);
+  color: var(--bu-on-error, #ffffff);
+}
+
+.balanceui-timeline-dot-filled.balanceui-timeline-dot-warning {
+  background-color: var(--bu-warning, #f57c00);
+  color: var(--bu-on-warning, #ffffff);
+}
+
+.balanceui-timeline-dot-filled.balanceui-timeline-dot-info {
+  background-color: var(--bu-info, #0288d1);
+  color: var(--bu-on-info, #ffffff);
+}
+
+.balanceui-timeline-dot-filled.balanceui-timeline-dot-grey {
+  background-color: var(--bu-fg-secondary, rgba(0, 0, 0, 0.6));
+  color: var(--bu-surface, #ffffff);
+}
+
+/* Outlined variant */
+.balanceui-timeline-dot-outlined {
+  background-color: transparent;
+  border: 2px solid;
+}
+
+.balanceui-timeline-dot-outlined.balanceui-timeline-dot-primary {
+  border-color: var(--bu-primary, #1976d2);
+  color: var(--bu-primary, #1976d2);
+}
+
+.balanceui-timeline-dot-outlined.balanceui-timeline-dot-secondary {
+  border-color: var(--bu-secondary, #9c27b0);
+  color: var(--bu-secondary, #9c27b0);
+}
+
+.balanceui-timeline-dot-outlined.balanceui-timeline-dot-success {
+  border-color: var(--bu-success, #2e7d32);
+  color: var(--bu-success, #2e7d32);
+}
+
+.balanceui-timeline-dot-outlined.balanceui-timeline-dot-error {
+  border-color: var(--bu-error, #d32f2f);
+  color: var(--bu-error, #d32f2f);
+}
+
+.balanceui-timeline-dot-outlined.balanceui-timeline-dot-warning {
+  border-color: var(--bu-warning, #f57c00);
+  color: var(--bu-warning, #f57c00);
+}
+
+.balanceui-timeline-dot-outlined.balanceui-timeline-dot-info {
+  border-color: var(--bu-info, #0288d1);
+  color: var(--bu-info, #0288d1);
+}
+
+.balanceui-timeline-dot-outlined.balanceui-timeline-dot-grey {
+  border-color: var(--bu-fg-secondary, rgba(0, 0, 0, 0.6));
+  color: var(--bu-fg-secondary, rgba(0, 0, 0, 0.6));
+}
+
+/* Timeline Connector */
+.balanceui-timeline-connector {
+  width: 2px;
+  flex: 1;
+  min-height: 1.5rem;
+  background-color: var(--bu-border, rgba(0, 0, 0, 0.12));
+  margin: 0.25rem 0;
+}
+
+/* Timeline Content */
+.balanceui-timeline-content {
+  flex: 1;
+  padding: 0.5rem 0;
+  min-width: 0;
+}
+
+/* Timeline Opposite Content */
+.balanceui-timeline-opposite-content {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  text-align: right;
+  color: var(--bu-fg-secondary, rgba(0, 0, 0, 0.6));
+  font-size: 0.875rem;
+  min-width: 0;
+}
+
+/* Position: Right (default) */
+.balanceui-timeline-position-right .balanceui-timeline-item {
+  flex-direction: row;
+}
+
+.balanceui-timeline-position-right .balanceui-timeline-content {
+  padding-left: 1rem;
+}
+
+/* Position: Left */
+.balanceui-timeline-position-left .balanceui-timeline-item {
+  flex-direction: row-reverse;
+}
+
+.balanceui-timeline-position-left .balanceui-timeline-content {
+  padding-right: 1rem;
+  text-align: right;
+}
+
+.balanceui-timeline-position-left .balanceui-timeline-opposite-content {
+  text-align: left;
+}
+
+/* Position: Alternate */
+.balanceui-timeline-position-alternate .balanceui-timeline-item {
+  flex-direction: row;
+}
+
+.balanceui-timeline-position-alternate .balanceui-timeline-item:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+.balanceui-timeline-position-alternate .balanceui-timeline-item:nth-child(even) .balanceui-timeline-content {
+  padding-right: 1rem;
+  padding-left: 0;
+  text-align: right;
+}
+
+.balanceui-timeline-position-alternate .balanceui-timeline-item:nth-child(even) .balanceui-timeline-opposite-content {
+  text-align: left;
+}
+
+.balanceui-timeline-position-alternate .balanceui-timeline-item:nth-child(odd) .balanceui-timeline-content {
+  padding-left: 1rem;
+}
+
+.balanceui-timeline-position-alternate .balanceui-timeline-item:nth-child(odd) .balanceui-timeline-opposite-content {
+  text-align: right;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .balanceui-timeline-position-alternate .balanceui-timeline-item {
+    flex-direction: row !important;
+  }
+
+  .balanceui-timeline-position-alternate .balanceui-timeline-item .balanceui-timeline-content {
+    padding-left: 1rem !important;
+    padding-right: 0 !important;
+    text-align: left !important;
+  }
+
+  .balanceui-timeline-position-alternate .balanceui-timeline-item .balanceui-timeline-opposite-content {
+    text-align: right !important;
+  }
+}
+

@@ -27,7 +27,7 @@ export const Progress = ({
   if (type === "circular") {
     const radius = 28;
     const circumference = 2 * Math.PI * radius;
-    const offset = circumference - (percent / 100) * circumference;
+    const offset = indeterminate ? 0 : circumference - (percent / 100) * circumference;
 
     return (
       <div className={`balanceui-progress-circular ${className || ""}`} style={style}>
@@ -37,26 +37,36 @@ export const Progress = ({
             cx="32"
             cy="32"
             r={radius}
+            fill="none"
           />
-          {!indeterminate && (
+          {indeterminate ? (
             <circle
-              className="balanceui-progress-circular-fill"
+              className={`balanceui-progress-circular-fill variant-${variant}`}
               cx="32"
               cy="32"
               r={radius}
+              fill="none"
+              strokeDasharray={circumference}
+              strokeDashoffset={circumference * 0.25}
+              style={{
+                strokeDasharray: `${circumference * 0.25} ${circumference * 0.75}`,
+                animation: "bu-spin 1.4s linear infinite",
+              }}
+            />
+          ) : (
+            <circle
+              className={`balanceui-progress-circular-fill variant-${variant}`}
+              cx="32"
+              cy="32"
+              r={radius}
+              fill="none"
               strokeDasharray={circumference}
               strokeDashoffset={offset}
-              style={{
-                stroke: variant === "solid" ? "var(--bu-primary)" :
-                       variant === "danger" ? "var(--bu-danger)" :
-                       variant === "success" ? "var(--bu-success)" :
-                       variant === "warning" ? "var(--bu-warning)" : "var(--bu-primary)",
-              }}
             />
           )}
         </svg>
         {showValue && !indeterminate && (
-          <div className="balanceui-progress-value" style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
+          <div className="balanceui-progress-value">
             {Math.round(percent)}%
           </div>
         )}
@@ -69,7 +79,7 @@ export const Progress = ({
                    "variant-linear";
 
   return (
-    <div className={className} style={style}>
+    <div className={className || ""} style={{ width: "100%", ...style }}>
       <div
         role="progressbar"
         aria-valuemin={min}
@@ -77,13 +87,22 @@ export const Progress = ({
         aria-valuenow={indeterminate ? undefined : clamped}
         aria-busy={indeterminate}
         className={`balanceui-progress ${sizeClass}`}
+        style={{ width: "100%", position: "relative" }}
       >
         {indeterminate ? (
           <div className={`balanceui-progress-indeterminate variant-${variant}`} />
         ) : (
           <div 
             className={`balanceui-progress-fill variant-${variant}`}
-            style={{ width: `${percent}%` }}
+            style={{ 
+              width: `${percent}%`, 
+              display: "block", 
+              minWidth: percent > 0 ? "2px" : "0",
+              position: "absolute",
+              top: 0,
+              left: 0,
+              height: "100%"
+            }}
           />
         )}
       </div>

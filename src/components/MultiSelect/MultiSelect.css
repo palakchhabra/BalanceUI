@@ -14,13 +14,14 @@
   transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.balanceui-multiselect-input-container:hover:not(.balanceui-multiselect-disabled) {
+.balanceui-multiselect-input-container:hover:not(.balanceui-multiselect-disabled):not(.balanceui-multiselect-open) {
   border-color: var(--bu-primary, #1976d2);
 }
 
 .balanceui-multiselect-input-container:focus-within {
   border-color: var(--bu-primary, #1976d2);
   box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .balanceui-multiselect-error .balanceui-multiselect-input-container {
@@ -32,19 +33,26 @@
   box-shadow: 0 0 0 2px rgba(211, 47, 47, 0.2);
 }
 
-/* Chip Styles */
+/* Chip Styles - Material Design with Elevation */
 .balanceui-multiselect-chip {
   transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 2px 1px -1px rgba(0, 0, 0, 0.12);
+  border-radius: var(--bu-radius-xl, 16px);
 }
 
 .balanceui-multiselect-chip:hover {
   background-color: var(--bu-primary-dark, #1565c0) !important;
-  transform: scale(1.05);
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 }
 
-/* Dropdown Options */
+/* Dropdown Options - Material Design Floating */
 .balanceui-multiselect-dropdown {
   animation: balanceui-multiselect-dropdown-enter 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+  border-radius: var(--bu-radius-md, 4px);
+  border: 1px solid var(--bu-border, rgba(0, 0, 0, 0.12));
+  background: var(--bu-surface, #ffffff);
+  z-index: 1000;
 }
 
 @keyframes balanceui-multiselect-dropdown-enter {
@@ -59,20 +67,65 @@
 }
 
 .balanceui-multiselect-option {
-  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  /* No transition for instant selection feedback */
+  transition: none;
 }
 
-.balanceui-multiselect-option:hover:not(.balanceui-multiselect-option-disabled) {
+/* Selected state - Material Design primary light background */
+.balanceui-multiselect-option-selected {
+  background-color: var(--bu-primary-light, rgba(25, 118, 210, 0.12)) !important;
+  font-weight: 500;
+  color: var(--bu-primary, #1976d2);
+}
+
+/* Hover state for non-selected items - smooth transition only on hover */
+.balanceui-multiselect-option:hover:not(.balanceui-multiselect-option-disabled):not(.balanceui-multiselect-option-selected) {
+  background-color: var(--bu-surface-variant, rgba(0, 0, 0, 0.04)) !important;
+  transition: background-color 100ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover state for selected items - darker primary color with smooth transition */
+.balanceui-multiselect-option-selected:hover:not(.balanceui-multiselect-option-disabled) {
+  background-color: var(--bu-primary-light, rgba(25, 118, 210, 0.16)) !important;
+  transition: background-color 100ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Focused state for non-selected items */
+.balanceui-multiselect-option-focused:not(.balanceui-multiselect-option-selected) {
   background-color: var(--bu-surface-variant, rgba(0, 0, 0, 0.04)) !important;
 }
 
-.balanceui-multiselect-option-selected {
-  background-color: var(--bu-primary-light, rgba(25, 118, 210, 0.08));
-  font-weight: 500;
+/* Focused state for selected items */
+.balanceui-multiselect-option-focused.balanceui-multiselect-option-selected {
+  background-color: var(--bu-primary-light, rgba(25, 118, 210, 0.16)) !important;
 }
 
-.balanceui-multiselect-option-focused {
-  background-color: var(--bu-surface-variant, rgba(0, 0, 0, 0.04));
+/* Disabled state - grey out remaining options when maxSelected is reached */
+.balanceui-multiselect-option-disabled {
+  opacity: 0.5 !important;
+  color: var(--bu-disabled, rgba(0, 0, 0, 0.38)) !important;
+}
+
+/* Inherently disabled options (from option.disabled) - visually greyed but may be selectable */
+.balanceui-multiselect-option-inherently-disabled {
+  opacity: 0.5 !important;
+  color: var(--bu-disabled, rgba(0, 0, 0, 0.38)) !important;
+}
+
+/* Functionally disabled options (not clickable) */
+.balanceui-multiselect-option-disabled:not(.balanceui-multiselect-option-inherently-disabled) {
+  cursor: not-allowed !important;
+  pointer-events: none;
+}
+
+.balanceui-multiselect-option-disabled:not(.balanceui-multiselect-option-inherently-disabled):hover {
+  background-color: transparent !important;
+}
+
+/* Allow hover on inherently disabled options if they're selectable */
+.balanceui-multiselect-option-inherently-disabled:hover {
+  background-color: var(--bu-surface-variant, rgba(0, 0, 0, 0.04)) !important;
+  transition: background-color 100ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Responsive Design */

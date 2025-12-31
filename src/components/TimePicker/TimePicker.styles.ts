@@ -27,13 +27,14 @@ export const timePickerDropdownStyle = {
   position: "absolute" as const,
   top: "100%",
   left: 0,
+  right: 0,
   marginTop: "0.25rem",
   zIndex: 1000,
   backgroundColor: "var(--bu-surface, #fff)",
   borderRadius: "var(--bu-radius-md, 0.375rem)",
   boxShadow:
     "0px 2px 8px rgba(0, 0, 0, 0.15), 0px 0px 1px rgba(0, 0, 0, 0.1)",
-  padding: "1rem",
+  padding: "0.5rem",
   minWidth: "200px",
   maxHeight: "300px",
   overflowY: "auto" as const,
@@ -43,6 +44,7 @@ export const timeListStyle = {
   display: "flex",
   flexDirection: "column" as const,
   gap: "0.25rem",
+  width: "100%",
 } as React.CSSProperties;
 
 export const timeItemStyle = (isSelected: boolean) => ({
@@ -55,10 +57,6 @@ export const timeItemStyle = (isSelected: boolean) => ({
   color: isSelected ? "#fff" : "var(--bu-fg, #000)",
   transition: "all 0.15s ease",
   fontSize: "0.875rem",
-  "&:hover": !isSelected
-    ? {
-        backgroundColor: "var(--bu-surface-variant, rgba(0, 0, 0, 0.05))",
-      }
-    : {},
+  width: "100%",
+  boxSizing: "border-box" as const,
 } as React.CSSProperties);
-

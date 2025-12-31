@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useId } from "react";
 import { CheckboxProps } from "./Checkbox.types";
 import { checkboxStyle, checkboxIconStyle } from "./Checkbox.styles";
 import "./Checkbox.css";
@@ -74,7 +74,8 @@ export const Checkbox = ({
   };
 
   // Generate unique IDs for accessibility
-  const id = `checkbox-${Math.random().toString(36).substr(2, 9)}`;
+  const generatedId = useId();
+  const id = `checkbox-${generatedId}`;
   const errorId = error ? `${id}-error` : undefined;
   const helperId = helperText ? `${id}-helper` : undefined;
   const describedBy = [errorId, helperId].filter(Boolean).join(" ") || undefined;
@@ -82,9 +83,9 @@ export const Checkbox = ({
   return (
     <div
       className={`balanceui-checkbox-container ${className || ""}`}
-      style={{ display: "inline-flex", flexDirection: "column", gap: "0.25rem", width: "100%" }}
+      style={{ display: label ? "inline-flex" : "inline-block", flexDirection: "column", gap: "0.25rem", width: label ? "100%" : "auto" }}
     >
-      <div style={{ display: "inline-flex", alignItems: "flex-start", gap: "0.5rem", width: "100%" }}>
+      <div style={{ display: "inline-flex", alignItems: label ? "flex-start" : "center", gap: "0.5rem", width: label ? "100%" : "auto" }}>
         <div
           role="checkbox"
           id={id}
@@ -92,15 +93,22 @@ export const Checkbox = ({
           aria-disabled={disabled}
           aria-describedby={describedBy}
           aria-invalid={!!error}
+          aria-label={label ? undefined : props["aria-label"]}
           onClick={handleChange}
           style={checkboxStyle(variant, size, checked, disabled, indeterminate)}
           className={`balanceui-checkbox ${checked ? "balanceui-checkbox-checked" : ""} ${indeterminate ? "balanceui-checkbox-indeterminate" : ""} ${disabled ? "balanceui-checkbox-disabled" : ""} ${error ? "balanceui-checkbox-error" : ""}`}
           tabIndex={disabled ? -1 : 0}
           onKeyDown={(e) => {
             if (disabled) return;
+            // Space or Enter to toggle
             if (e.key === " " || e.key === "Enter") {
               e.preventDefault();
+              e.stopPropagation();
               handleChange();
+            }
+            // Escape to blur (optional, for better UX)
+            if (e.key === "Escape") {
+              e.currentTarget.blur();
             }
           }}
         >

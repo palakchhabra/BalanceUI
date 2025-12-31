@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { List } from './List';
+import { Button } from '../Button/Button';
 
 const meta: Meta<typeof List> = {
   title: 'Components/List',
@@ -105,13 +106,30 @@ export const WithActions: Story = {
         id: '1',
         primary: 'Item with action',
         secondary: 'Click the button',
-        action: <button style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}>Action</button>,
+        action: <Button variant="bare" size="sm" onClick={(e) => { e.stopPropagation(); alert('Action clicked'); }}>Action</Button>,
       },
       {
         id: '2',
         primary: 'Another item',
         secondary: 'With action button',
-        action: <button style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}>Action</button>,
+        action: <Button variant="bare" size="sm" onClick={(e) => { e.stopPropagation(); alert('Action clicked'); }}>Action</Button>,
+      },
+      {
+        id: '3',
+        primary: 'Item with icon action',
+        secondary: 'Icon button action',
+        action: (
+          <Button 
+            variant="bare" 
+            size="sm" 
+            onClick={(e) => { e.stopPropagation(); alert('More options'); }}
+            style={{ minWidth: 'auto', padding: '0.5rem' }}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+            </svg>
+          </Button>
+        ),
       },
     ];
     return <List items={items} />;

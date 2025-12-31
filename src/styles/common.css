@@ -1,0 +1,232 @@
+/**
+ * Common CSS utilities and patterns
+ * Reusable styles used across multiple components
+ */
+
+/* =========================================================
+   Common Patterns
+   ========================================================= */
+
+/* Flexbox utilities */
+.balanceui-flex {
+  display: flex;
+}
+
+.balanceui-flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.balanceui-flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.balanceui-flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Positioning utilities */
+.balanceui-relative {
+  position: relative;
+}
+
+.balanceui-absolute {
+  position: absolute;
+}
+
+.balanceui-fixed {
+  position: fixed;
+}
+
+/* Common interactive states */
+.balanceui-interactive {
+  cursor: pointer;
+  user-select: none;
+  transition: var(--bu-transition-surface);
+}
+
+.balanceui-interactive:hover {
+  background-color: var(--bu-hover-bg);
+}
+
+.balanceui-interactive:active {
+  background-color: var(--bu-active-bg);
+}
+
+.balanceui-interactive:disabled {
+  opacity: var(--bu-opacity-disabled);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Common focus styles */
+.balanceui-focusable:focus-visible {
+  outline: var(--bu-focus-ring-width, 2px) solid var(--bu-primary);
+  outline-offset: var(--bu-space-1);
+  border-radius: var(--bu-radius-sm);
+}
+
+/* Common container styles */
+.balanceui-container {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.balanceui-container-fullwidth {
+  width: 100%;
+}
+
+/* Common text utilities */
+.balanceui-text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.balanceui-text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+/* Common spacing utilities */
+.balanceui-spacing-xs {
+  padding: var(--bu-space-1);
+}
+
+.balanceui-spacing-sm {
+  padding: var(--bu-space-2);
+}
+
+.balanceui-spacing-md {
+  padding: var(--bu-space-4);
+}
+
+.balanceui-spacing-lg {
+  padding: var(--bu-space-6);
+}
+
+/* Common border utilities */
+.balanceui-border {
+  border: var(--bu-border-width) var(--bu-border-style) var(--bu-border);
+}
+
+.balanceui-border-radius-sm {
+  border-radius: var(--bu-radius-sm);
+}
+
+.balanceui-border-radius-md {
+  border-radius: var(--bu-radius-md);
+}
+
+.balanceui-border-radius-lg {
+  border-radius: var(--bu-radius-lg);
+}
+
+.balanceui-border-radius-full {
+  border-radius: var(--bu-radius-full);
+}
+
+/* Common shadow utilities */
+.balanceui-shadow-sm {
+  box-shadow: var(--bu-elevation-1);
+}
+
+.balanceui-shadow-md {
+  box-shadow: var(--bu-elevation-2);
+}
+
+.balanceui-shadow-lg {
+  box-shadow: var(--bu-elevation-4);
+}
+
+/* Common transition utilities */
+.balanceui-transition {
+  transition: var(--bu-transition-surface);
+}
+
+.balanceui-transition-shadow {
+  transition: var(--bu-transition-shadow);
+}
+
+.balanceui-transition-transform {
+  transition: var(--bu-transition-transform);
+}
+
+/* Common visibility utilities */
+.balanceui-hidden {
+  display: none !important;
+}
+
+.balanceui-visible {
+  visibility: visible;
+}
+
+.balanceui-invisible {
+  visibility: hidden;
+}
+
+/* Common z-index utilities */
+.balanceui-z-dropdown {
+  z-index: var(--bu-z-dropdown);
+}
+
+.balanceui-z-modal {
+  z-index: var(--bu-z-modal);
+}
+
+.balanceui-z-tooltip {
+  z-index: var(--bu-z-tooltip);
+}
+
+/* Common overflow utilities */
+.balanceui-overflow-hidden {
+  overflow: hidden;
+}
+
+.balanceui-overflow-auto {
+  overflow: auto;
+}
+
+.balanceui-overflow-scroll {
+  overflow: scroll;
+}
+
+/* Common size utilities */
+.balanceui-size-sm {
+  width: var(--bu-control-height-sm);
+  height: var(--bu-control-height-sm);
+}
+
+.balanceui-size-md {
+  width: var(--bu-control-height-md);
+  height: var(--bu-control-height-md);
+}
+
+.balanceui-size-lg {
+  width: var(--bu-control-height-lg);
+  height: var(--bu-control-height-lg);
+}
+
+/* Common gap utilities */
+.balanceui-gap-xs {
+  gap: var(--bu-gap-xs);
+}
+
+.balanceui-gap-sm {
+  gap: var(--bu-gap-sm);
+}
+
+.balanceui-gap-md {
+  gap: var(--bu-gap-md);
+}
+
+.balanceui-gap-lg {
+  gap: var(--bu-gap-lg);
+}
+

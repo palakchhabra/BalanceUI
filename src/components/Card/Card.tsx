@@ -11,9 +11,21 @@ export const Card = ({
   style,
   onClick,
   hoverable = false,
+  onMouseEnter,
+  onMouseLeave,
 }: CardProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const isClickable = onClick !== undefined || hoverable;
+
+  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+    setIsHovered(true);
+    onMouseEnter?.(e);
+  };
+
+  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    setIsHovered(false);
+    onMouseLeave?.(e);
+  };
 
   // Build gradient style if gradient variant is used
   const gradientStyle = variant === "gradient" && gradient
@@ -42,8 +54,8 @@ export const Card = ({
         ...style,
       }}
       onClick={onClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       role={isClickable ? "button" : undefined}
       tabIndex={isClickable ? 0 : undefined}
       onKeyDown={(e) => {

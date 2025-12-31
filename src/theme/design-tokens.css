@@ -1,0 +1,231 @@
+/**
+ * BalanceUI Design System - Comprehensive Design Tokens
+ * 
+ * This file contains all design tokens used across the component library.
+ * All components should reference these variables for consistency.
+ */
+
+:root,
+html {
+  /* ========= SPACING SYSTEM (Material UI - 4px base) ========= */
+  /* Use these for padding, margins, and gaps */
+  --bu-space-0: 0;
+  --bu-space-1: 4px;   /* xs */
+  --bu-space-2: 8px;   /* sm */
+  --bu-space-3: 12px;  /* md-sm */
+  --bu-space-4: 16px;  /* md */
+  --bu-space-5: 20px;  /* md-lg */
+  --bu-space-6: 24px;  /* lg */
+  --bu-space-8: 32px;  /* xl */
+  --bu-space-10: 40px; /* 2xl */
+  --bu-space-12: 48px; /* 3xl */
+  --bu-space-16: 64px; /* 4xl */
+  
+  /* Legacy spacing (for backward compatibility) */
+  --bu-space-xs: var(--bu-space-1);
+  --bu-space-sm: var(--bu-space-2);
+  --bu-space-md: var(--bu-space-4);
+  --bu-space-lg: var(--bu-space-6);
+  --bu-space-xl: var(--bu-space-8);
+
+  /* ========= PADDING SYSTEM ========= */
+  /* Component padding presets */
+  --bu-padding-xs: var(--bu-space-1);
+  --bu-padding-sm: var(--bu-space-2);
+  --bu-padding-md: var(--bu-space-4);
+  --bu-padding-lg: var(--bu-space-6);
+  --bu-padding-xl: var(--bu-space-8);
+  
+  /* Input/Control padding */
+  --bu-padding-input-x: var(--bu-space-3);
+  --bu-padding-input-y: var(--bu-space-2);
+  --bu-padding-input-x-with-adornment: 48px;
+  --bu-padding-input-y-floating: var(--bu-space-4);
+
+  /* ========= MARGIN SYSTEM ========= */
+  --bu-margin-xs: var(--bu-space-1);
+  --bu-margin-sm: var(--bu-space-2);
+  --bu-margin-md: var(--bu-space-4);
+  --bu-margin-lg: var(--bu-space-6);
+  --bu-margin-xl: var(--bu-space-8);
+
+  /* ========= GAP SYSTEM ========= */
+  /* For flexbox and grid gaps */
+  --bu-gap-xs: var(--bu-space-1);
+  --bu-gap-sm: var(--bu-space-2);
+  --bu-gap-md: var(--bu-space-4);
+  --bu-gap-lg: var(--bu-space-6);
+  --bu-gap-xl: var(--bu-space-8);
+
+  /* ========= BORDER RADIUS SYSTEM ========= */
+  /* Already defined in theme-contract.css, but ensuring consistency */
+  --bu-radius-xs: 4px;
+  --bu-radius-sm: 8px;
+  --bu-radius-md: 10px;
+  --bu-radius-lg: 12px;
+  --bu-radius-xl: 14px;
+  --bu-radius-full: 999px;
+
+  /* ========= BORDER SYSTEM ========= */
+  --bu-border-width: 1px;
+  --bu-border-width-thick: 2px;
+  --bu-border-style: solid;
+  --bu-border-color: var(--bu-border);
+  --bu-border-color-hover: var(--bu-border-hover);
+  --bu-border-color-focus: var(--bu-primary);
+  --bu-border-color-error: var(--bu-error);
+
+  /* ========= LAYOUT SYSTEM ========= */
+  /* Container widths */
+  --bu-container-sm: 640px;
+  --bu-container-md: 768px;
+  --bu-container-lg: 1024px;
+  --bu-container-xl: 1280px;
+  --bu-container-2xl: 1536px;
+
+  /* Z-index scale (already in base.css, but ensuring consistency) */
+  --bu-z-base: 1;
+  --bu-z-dropdown: 1000;
+  --bu-z-sticky: 1020;
+  --bu-z-fixed: 1030;
+  --bu-z-modal-backdrop: 1040;
+  --bu-z-modal: 1050;
+  --bu-z-popover: 1060;
+  --bu-z-tooltip: 1070;
+
+  /* ========= SHADOW SYSTEM ========= */
+  /* Already defined in theme-contract.css as elevation system */
+  /* Use --bu-elevation-0 through --bu-elevation-24 */
+
+  /* ========= TRANSITION SYSTEM ========= */
+  /* Already defined in theme-contract.css and base.css */
+  /* Use --bu-transition-fast, --bu-transition-base, --bu-transition-slow */
+  /* Use --bu-transition-shadow, --bu-transition-transform, --bu-transition-elevation, --bu-transition-surface */
+
+  /* ========= OPACITY SYSTEM ========= */
+  --bu-opacity-disabled: var(--bu-disabled-opacity, 0.38);
+  --bu-opacity-hover: var(--bu-hover-opacity, 0.04);
+  --bu-opacity-focus: var(--bu-focus-opacity, 0.12);
+  --bu-opacity-selected: var(--bu-selected-opacity, 0.08);
+  --bu-opacity-overlay: 0.5;
+
+  /* ========= TYPOGRAPHY SYSTEM ========= */
+  /* Already defined in fonts.css */
+  /* Use --bu-font-family, --bu-font-size-*, --bu-font-weight-*, --bu-line-height-* */
+
+  /* ========= COMPONENT-SPECIFIC TOKENS ========= */
+  /* These should be used consistently across similar components */
+  
+  /* Button */
+  --bu-button-padding-x-sm: var(--bu-space-3);
+  --bu-button-padding-y-sm: var(--bu-space-1);
+  --bu-button-padding-x-md: var(--bu-space-4);
+  --bu-button-padding-y-md: var(--bu-space-2);
+  --bu-button-padding-x-lg: var(--bu-space-5);
+  --bu-button-padding-y-lg: var(--bu-space-3);
+  --bu-button-gap: var(--bu-space-2);
+  --bu-button-border-radius: var(--bu-radius-sm);
+
+  /* Input */
+  --bu-input-padding-x: var(--bu-space-3);
+  --bu-input-padding-y: var(--bu-space-2);
+  --bu-input-padding-x-with-adornment: 48px;
+  --bu-input-border-radius: var(--bu-radius-sm);
+  --bu-input-height-sm: var(--bu-control-height-sm);
+  --bu-input-height-md: var(--bu-control-height-md);
+  --bu-input-height-lg: var(--bu-control-height-lg);
+  --bu-input-height-floating: 56px;
+
+  /* Card */
+  --bu-card-padding: var(--bu-space-4);
+  --bu-card-padding-sm: var(--bu-space-3);
+  --bu-card-padding-lg: var(--bu-space-6);
+  --bu-card-border-radius: var(--bu-radius-lg);
+  --bu-card-gap: var(--bu-space-4);
+
+  /* List */
+  --bu-list-item-padding-x: var(--bu-space-4);
+  --bu-list-item-padding-y: var(--bu-space-2);
+  --bu-list-item-gap: var(--bu-space-2);
+  --bu-list-item-min-height: var(--bu-control-height-md);
+
+  /* Dialog/Modal */
+  --bu-modal-padding: var(--bu-space-6);
+  --bu-modal-padding-sm: var(--bu-space-4);
+  --bu-modal-border-radius: var(--bu-radius-lg);
+  --bu-modal-gap: var(--bu-space-4);
+
+  /* Toolbar */
+  --bu-toolbar-padding-x: var(--bu-space-2);
+  --bu-toolbar-padding-y: var(--bu-space-1);
+  --bu-toolbar-item-padding-x: var(--bu-space-4);
+  --bu-toolbar-item-padding-y: var(--bu-space-2);
+  --bu-toolbar-gap: var(--bu-space-2);
+
+  /* Tree */
+  --bu-tree-node-padding-x: var(--bu-space-2);
+  --bu-tree-node-padding-y: var(--bu-space-1);
+  --bu-tree-node-gap: var(--bu-space-2);
+  --bu-tree-node-indent: 20px;
+  --bu-tree-node-min-height: var(--bu-control-height-md);
+
+  /* Badge */
+  --bu-badge-padding-x: 10px;
+  --bu-badge-padding-y: var(--bu-space-1);
+  --bu-badge-border-radius: var(--bu-radius-xl);
+  --bu-badge-min-height: 20px;
+  --bu-badge-gap: var(--bu-space-1);
+
+  /* ========= COMMON PATTERNS ========= */
+  /* Adornment sizes (used in Input, Select, etc.) */
+  --bu-adornment-size: 40px;
+  --bu-adornment-size-sm: 32px;
+  --bu-adornment-gap: var(--bu-space-2);
+
+  /* Number input spinner */
+  --bu-spinner-width: 20px;
+  --bu-spinner-button-height: 14px;
+  --bu-spinner-height: 32px;
+  --bu-spinner-icon-size: 10px;
+  --bu-spinner-gap: 2px;
+  --bu-spinner-padding-right: 44px;
+
+  /* Focus ring */
+  --bu-focus-ring-width: 1px;
+  --bu-focus-ring-offset: 4px;
+  --bu-focus-ring-opacity: 0.15;
+
+  /* Placeholder opacity */
+  --bu-placeholder-opacity: 0.7;
+  --bu-placeholder-opacity-hidden: 0;
+
+  /* Label positioning */
+  --bu-label-z-index: 3;
+  --bu-label-max-width-offset: 24px;
+  --bu-label-max-width-offset-with-adornment: 56px;
+
+  /* Dark mode colors */
+  --bu-dark-surface: #121212;
+  --bu-dark-border: rgba(255, 255, 255, 0.23);
+  --bu-dark-border-hover: rgba(255, 255, 255, 0.6);
+  --bu-dark-fg: rgba(255, 255, 255, 0.87);
+  --bu-dark-muted: rgba(255, 255, 255, 0.6);
+  --bu-dark-muted-light: rgba(255, 255, 255, 0.7);
+  --bu-dark-primary: #90caf9;
+  --bu-dark-error: #f44336;
+  --bu-dark-surface-variant: rgba(255, 255, 255, 0.05);
+  --bu-dark-hover-bg: rgba(255, 255, 255, 0.08);
+  --bu-dark-disabled-bg: rgba(255, 255, 255, 0.04);
+  --bu-dark-disabled-border: rgba(255, 255, 255, 0.12);
+  --bu-dark-disabled-fg: rgba(255, 255, 255, 0.38);
+
+  /* Input specific tokens */
+  --bu-input-padding-y-floating: var(--bu-space-4);
+  --bu-input-adornment-width-filled: 40px;
+  --bu-input-label-left-filled: 0;
+  --bu-input-label-left-outlined: var(--bu-space-3);
+  --bu-input-label-max-width-offset-filled: 40px;
+  --bu-input-label-max-width-offset-outlined: var(--bu-label-max-width-offset);
+  --bu-input-label-max-width-offset-outlined-with-adornment: var(--bu-label-max-width-offset-with-adornment);
+}
+

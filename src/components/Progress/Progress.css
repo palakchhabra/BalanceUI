@@ -1,9 +1,23 @@
+/* Shimmer animation for indeterminate progress */
+@keyframes bu-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
 .balanceui-progress {
   position: relative;
   width: 100%;
   overflow: hidden;
   border-radius: var(--bu-radius-full, 999px);
-  background: var(--bu-border, #e5e7eb);
+  background: var(--bu-border, rgba(0, 0, 0, 0.12)) !important;
+  display: block !important;
+  min-height: 6px;
+  height: 6px;
+  visibility: visible;
 }
 
 .balanceui-progress.variant-linear {
@@ -26,17 +40,25 @@
 }
 
 .balanceui-progress-fill {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  height: 100% !important;
+  width: 0%;
+  min-width: 0;
   border-radius: inherit;
-  transition: width var(--bu-transition-base), background-color var(--bu-transition-base);
+  transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1), background-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+  display: block !important;
+  background-color: var(--bu-primary, #1976d2) !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  box-sizing: border-box;
 }
 
 .balanceui-progress-fill.variant-solid {
-  background: var(--bu-primary, #1f2937);
-  box-shadow: 0 0 8px rgba(31, 41, 55, 0.3);
+  background: var(--bu-primary, #1976d2) !important;
+  box-shadow: var(--bu-elevation-2);
 }
 
 .balanceui-progress-fill.variant-soft {
@@ -45,18 +67,18 @@
 }
 
 .balanceui-progress-fill.variant-danger {
-  background: var(--bu-danger, #dc2626);
-  box-shadow: 0 0 8px rgba(220, 38, 38, 0.3);
+  background: var(--bu-danger, #dc2626) !important;
+  box-shadow: var(--bu-elevation-2);
 }
 
 .balanceui-progress-fill.variant-success {
-  background: var(--bu-success, #16a34a);
-  box-shadow: 0 0 8px rgba(22, 163, 74, 0.3);
+  background: var(--bu-success, #16a34a) !important;
+  box-shadow: var(--bu-elevation-2);
 }
 
 .balanceui-progress-fill.variant-warning {
-  background: var(--bu-warning, #f59e0b);
-  box-shadow: 0 0 8px rgba(245, 158, 11, 0.3);
+  background: var(--bu-warning, #f59e0b) !important;
+  box-shadow: var(--bu-elevation-2);
 }
 
 .balanceui-progress-indeterminate {
@@ -71,6 +93,7 @@
   );
   background-size: 200% 100%;
   animation: bu-shimmer 1.5s infinite linear;
+  z-index: 1;
 }
 
 .balanceui-progress-indeterminate.variant-solid {
@@ -80,7 +103,7 @@
     rgba(255, 255, 255, 0.4) 50%,
     transparent 100%
   ),
-  var(--bu-primary, #1f2937);
+  var(--bu-primary, #1976d2);
   background-size: 200% 100%;
 }
 
@@ -95,6 +118,28 @@
   background-size: 200% 100%;
 }
 
+.balanceui-progress-indeterminate.variant-success {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  ),
+  var(--bu-success, #16a34a);
+  background-size: 200% 100%;
+}
+
+.balanceui-progress-indeterminate.variant-warning {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  ),
+  var(--bu-warning, #f59e0b);
+  background-size: 200% 100%;
+}
+
 .balanceui-progress-value {
   margin-top: 8px;
   font-size: var(--bu-font-size-sm, 12px);
@@ -103,10 +148,25 @@
   text-align: center;
 }
 
+.balanceui-progress-circular .balanceui-progress-value {
+  margin-top: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: var(--bu-font-size-xs, 11px);
+  z-index: 2;
+  pointer-events: none;
+  color: var(--bu-fg, rgba(0, 0, 0, 0.87));
+  font-weight: var(--bu-font-weight-medium, 500);
+}
+
 .balanceui-progress-circular {
   width: 64px;
   height: 64px;
   position: relative;
+  display: inline-block;
+  flex-shrink: 0;
 }
 
 .balanceui-progress-circular svg {
@@ -116,16 +176,45 @@
 }
 
 .balanceui-progress-circular-track {
-  fill: none;
-  stroke: var(--bu-border, #e5e7eb);
+  fill: none !important;
+  stroke: var(--bu-border, rgba(0, 0, 0, 0.12));
   stroke-width: 4;
 }
 
 .balanceui-progress-circular-fill {
-  fill: none;
-  stroke: var(--bu-primary, #1f2937);
+  fill: none !important;
+  stroke: var(--bu-primary, #1976d2) !important;
   stroke-width: 4;
   stroke-linecap: round;
-  transition: stroke-dashoffset var(--bu-transition-base);
+  transition: stroke-dashoffset 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Circular progress variant colors */
+.balanceui-progress-circular-fill.variant-solid {
+  stroke: var(--bu-primary, #1976d2) !important;
+}
+
+.balanceui-progress-circular-fill.variant-danger {
+  stroke: var(--bu-danger, #d32f2f) !important;
+}
+
+.balanceui-progress-circular-fill.variant-success {
+  stroke: var(--bu-success, #2e7d32) !important;
+}
+
+.balanceui-progress-circular-fill.variant-warning {
+  stroke: var(--bu-warning, #f57c00) !important;
+}
+
+/* Spin animation for circular indeterminate */
+@keyframes bu-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 

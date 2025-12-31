@@ -3,14 +3,15 @@ import fs from "fs";
 const requiredFiles = [
   "dist/balanceui.es.js",
   "dist/balanceui.cjs.js",
-  "dist/index.d.ts",
+  "dist/index.types.d.ts",
   "dist/index.css",
   "dist/theme/theme-contract.css",
+  "dist/theme/design-tokens.css",
 ];
 
 const requiredDirs = [
   "dist/components",
-  "dist/theme/themes",
+  "dist/theme",
 ];
 
 let failed = false;

@@ -1,0 +1,159 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-recess-order",
+    "stylelint-config-prettier"
+  ],
+  "rules": {
+    "color-hex-case": "lower",
+    "color-hex-length": "short",
+    "color-named": "never",
+    "declaration-block-no-redundant-longhand-properties": true,
+    "declaration-block-trailing-semicolon": "always",
+    "declaration-colon-space-after": "always",
+    "declaration-colon-space-before": "never",
+    "function-name-case": "lower",
+    "property-no-unknown": [
+      true,
+      {
+        "ignoreProperties": [
+          "/^--bu-/",
+          "composes"
+        ]
+      }
+    ],
+    "selector-class-pattern": [
+      "^balanceui-",
+      {
+        "message": "Class names should start with 'balanceui-'"
+      }
+    ],
+    "selector-id-pattern": null,
+    "value-keyword-case": "lower",
+    "at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": [
+          "import",
+          "media",
+          "supports",
+          "keyframes",
+          "layer"
+        ]
+      }
+    ],
+    "custom-property-pattern": [
+      "^--bu-",
+      {
+        "message": "CSS variables should start with '--bu-'"
+      }
+    ],
+    "declaration-block-no-duplicate-properties": [
+      true,
+      {
+        "ignore": [
+          "consecutive-duplicates-with-different-values"
+        ]
+      }
+    ],
+    "no-descending-specificity": null,
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        "ignorePseudoClasses": [
+          "global"
+        ]
+      }
+    ],
+    "selector-pseudo-element-no-unknown": [
+      true,
+      {
+        "ignorePseudoElements": [
+          "v-deep",
+          "deep"
+        ]
+      }
+    ],
+    "value-no-vendor-prefix": [
+      true,
+      {
+        "ignoreValues": [
+          "box",
+          "flex",
+          "grid"
+        ]
+      }
+    ],
+    "alpha-value-notation": "number",
+    "color-function-notation": "modern",
+    "hue-degree-notation": "angle",
+    "length-zero-no-unit": [
+      true,
+      {
+        "ignore": [
+          "custom-properties"
+        ]
+      }
+    ],
+    "shorthand-property-no-redundant-values": true,
+    "declaration-block-single-line-max-declarations": null,
+    "max-line-length": [
+      200,
+      {
+        "ignore": [
+          "comments"
+        ]
+      }
+    ],
+    "selector-max-id": 0,
+    "selector-max-type": [
+      2,
+      {
+        "ignore": [
+          "custom-elements"
+        ]
+      }
+    ],
+    "selector-no-qualifying-type": [
+      true,
+      {
+        "ignore": [
+          "attribute",
+          "class"
+        ]
+      }
+    ],
+    "comment-empty-line-before": [
+      "always",
+      {
+        "except": [
+          "first-nested"
+        ],
+        "ignore": [
+          "stylelint-commands",
+          "after-comment"
+        ]
+      }
+    ],
+    "comment-whitespace-inside": "always",
+    "rule-empty-line-before": [
+      "always-multi-line",
+      {
+        "except": [
+          "first-nested"
+        ],
+        "ignore": [
+          "after-comment"
+        ]
+      }
+    ]
+  },
+  "ignoreFiles": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/*.min.css",
+    "**/theme/themes/**"
+  ]
+}
+
