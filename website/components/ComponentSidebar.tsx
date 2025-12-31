@@ -181,7 +181,7 @@ export function ComponentSidebar() {
         style={{
           backgroundColor: "var(--bu-surface, #ffffff)",
           borderRight: "1px solid var(--bu-border, rgba(0, 0, 0, 0.12))",
-          boxShadow: "1px 0 2px rgba(0, 0, 0, 0.05)",
+          boxShadow: "var(--bu-elevation-2)",
         }}
       >
         {sidebarContent}
@@ -190,7 +190,20 @@ export function ComponentSidebar() {
       {/* Mobile Sidebar Toggle Button */}
       <button
         onClick={() => setIsMobileOpen(true)}
-        className="lg:hidden fixed bottom-4 right-4 z-50 p-3 bg-gray-900 dark:bg-gray-800 text-white rounded-full shadow-lg hover:bg-gray-800 dark:hover:bg-gray-700 transition-colors"
+        className="lg:hidden fixed bottom-4 right-4 z-50 p-3 text-white rounded-full transition-all duration-200"
+        style={{
+          backgroundColor: "var(--bu-primary, #1976d2)",
+          boxShadow: "var(--bu-elevation-8)",
+          borderRadius: "50%",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.boxShadow = "var(--bu-elevation-12)";
+          e.currentTarget.style.transform = "translateY(-2px) scale(1.05)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.boxShadow = "var(--bu-elevation-8)";
+          e.currentTarget.style.transform = "translateY(0) scale(1)";
+        }}
         aria-label="Open component menu"
       >
         <svg
@@ -215,7 +228,14 @@ export function ComponentSidebar() {
             onClick={() => setIsMobileOpen(false)}
           />
           {/* Sidebar */}
-          <aside className="absolute left-0 top-0 bottom-0 w-64 bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 shadow-xl">
+          <aside 
+            className="absolute left-0 top-0 bottom-0 w-64 border-r"
+            style={{
+              backgroundColor: "var(--bu-surface, #ffffff)",
+              borderColor: "var(--bu-border, rgba(0, 0, 0, 0.12))",
+              boxShadow: "var(--bu-elevation-16)",
+            }}
+          >
             <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Components</h2>
               <button

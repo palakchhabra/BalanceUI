@@ -8,17 +8,13 @@ on:
       - 'src/**'
       - 'package.json'
       - '.github/workflows/deploy-website.yml'
-  pull_request:
-    branches: [main]
-    paths:
-      - 'website/**'
-      - 'src/**'
-      - 'package.json'
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    # Only deploy on pushes to main branch, not on PRs or other branches
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
     environment: PROD
     permissions:
       contents: read

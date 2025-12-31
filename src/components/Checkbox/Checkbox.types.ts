@@ -13,5 +13,6 @@ export interface CheckboxProps {
   style?: React.CSSProperties;
   error?: string;
   helperText?: string;
+  "aria-label"?: string;
 }
 

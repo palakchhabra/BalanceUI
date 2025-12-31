@@ -220,7 +220,7 @@ export default function VideoTrimmerPage() {
           <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
             VideoTrimmer
           </h1>
-          <Badge variant="solid" style={{ fontSize: "0.875rem", alignSelf: "flex-start", sm: { alignSelf: "auto" } }}>
+          <Badge variant="solid" style={{ fontSize: "0.875rem", alignSelf: "flex-start" }} className="sm:align-self-auto">
             Media
           </Badge>
         </div>

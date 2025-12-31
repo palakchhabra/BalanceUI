@@ -81,7 +81,7 @@ export const ButtonToggle = ({
               isLast
             )}
             className={`balanceui-buttontoggle-item ${selected ? "balanceui-buttontoggle-selected" : ""} ${isFirst ? "balanceui-buttontoggle-first" : ""} ${isLast ? "balanceui-buttontoggle-last" : ""}`}
-            aria-pressed={selected}
+            aria-pressed={selected ? "true" : "false"}
           >
             {option.icon && (
               <span className="balanceui-buttontoggle-icon">{option.icon}</span>

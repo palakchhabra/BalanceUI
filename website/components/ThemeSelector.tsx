@@ -98,10 +98,6 @@ export function ThemeSelector() {
                   }`}
                 >
                   <div className="flex items-center gap-2 flex-1 min-w-0">
-                    <div
-                      className="w-4 h-4 rounded border border-gray-300 flex-shrink-0"
-                      style={{ backgroundColor: t.color }}
-                    />
                     <span className="truncate">{t.label}</span>
                     {isSelected && (
                       <span className="ml-auto text-xs" aria-label="Selected theme">✓</span>

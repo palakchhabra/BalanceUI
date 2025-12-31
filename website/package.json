@@ -3,13 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3001",
     "build": "next build",
-    "start": "next start",
+    "build:local": "npm run build:local:setup && next build",
+    "build:local:setup": "cd .. && npm run build && npm pack && cd website && npm install ../balanceui-core-*.tgz --save --force",
+    "build:deploy": "npm install @balanceui/core@latest --save && next build",
+    "start": "next start -p 3001",
     "lint": "eslint"
   },
   "dependencies": {
-    "@balanceui/core": "^1.0.0",
+    "@balanceui/core": "file:../balanceui-core-1.1.0.tgz",
+    "@types/js-cookie": "^3.0.6",
+    "@vercel/blob": "^0.25.0",
+    "js-cookie": "^3.0.5",
     "next": "16.1.1",
     "react": "19.2.3",
     "react-dom": "19.2.3"

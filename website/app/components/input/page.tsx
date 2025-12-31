@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, Badge, Input, FormField } from "@balanceui/core";
+import { Card, Badge, Input, FormField, Tension } from "@balanceui/core";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -8,6 +8,7 @@ export default function InputPage() {
   const [emailValue, setEmailValue] = useState("");
   const [passwordValue, setPasswordValue] = useState("");
   const [nameValue, setNameValue] = useState("");
+  const [tensionValue, setTensionValue] = useState(50);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
@@ -249,7 +250,7 @@ export default function InputPage() {
             </Card>
 
             {/* With FormField */}
-            <Card variant="elevated" elevation={2} style={{ padding: "1.5rem" }} className="sm:p-8">
+            <Card variant="elevated" elevation={2} style={{ padding: "1.5rem", marginBottom: "1.5rem" }} className="sm:p-8 sm:mb-8">
               <h3 className="mb-3 text-base font-semibold text-gray-900 dark:text-white sm:mb-4 sm:text-lg">
                 With FormField (Legacy Support)
               </h3>
@@ -262,13 +263,54 @@ export default function InputPage() {
                 </FormField>
               </div>
             </Card>
+
+            {/* Tension Usage */}
+            <Card variant="elevated" elevation={2} style={{ padding: "1.5rem" }} className="sm:p-8">
+              <h3 className="mb-3 text-base font-semibold text-gray-900 dark:text-white sm:mb-4 sm:text-lg">
+                Tension Usage (Input with Tension Control)
+              </h3>
+              <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
+                Use Input component with Tension slider for precise value control.
+              </p>
+              <div className="space-y-4 sm:space-y-6">
+                <div>
+                  <Input
+                    label="Tension Value"
+                    type="number"
+                    floatingLabel
+                    value={tensionValue.toString()}
+                    onChange={(e) => {
+                      const val = parseInt(e.target.value) || 0;
+                      if (val >= 0 && val <= 100) {
+                        setTensionValue(val);
+                      }
+                    }}
+                    min={0}
+                    max={100}
+                    helperText="Enter a value between 0 and 100"
+                  />
+                </div>
+                <div>
+                  <Tension
+                    value={tensionValue}
+                    onChange={setTensionValue}
+                    min={0}
+                    max={100}
+                    step={1}
+                  />
+                </div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  Current tension value: <strong>{tensionValue}</strong>
+                </div>
+              </div>
+            </Card>
           </section>
 
           <section id="usage" className="mb-8 sm:mb-12">
             <h2 className="mb-4 text-xl font-semibold text-gray-900 dark:text-white sm:mb-6 sm:text-2xl">
               Usage
             </h2>
-            
+
             <Card variant="elevated" elevation={2} style={{ padding: "1.5rem", marginBottom: "1.5rem" }} className="sm:p-8 sm:mb-8">
               <h3 className="mb-3 text-base font-semibold text-gray-900 dark:text-white sm:mb-4 sm:text-lg">
                 Floating Label Input

@@ -65,9 +65,17 @@ import '@balanceui/core/theme/clay-graphite.css'`}</code>
                 elevation={2}
                 style={{
                   padding: "1.5rem",
-                  transition: "all 0.3s ease",
+                  transition: "var(--bu-transition-elevation)",
+                  cursor: "pointer",
                 }}
-                className="hover:shadow-lg hover:-translate-y-1"
+                onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
+                  e.currentTarget.style.transform = "translateY(-4px)";
+                  e.currentTarget.style.boxShadow = "var(--bu-elevation-4)";
+                }}
+                onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "var(--bu-elevation-2)";
+                }}
               >
                 <h3 className="font-semibold text-gray-900 dark:text-white">
                   {theme.name}

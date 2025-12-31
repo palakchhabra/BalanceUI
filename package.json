@@ -74,7 +74,7 @@
     "test:visual:ui": "playwright test --ui",
     "test:visual:update": "playwright test --update-snapshots",
     "test:css-auto": "vitest --run src/test/auto-css-detection.test.tsx",
-    "test:css-visual": "playwright test tests/visual/auto-css-visual.test.ts",
+    "test:css-visual": "playwright test tests/playwright/auto-css-visual.test.ts",
     "pre-push": "node scripts/pre-push-check.mjs",
     "pre-publish": "node scripts/pre-publish-check.mjs",
     "prepublishOnly": "npm run pre-publish",

@@ -60,6 +60,12 @@ const components = [
     href: "/components/multiselect",
   },
   {
+    name: "SearchSelect",
+    description: "Searchable multi-select component with search functionality and chip display",
+    category: "Forms",
+    href: "/components/searchselect",
+  },
+  {
     name: "TextArea",
     description: "Multi-line text input component",
     category: "Forms",
@@ -239,12 +245,12 @@ export default function ComponentsPage() {
       : components.filter((component) => component.category === selectedCategory);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:ml-64">
+    <div>
       <div className="mb-8 sm:mb-12">
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl" style={{ color: "#000000" }}>
+        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl" style={{ color: "var(--bu-fg, rgba(0, 0, 0, 0.87))" }}>
           Components
         </h1>
-        <p className="mt-3 text-base sm:mt-4 sm:text-lg" style={{ color: "#333333" }}>
+        <p className="mt-3 text-base sm:mt-4 sm:text-lg" style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>
           Browse our collection of {components.length} carefully crafted React
           components. Each component is fully typed, accessible, and
           customizable.
@@ -307,7 +313,6 @@ export default function ComponentsPage() {
             <Card
               variant="elevated"
               elevation={2}
-              hoverable={true}
               style={{
                 padding: "clamp(1rem, 2vw, 1.5rem)",
                 height: "100%",
@@ -318,23 +323,7 @@ export default function ComponentsPage() {
                 position: "relative",
                 overflow: "hidden",
               }}
-              className="group-hover:elevation-4"
-              onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
-                const target = e.currentTarget;
-                target.style.transform = "translateY(-4px)";
-                target.style.boxShadow = 
-                  "0px 4px 5px -2px rgba(0, 0, 0, 0.2), " +
-                  "0px 7px 10px 1px rgba(0, 0, 0, 0.14), " +
-                  "0px 2px 16px 1px rgba(0, 0, 0, 0.12)";
-              }}
-              onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
-                const target = e.currentTarget;
-                target.style.transform = "translateY(0)";
-                target.style.boxShadow = 
-                  "0px 3px 1px -2px rgba(0, 0, 0, 0.2), " +
-                  "0px 2px 2px 0px rgba(0, 0, 0, 0.14), " +
-                  "0px 1px 5px 0px rgba(0, 0, 0, 0.12)";
-              }}
+              className="group-hover:elevation-4 balanceui-hover-elevate"
             >
               <div className="flex items-start justify-between gap-2">
                 <h3 
