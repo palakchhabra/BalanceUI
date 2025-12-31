@@ -10,7 +10,10 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
+  // Use multiple workers for parallel execution
+  // In CI: use 4 workers (or 50% of CPU cores if available)
+  // Locally: use 50% of CPU cores
+  workers: process.env.CI ? 4 : '50%',
   reporter: [
     ['html', { outputFolder: 'playwright-report', open: 'never' }],
     ['json', { outputFile: 'test-results/results.json' }],
