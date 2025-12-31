@@ -6,7 +6,7 @@ import { defineConfig, devices } from '@playwright/test';
  * Tests all Storybook stories with screenshot comparison
  */
 export default defineConfig({
-  testDir: './tests/visual',
+  testDir: './tests/playwright',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
