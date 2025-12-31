@@ -31,9 +31,9 @@ export const toolbarItemStyle = (
   disabled: boolean
 ) => {
   const sizeMap = {
-    sm: { padding: "0.375rem", fontSize: "0.75rem" },
-    md: { padding: "0.5rem", fontSize: "0.875rem" },
-    lg: { padding: "0.75rem", fontSize: "1rem" },
+    sm: { padding: "0.375rem 0.75rem", fontSize: "0.75rem", minHeight: "32px", minWidth: "32px" },
+    md: { padding: "0.5rem 1rem", fontSize: "0.875rem", minHeight: "40px", minWidth: "40px" },
+    lg: { padding: "0.75rem 1.25rem", fontSize: "1rem", minHeight: "48px", minWidth: "48px" },
   };
 
   return {
@@ -52,8 +52,10 @@ export const toolbarItemStyle = (
       : "var(--bu-fg, #000)",
     cursor: disabled ? "not-allowed" : "pointer",
     opacity: disabled ? 0.5 : 1,
-    transition: "all 0.15s ease",
+    transition: "background-color 150ms cubic-bezier(0.4, 0, 0.2, 1)",
     fontFamily: "var(--bu-font-family, system-ui)",
+    boxSizing: "border-box" as const,
+    width: "auto",
   } as React.CSSProperties;
 };
 
@@ -63,4 +65,3 @@ export const dividerStyle = (orientation: "horizontal" | "vertical") => ({
   backgroundColor: "var(--bu-border, rgba(0, 0, 0, 0.23))",
   margin: orientation === "horizontal" ? "0 0.25rem" : "0.25rem 0",
 } as React.CSSProperties);
-

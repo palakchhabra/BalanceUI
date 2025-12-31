@@ -1,7 +1,8 @@
 import type { Preview } from '@storybook/react';
+import React from 'react';
 import '../src/styles/index.css';
 import '../src/theme/theme-contract.css';
-import '../src/theme/themes/ink-bone.css';
+import '../src/theme/themes/calm-blue.css';
 
 const preview: Preview = {
   parameters: {
@@ -36,3 +37,4 @@ const preview: Preview = {
 };
 
 export default preview;
+

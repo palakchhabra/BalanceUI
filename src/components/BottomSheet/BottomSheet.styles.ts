@@ -22,6 +22,7 @@ export const bottomSheetStyle = (size: "sm" | "md" | "lg" | "full", open: boolea
     bottom: 0,
     left: 0,
     right: 0,
+    height: heightMap[size],
     maxHeight: heightMap[size],
     backgroundColor: "var(--bu-surface, #fff)",
     borderTopLeftRadius: "var(--bu-radius-lg, 0.5rem)",
@@ -32,6 +33,7 @@ export const bottomSheetStyle = (size: "sm" | "md" | "lg" | "full", open: boolea
     flexDirection: "column" as const,
     transform: open ? "translateY(0)" : "translateY(100%)",
     transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    overflow: "hidden" as const,
   } as React.CSSProperties;
 };
 

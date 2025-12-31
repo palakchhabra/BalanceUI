@@ -12,8 +12,24 @@
   border-color: var(--bu-error, #d32f2f) !important;
 }
 
+/* Disabled state styling - light grey */
+input[type="text"].balanceui-input:disabled,
+input[type="text"].balanceui-input[disabled],
+.balanceui-input-wrapper input:disabled {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+  color: rgba(0, 0, 0, 0.38) !important;
+  cursor: not-allowed !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
 .balanceui-datepicker-calendar {
   animation: balanceui-fade-in 0.2s ease-out;
+  box-shadow: var(--bu-elevation-8);
+  border-radius: var(--bu-radius-lg, 12px);
+  border: 1px solid var(--bu-border, rgba(0, 0, 0, 0.12));
+  background: var(--bu-surface, #ffffff);
+  z-index: 1000;
+  transition: var(--bu-transition-elevation);
 }
 
 @keyframes balanceui-fade-in {
@@ -33,7 +49,7 @@
   padding: 0.5rem;
   cursor: pointer;
   color: var(--bu-fg, #000);
-  border-radius: var(--bu-radius-md, 0.375rem);
+  border-radius: var(--bu-radius-md, 10px);
   transition: background-color 0.15s ease;
   font-size: 1rem;
   display: flex;
@@ -45,6 +61,9 @@
 
 .balanceui-datepicker-nav-btn:hover {
   background-color: var(--bu-surface-variant, rgba(0, 0, 0, 0.05));
+  box-shadow: var(--bu-elevation-1);
+  transform: scale(1.05);
+  transition: var(--bu-transition-elevation);
 }
 
 .balanceui-datepicker-month-year {
@@ -65,17 +84,53 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .balanceui-datepicker-day-cell:hover:not(:disabled) {
   background-color: var(--bu-surface-variant, rgba(0, 0, 0, 0.05)) !important;
+  box-shadow: var(--bu-elevation-1);
+  transform: scale(1.1);
+  border-radius: var(--bu-radius-sm, 8px);
+  transition: var(--bu-transition-elevation);
+}
+
+/* Material UI range selection styling */
+.balanceui-datepicker-day-cell.balanceui-datepicker-in-range {
+  background-color: var(--bu-primary-light, rgba(25, 118, 210, 0.12)) !important;
+  border-radius: 0 !important;
+  color: var(--bu-fg, rgba(0, 0, 0, 0.87)) !important;
+}
+
+.balanceui-datepicker-day-cell.balanceui-datepicker-range-start {
+  background-color: var(--bu-primary, #1976d2) !important;
+  color: #ffffff !important;
+  border-radius: 50% 0 0 50% !important;
+}
+
+.balanceui-datepicker-day-cell.balanceui-datepicker-range-end {
+  background-color: var(--bu-primary, #1976d2) !important;
+  color: #ffffff !important;
+  border-radius: 0 50% 50% 0 !important;
+}
+
+.balanceui-datepicker-day-cell.balanceui-datepicker-range-start.balanceui-datepicker-range-end {
+  border-radius: 50% !important;
+}
+
+/* Ensure range cells don't have hover effects that override range styling */
+.balanceui-datepicker-day-cell.balanceui-datepicker-in-range:hover,
+.balanceui-datepicker-day-cell.balanceui-datepicker-range-start:hover,
+.balanceui-datepicker-day-cell.balanceui-datepicker-range-end:hover {
+  background-color: var(--bu-primary, #1976d2) !important;
+  color: #ffffff !important;
 }
 
 .balanceui-datepicker-clear-btn,
 .balanceui-datepicker-apply-btn {
   padding: 0.5rem 1rem;
   border: none;
-  border-radius: var(--bu-radius-md, 0.375rem);
+  border-radius: var(--bu-radius-md, 10px);
   cursor: pointer;
   font-size: 0.875rem;
   font-weight: 500;
@@ -102,7 +157,9 @@
 
 .balanceui-datepicker-input:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2), 0 0 0 1px var(--bu-primary, #1976d2);
+  box-shadow: var(--bu-elevation-2), 0 0 0 2px rgba(25, 118, 210, 0.2);
+  transform: translateY(-1px);
+  transition: var(--bu-transition-elevation);
 }
 
 .balanceui-datepicker-input.balanceui-datepicker-error:focus-visible {

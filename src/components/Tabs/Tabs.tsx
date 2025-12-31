@@ -18,7 +18,11 @@ export const Tabs = ({ tabs, value, onChange }: TabsProps) => {
         ))}
       </div>
 
-      <div style={{ padding: 16 }}>{active?.content}</div>
+      <div style={{ 
+        padding: 16,
+      }}>
+        {active?.content}
+      </div>
     </>
   );
 };

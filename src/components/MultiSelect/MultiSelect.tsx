@@ -22,6 +22,7 @@ export const MultiSelect = ({
   "aria-describedby": ariaDescribedBy,
   renderOption,
   renderChip,
+  allowDisabledSelection = false,
 }: MultiSelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -108,6 +109,11 @@ export const MultiSelect = ({
   }, [focusedIndex]);
 
   const handleToggle = (optionValue: string) => {
+    // #region agent log
+    const clickStartTime = performance.now();
+    fetch('http://127.0.0.1:7242/ingest/4131f597-13c0-41fc-90af-eb2005d763cb',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MultiSelect.tsx:110',message:'handleToggle called',data:{optionValue,currentValue:value},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+    // #endregion
+    
     if (disabled) return;
 
     const isSelected = value.includes(optionValue);
@@ -122,7 +128,18 @@ export const MultiSelect = ({
       newValue = [...value, optionValue];
     }
 
+    // #region agent log
+    const beforeOnChangeTime = performance.now();
+    fetch('http://127.0.0.1:7242/ingest/4131f597-13c0-41fc-90af-eb2005d763cb',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MultiSelect.tsx:125',message:'Before onChange call',data:{newValue,timeSinceClick:beforeOnChangeTime-clickStartTime},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+    // #endregion
+
     onChange?.(newValue);
+    
+    // #region agent log
+    const afterOnChangeTime = performance.now();
+    fetch('http://127.0.0.1:7242/ingest/4131f597-13c0-41fc-90af-eb2005d763cb',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MultiSelect.tsx:128',message:'After onChange call',data:{timeSinceClick:afterOnChangeTime-clickStartTime,timeSinceBeforeOnChange:afterOnChangeTime-beforeOnChangeTime},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+    // #endregion
+    
     setSearchQuery("");
     setFocusedIndex(-1);
   };
@@ -366,34 +383,56 @@ export const MultiSelect = ({
             filteredOptions.map((option, index) => {
               const selected = isSelected(option.value);
               const focused = index === focusedIndex;
+              // Disable option if maxSelected is reached and this option is not selected
+              const isMaxReached = maxSelected !== undefined && value.length >= maxSelected;
+              // Option is visually disabled if it has disabled flag or max is reached
+              const isOptionVisuallyDisabled = option.disabled || (isMaxReached && !selected);
+              // Option is functionally disabled (not clickable) if:
+              // - maxSelected is reached and option is not selected, OR
+              // - option is disabled AND allowDisabledSelection is false
+              const isOptionFunctionallyDisabled = (isMaxReached && !selected) || (option.disabled && !allowDisabledSelection);
 
               return (
                 <li
                   key={option.value}
                   role="option"
                   aria-selected={selected}
-                  onClick={() => handleToggle(option.value)}
+                  aria-disabled={isOptionFunctionallyDisabled}
+                  onClick={() => {
+                    if (isOptionFunctionallyDisabled) return;
+                    // #region agent log
+                    const clickTime = performance.now();
+                    fetch('http://127.0.0.1:7242/ingest/4131f597-13c0-41fc-90af-eb2005d763cb',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MultiSelect.tsx:375',message:'Option clicked',data:{optionValue:option.value,isSelected:selected},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
+                    // #endregion
+                    handleToggle(option.value);
+                    // #region agent log
+                    const afterHandleToggleTime = performance.now();
+                    fetch('http://127.0.0.1:7242/ingest/4131f597-13c0-41fc-90af-eb2005d763cb',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'MultiSelect.tsx:378',message:'After handleToggle',data:{timeSinceClick:afterHandleToggleTime-clickTime},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
+                    // #endregion
+                  }}
                   className={`balanceui-multiselect-option ${selected ? "balanceui-multiselect-option-selected" : ""} ${
                     focused ? "balanceui-multiselect-option-focused" : ""
-                  } ${option.disabled ? "balanceui-multiselect-option-disabled" : ""}`}
+                  } ${isOptionVisuallyDisabled ? "balanceui-multiselect-option-disabled" : ""} ${
+                    option.disabled ? "balanceui-multiselect-option-inherently-disabled" : ""
+                  }`}
                   style={{
                     padding: "8px 12px",
-                    cursor: option.disabled ? "not-allowed" : "pointer",
+                    cursor: isOptionFunctionallyDisabled ? "not-allowed" : "pointer",
                     borderRadius: "var(--bu-radius-sm, 4px)",
-                    backgroundColor: focused
-                      ? "var(--bu-surface-variant, rgba(0, 0, 0, 0.04))"
-                      : selected
-                      ? "var(--bu-primary-light, rgba(25, 118, 210, 0.08))"
+                    backgroundColor: selected
+                      ? "var(--bu-primary-light, rgba(25, 118, 210, 0.12))"
                       : "transparent",
-                    color: option.disabled
+                    color: isOptionVisuallyDisabled
                       ? "var(--bu-disabled, rgba(0, 0, 0, 0.38))"
+                      : selected
+                      ? "var(--bu-primary, #1976d2)"
                       : "var(--bu-fg, rgba(0, 0, 0, 0.87))",
                     fontSize: "0.875rem",
                     display: "flex",
                     alignItems: "center",
                     gap: "8px",
-                    transition: "background-color 150ms ease",
-                    opacity: option.disabled ? 0.5 : 1,
+                    transition: "none",
+                    opacity: isOptionVisuallyDisabled ? 0.5 : 1,
                   }}
                 >
                   {renderOption ? (
@@ -403,11 +442,13 @@ export const MultiSelect = ({
                       <input
                         type="checkbox"
                         checked={selected}
+                        disabled={isOptionFunctionallyDisabled}
                         readOnly
                         style={{
                           width: "18px",
                           height: "18px",
-                          cursor: option.disabled ? "not-allowed" : "pointer",
+                          cursor: isOptionFunctionallyDisabled ? "not-allowed" : "pointer",
+                          opacity: isOptionVisuallyDisabled ? 0.5 : 1,
                         }}
                       />
                       <span style={{ flex: 1 }}>{option.label}</span>

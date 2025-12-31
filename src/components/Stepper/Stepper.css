@@ -23,6 +23,11 @@
   flex: 1;
 }
 
+.balanceui-stepper-step.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
 .balanceui-stepper-step-wrapper {
   display: flex;
   flex: 1;
@@ -48,7 +53,20 @@
   z-index: 1;
 }
 
-.balanceui-stepper-step:hover .balanceui-stepper-circle {
+.balanceui-stepper-circle.with-icon {
+  font-size: 0;
+}
+
+.balanceui-stepper-circle.with-icon svg,
+.balanceui-stepper-circle.with-icon > * {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.balanceui-stepper-step:hover:not(.disabled) .balanceui-stepper-circle {
   transform: scale(1.05);
 }
 
@@ -56,13 +74,21 @@
   background: var(--bu-primary, #1f2937);
   color: var(--bu-on-primary, #ffffff);
   border: 2px solid var(--bu-primary, #1f2937);
-  box-shadow: 0 0 0 4px rgba(31, 41, 55, 0.1);
+  box-shadow: var(--bu-elevation-3);
+  transition: var(--bu-transition-elevation);
+}
+
+.balanceui-stepper-circle.active.with-icon svg,
+.balanceui-stepper-circle.active.with-icon > * {
+  color: var(--bu-on-primary, #ffffff);
 }
 
 .balanceui-stepper-circle.completed {
   background: var(--bu-success, #16a34a);
   color: var(--bu-on-primary, #ffffff);
   border: 2px solid var(--bu-success, #16a34a);
+  box-shadow: var(--bu-elevation-2);
+  transition: var(--bu-transition-elevation);
 }
 
 .balanceui-stepper-circle.completed::after {
@@ -71,16 +97,44 @@
   font-weight: var(--bu-font-weight-bold, 700);
 }
 
+.balanceui-stepper-circle.completed.with-icon::after {
+  display: none;
+}
+
 .balanceui-stepper-circle.error {
+  background: var(--bu-error, #d32f2f);
+  color: var(--bu-on-error, #ffffff);
+  border: 2px solid var(--bu-error, #d32f2f);
+  box-shadow: 0 2px 4px rgba(211, 47, 47, 0.2);
+}
+
+.balanceui-stepper-circle.error.with-icon svg,
+.balanceui-stepper-circle.error.with-icon > * {
+  color: var(--bu-on-error, #ffffff);
+}
+
+.balanceui-stepper-circle.disabled {
   background: var(--bu-surface, #ffffff);
-  color: var(--bu-danger, #dc2626);
-  border: 2px solid var(--bu-danger, #dc2626);
+  color: var(--bu-muted, #6b7280);
+  border: 2px solid var(--bu-border, #e5e7eb);
+  opacity: 0.5;
+}
+
+.balanceui-stepper-circle.disabled.with-icon svg,
+.balanceui-stepper-circle.disabled.with-icon > * {
+  color: var(--bu-muted, #6b7280);
+  opacity: 0.5;
 }
 
 .balanceui-stepper-circle.inactive {
   background: var(--bu-surface, #ffffff);
   color: var(--bu-muted, #6b7280);
   border: 2px solid var(--bu-border, #e5e7eb);
+}
+
+.balanceui-stepper-circle.inactive.with-icon svg,
+.balanceui-stepper-circle.inactive.with-icon > * {
+  color: var(--bu-muted, #6b7280);
 }
 
 .balanceui-stepper-content {
@@ -103,11 +157,16 @@
 }
 
 .balanceui-stepper-step.error .balanceui-stepper-label {
-  color: var(--bu-danger, #dc2626);
+  color: var(--bu-error, #d32f2f);
 }
 
 .balanceui-stepper-step.inactive .balanceui-stepper-label {
   color: var(--bu-muted, #6b7280);
+}
+
+.balanceui-stepper-step.disabled .balanceui-stepper-label {
+  color: var(--bu-muted, #6b7280);
+  opacity: 0.5;
 }
 
 .balanceui-stepper-description {
@@ -115,6 +174,10 @@
   color: var(--bu-muted, #6b7280);
   margin-top: 2px;
   transition: color var(--bu-transition-fast);
+}
+
+.balanceui-stepper-step.disabled .balanceui-stepper-description {
+  opacity: 0.5;
 }
 
 .balanceui-stepper-connector {
@@ -128,6 +191,14 @@
 
 .balanceui-stepper-connector.completed {
   background: var(--bu-success, #16a34a);
+}
+
+.balanceui-stepper-connector.error {
+  background: var(--bu-error, #d32f2f) !important;
+}
+
+.balanceui-stepper-connector.error::after {
+  display: none;
 }
 
 .balanceui-stepper-connector::after {
@@ -156,6 +227,10 @@
 
 .balanceui-stepper-connector.dotted.completed {
   background-image: radial-gradient(circle, var(--bu-success, #16a34a) 1.5px, transparent 1.5px);
+}
+
+.balanceui-stepper-connector.dotted.error {
+  background-image: radial-gradient(circle, var(--bu-error, #d32f2f) 1.5px, transparent 1.5px) !important;
 }
 
 .balanceui-stepper-connector.dotted::after {
@@ -189,4 +264,3 @@
 .balanceui-stepper-container.vertical .balanceui-stepper-connector.completed::after {
   height: 100%;
 }
-

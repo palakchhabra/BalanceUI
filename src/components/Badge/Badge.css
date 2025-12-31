@@ -2,48 +2,62 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: var(--bu-font-size-xs, 11px);
+  padding: 4px 10px;
+  border-radius: var(--bu-radius-xl, 14px);
+  font-size: var(--bu-font-size-xs, 12px);
   font-weight: var(--bu-font-weight-medium, 500);
   line-height: 1.43;
   letter-spacing: 0.01071em;
   white-space: nowrap;
-  transition: 
-    background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
-    color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: var(--bu-transition-elevation);
   min-width: 20px;
-  height: 20px;
+  min-height: 20px;
+  /* Material Design Badge Elevation */
+  box-shadow: var(--bu-elevation-1);
+  position: relative;
+  box-sizing: border-box;
 }
 
 .balanceui-badge.variant-solid {
   background: var(--bu-primary, #1976d2);
   color: var(--bu-on-primary, #ffffff);
+  box-shadow: var(--bu-elevation-2);
 }
 
 .balanceui-badge.variant-soft {
   background: var(--bu-surface-variant, rgba(0, 0, 0, 0.08));
   color: var(--bu-fg, rgba(0, 0, 0, 0.87));
   border: none;
+  box-shadow: var(--bu-elevation-1);
 }
 
 .balanceui-badge.variant-outline {
-  background: transparent;
+  background: var(--bu-surface, #ffffff);
   color: var(--bu-primary, #1976d2);
   border: 1px solid var(--bu-primary, #1976d2);
+  box-shadow: var(--bu-elevation-1);
 }
 
 .balanceui-badge.variant-danger {
   background: var(--bu-danger, #d32f2f);
   color: var(--bu-on-primary, #ffffff);
+  box-shadow: var(--bu-elevation-2);
 }
 
 .balanceui-badge.variant-success {
   background: var(--bu-success, #388e3c);
   color: var(--bu-on-primary, #ffffff);
+  box-shadow: var(--bu-elevation-2);
 }
 
 .balanceui-badge.variant-warning {
   background: var(--bu-warning, #f57c00);
   color: var(--bu-on-primary, #ffffff);
+  box-shadow: var(--bu-elevation-2);
+}
+
+/* Badge hover elevation increase */
+.balanceui-badge:hover {
+  box-shadow: var(--bu-elevation-3);
+  transform: translateY(-1px);
 }

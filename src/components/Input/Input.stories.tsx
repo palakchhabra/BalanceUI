@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Input } from './Input';
+import { Icon } from '../Icon/Icon';
 
 const meta: Meta<typeof Input> = {
   title: 'Components/Input',
@@ -11,7 +12,7 @@ const meta: Meta<typeof Input> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['outline', 'soft', 'solid'],
+      options: ['outlined', 'filled', 'standard'],
     },
     type: {
       control: 'select',
@@ -35,17 +36,30 @@ export const Default: Story = {
   },
 };
 
-export const Outline: Story = {
+export const Outlined: Story = {
   args: {
-    variant: 'outline',
-    placeholder: 'Outline variant',
+    variant: 'outlined',
+    placeholder: 'Outlined variant',
+    label: 'Outlined',
+    floatingLabel: true,
   },
 };
 
-export const Soft: Story = {
+export const Filled: Story = {
   args: {
-    variant: 'soft',
-    placeholder: 'Soft variant',
+    variant: 'filled',
+    placeholder: 'Filled variant',
+    label: 'Filled',
+    floatingLabel: true,
+  },
+};
+
+export const Standard: Story = {
+  args: {
+    variant: 'standard',
+    placeholder: 'Standard variant',
+    label: 'Standard',
+    floatingLabel: true,
   },
 };
 
@@ -84,20 +98,167 @@ export const Number: Story = {
   },
 };
 
-export const Solid: Story = {
+export const AllVariants: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '300px' }}>
+      <div>
+        <h4 style={{ marginBottom: '8px', fontSize: '14px', fontWeight: 500 }}>Outlined (Default)</h4>
+        <Input variant="outlined" label="Outlined" floatingLabel placeholder="Enter text" />
+      </div>
+      <div>
+        <h4 style={{ marginBottom: '8px', fontSize: '14px', fontWeight: 500 }}>Filled</h4>
+        <Input variant="filled" label="Filled" floatingLabel placeholder="Enter text" />
+      </div>
+      <div>
+        <h4 style={{ marginBottom: '8px', fontSize: '14px', fontWeight: 500 }}>Standard</h4>
+        <Input variant="standard" label="Standard" floatingLabel placeholder="Enter text" />
+      </div>
+    </div>
+  ),
+};
+
+export const FloatingLabel: Story = {
   args: {
-    variant: 'solid',
-    placeholder: 'Solid variant with theme colors',
-    value: 'Solid input',
+    label: 'Email',
+    floatingLabel: true,
+    type: 'email',
+    placeholder: 'Enter your email',
   },
 };
 
-export const AllVariants: Story = {
+export const FloatingLabelWithValue: Story = {
+  args: {
+    label: 'Name',
+    floatingLabel: true,
+    value: 'John Doe',
+    placeholder: 'Enter your name',
+  },
+};
+
+export const FloatingLabelEmpty: Story = {
+  args: {
+    label: 'Search',
+    floatingLabel: true,
+    placeholder: 'Search...',
+  },
+};
+
+export const WithStartAdornment: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '300px' }}>
-      <Input variant="outline" placeholder="Outline variant" />
-      <Input variant="soft" placeholder="Soft variant" />
-      <Input variant="solid" placeholder="Solid variant" />
+      <Input
+        label="Search"
+        floatingLabel
+        startAdornment={<Icon name="search" />}
+        placeholder="Search..."
+      />
+      <Input
+        label="Price"
+        floatingLabel
+        type="number"
+        startAdornment={<span>$</span>}
+        placeholder="0.00"
+      />
+    </div>
+  ),
+};
+
+export const WithEndAdornment: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '300px' }}>
+      <Input
+        label="Website"
+        floatingLabel
+        type="url"
+        startAdornment={<Icon name="link" />}
+        endAdornment={<Icon name="check" />}
+        placeholder="https://"
+      />
+    </div>
+  ),
+};
+
+export const WithAdornments: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '300px' }}>
+      <Input
+        label="Search"
+        floatingLabel
+        startAdornment={<Icon name="search" />}
+        placeholder="Search..."
+      />
+      <Input
+        label="Price"
+        floatingLabel
+        type="number"
+        startAdornment={<span>$</span>}
+        placeholder="0.00"
+      />
+      <Input
+        label="Website"
+        floatingLabel
+        type="url"
+        startAdornment={<Icon name="link" />}
+        endAdornment={<Icon name="check" />}
+        placeholder="https://"
+      />
+    </div>
+  ),
+};
+
+export const ErrorState: Story = {
+  args: {
+    label: 'Email',
+    floatingLabel: true,
+    type: 'email',
+    error: 'Email is required',
+    placeholder: 'Enter your email',
+  },
+};
+
+export const ErrorStateWithValue: Story = {
+  args: {
+    label: 'Email',
+    floatingLabel: true,
+    type: 'email',
+    error: 'Please enter a valid email address',
+    value: 'invalid-email',
+    placeholder: 'Enter your email',
+  },
+};
+
+export const InputTypes: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '300px' }}>
+      <Input
+        label="Email"
+        floatingLabel
+        type="email"
+        helperText="We'll never share your email"
+      />
+      <Input
+        label="Password"
+        floatingLabel
+        type="password"
+      />
+      <Input
+        label="Number"
+        floatingLabel
+        type="number"
+        helperText="Enter a number"
+      />
+      <Input
+        label="Phone"
+        floatingLabel
+        type="tel"
+        placeholder="+1 (555) 000-0000"
+      />
+      <Input
+        label="URI"
+        floatingLabel
+        type="url"
+        placeholder="https://example.com"
+      />
     </div>
   ),
 };

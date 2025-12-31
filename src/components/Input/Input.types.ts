@@ -1,9 +1,11 @@
 import type { BalanceVariant } from "../../types/variant";
 import { forwardRef } from "react";
 
+export type InputVariant = "outlined" | "filled" | "standard";
+
 export interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "style"> {
-  variant?: Extract<BalanceVariant, "solid" | "soft" | "outline">;
+  variant?: InputVariant;
   style?: React.CSSProperties;
   
   // Floating label support

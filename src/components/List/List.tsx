@@ -47,19 +47,9 @@ export const List = ({
             )}
           </div>
           {item.action && (
-            <div className="balanceui-list-action">{item.action}</div>
-          )}
-          {item.divider && index < items.length - 1 && (
-            <div
-              style={{
-                position: "absolute" as const,
-                bottom: 0,
-                left: 0,
-                right: 0,
-                height: "1px",
-                backgroundColor: "var(--bu-border, rgba(0, 0, 0, 0.1))",
-              }}
-            />
+            <div className="balanceui-list-action" onClick={(e) => e.stopPropagation()}>
+              {item.action}
+            </div>
           )}
         </div>
       ))}

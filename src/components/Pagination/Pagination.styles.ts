@@ -10,8 +10,9 @@ export const buttonStyle = (
   active?: boolean
 ): CSSProperties => ({
   minWidth: 32,
+  width: 32,
   height: 32,
-  borderRadius: "var(--bu-radius-sm)",
+  borderRadius: "50%",
   border: "1px solid var(--bu-border)",
   background: active
     ? "var(--bu-primary)"
@@ -21,6 +22,10 @@ export const buttonStyle = (
     : "var(--bu-fg)",
   cursor: "pointer",
   fontSize: 13,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  padding: 0,
 });
 
 export const dotsStyle: CSSProperties = {

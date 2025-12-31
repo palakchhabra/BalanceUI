@@ -24,6 +24,10 @@
 
 .balanceui-toast {
   animation: balanceui-toast-enter 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  outline: none;
 }
 
 .balanceui-toast:hover {
@@ -34,7 +38,35 @@
     0px 2px 16px 1px rgba(0, 0, 0, 0.12);
 }
 
+.balanceui-toast:focus-visible {
+  outline: 2px solid var(--bu-primary, #1976d2);
+  outline-offset: 2px;
+}
+
+.balanceui-toast-entering {
+  animation: balanceui-toast-enter 300ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.balanceui-toast-exiting {
+  animation: balanceui-toast-exit 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .balanceui-toast,
+  .balanceui-toast-entering,
+  .balanceui-toast-exiting {
+    animation: none;
+    transition: opacity 150ms ease;
+  }
+  
+  .balanceui-toast:hover {
+    transform: none;
+  }
+}
+
 .balanceui-toast-icon {
+  /* Using common classes: .balanceui-flex-center, .balanceui-border-radius-full */
   display: flex;
   align-items: center;
   justify-content: center;

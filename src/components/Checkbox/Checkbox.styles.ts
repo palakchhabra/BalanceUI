@@ -19,13 +19,11 @@ export const checkboxStyle = (
   return {
     width: sizeConfig.size,
     height: sizeConfig.size,
-    borderRadius: "var(--bu-radius-sm, 0.25rem)",
+    borderRadius: "var(--bu-radius-xs, 4px)",
     border: "2px solid",
     borderColor: isActive
       ? "var(--bu-primary, #1976d2)"
-      : variant === "outline"
-      ? "var(--bu-border, rgba(0, 0, 0, 0.23))"
-      : "var(--bu-border, rgba(0, 0, 0, 0.23))",
+      : "rgba(0, 0, 0, 0.54)",
     backgroundColor: isActive
       ? "var(--bu-primary, #1976d2)"
       : variant === "solid"
@@ -37,10 +35,11 @@ export const checkboxStyle = (
     alignItems: "center",
     justifyContent: "center",
     cursor: disabled ? "not-allowed" : "pointer",
-    transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)",
     position: "relative" as const,
     opacity: disabled ? 0.5 : 1,
     flexShrink: 0,
+    boxSizing: "border-box",
   } as React.CSSProperties;
 };
 
@@ -49,10 +48,11 @@ export const checkboxIconStyle = (size: "sm" | "md" | "lg") => {
   return {
     width: sizeConfig.iconSize,
     height: sizeConfig.iconSize,
-    color: "#fff",
+    color: "#ffffff",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    flexShrink: 0,
   } as React.CSSProperties;
 };
 

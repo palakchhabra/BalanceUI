@@ -9,9 +9,90 @@
 
 .balanceui-shimmer {
   display: block;
+  border-radius: var(--bu-radius-md, 4px);
+  background: var(--bu-surface-variant, rgba(0, 0, 0, 0.05));
+  position: relative;
+  overflow: hidden;
 }
 
-.balanceui-shimmer-group {
+/* Shimmer animation */
+.balanceui-shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: bu-shimmer 1.5s infinite;
+}
+
+/* Pattern containers */
+.balanceui-shimmer-pattern {
   width: 100%;
 }
 
+.balanceui-shimmer-avatar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.balanceui-shimmer-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.balanceui-shimmer-table {
+  width: 100%;
+  border: 1px solid var(--bu-border, rgba(0, 0, 0, 0.12));
+  border-radius: var(--bu-radius-md, 4px);
+  overflow: hidden;
+}
+
+.balanceui-shimmer-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.balanceui-shimmer-table thead {
+  background-color: var(--bu-surface-variant, rgba(0, 0, 0, 0.02));
+}
+
+.balanceui-shimmer-table th {
+  border-bottom: 2px solid var(--bu-border, rgba(0, 0, 0, 0.12));
+}
+
+.balanceui-shimmer-table td {
+  border-bottom: 1px solid var(--bu-border, rgba(0, 0, 0, 0.08));
+}
+
+.balanceui-shimmer-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.balanceui-shimmer-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.balanceui-shimmer-profile {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.balanceui-shimmer-article {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}

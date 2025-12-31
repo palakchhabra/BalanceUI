@@ -1,9 +1,21 @@
 .balanceui-buttontoggle-group {
   isolation: isolate;
+  display: inline-flex;
+  border-radius: var(--bu-radius-md, 4px);
+  overflow: hidden;
+  border: 1px solid var(--bu-border, rgba(0, 0, 0, 0.23));
+  background: var(--bu-surface, #ffffff);
 }
 
 .balanceui-buttontoggle-item {
   position: relative;
+  box-sizing: border-box;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: break-word;
+  max-width: 100%;
 }
 
 .balanceui-buttontoggle-item:focus-visible {
@@ -13,16 +25,68 @@
 }
 
 .balanceui-buttontoggle-item:not(:disabled):hover {
-  background-color: var(--bu-surface-variant, rgba(0, 0, 0, 0.05)) !important;
+  background-color: var(--bu-surface-variant, rgba(0, 0, 0, 0.04));
 }
 
+.balanceui-buttontoggle-item.balanceui-buttontoggle-selected:not(:disabled) {
+  z-index: 1;
+}
+
+/* Solid variant selected */
+.balanceui-buttontoggle-group[data-variant="solid"] .balanceui-buttontoggle-item.balanceui-buttontoggle-selected:not(:disabled) {
+  background-color: var(--bu-primary, #1976d2);
+  color: var(--bu-on-primary, #ffffff);
+}
+
+/* Soft variant selected */
+.balanceui-buttontoggle-group[data-variant="soft"] .balanceui-buttontoggle-item.balanceui-buttontoggle-selected:not(:disabled) {
+  background-color: var(--bu-primary-light, rgba(25, 118, 210, 0.12));
+  color: var(--bu-primary, #1976d2);
+}
+
+/* Outline variant selected - handled by inline styles */
+
 .balanceui-buttontoggle-item.balanceui-buttontoggle-selected:not(:disabled):hover {
-  background-color: var(--bu-primary-dark, #1565c0) !important;
+  background-color: var(--bu-primary-dark, #1565c0);
+}
+
+.balanceui-buttontoggle-item:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
 }
 
 .balanceui-buttontoggle-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Material Design segmented control styling */
+.balanceui-buttontoggle-item.balanceui-buttontoggle-first {
+  border-top-left-radius: var(--bu-radius-md, 4px);
+  border-bottom-left-radius: var(--bu-radius-md, 4px);
+}
+
+.balanceui-buttontoggle-item.balanceui-buttontoggle-last {
+  border-top-right-radius: var(--bu-radius-md, 4px);
+  border-bottom-right-radius: var(--bu-radius-md, 4px);
+  border-right: none !important;
+}
+
+.balanceui-buttontoggle-item:not(.balanceui-buttontoggle-last) {
+  border-right: 1px solid var(--bu-border, rgba(0, 0, 0, 0.23));
+}
+
+/* Outline variant selected - ensure border is visible */
+.balanceui-buttontoggle-group[data-variant="outline"] .balanceui-buttontoggle-item.balanceui-buttontoggle-selected:not(:disabled) {
+  border: 2px solid var(--bu-primary, #1976d2) !important;
+  background-color: transparent !important;
+  color: var(--bu-primary, #1976d2) !important;
+}
+
+/* Override right border for selected outline items */
+.balanceui-buttontoggle-group[data-variant="outline"] .balanceui-buttontoggle-item.balanceui-buttontoggle-selected:not(.balanceui-buttontoggle-last) {
+  border-right: 2px solid var(--bu-primary, #1976d2) !important;
 }
 

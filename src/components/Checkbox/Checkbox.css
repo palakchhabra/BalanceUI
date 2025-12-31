@@ -1,51 +1,135 @@
 .balanceui-checkbox {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  transform-origin: center;
+}
+
+.balanceui-checkbox-container {
+  display: inline-flex;
+}
+
+.balanceui-checkbox-checked {
+  border-color: var(--bu-primary, #1976d2) !important;
+  background-color: var(--bu-primary, #1976d2) !important;
+  animation: balanceui-checkbox-checked 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.balanceui-checkbox:not(.balanceui-checkbox-checked) {
+  animation: balanceui-checkbox-unchecked 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes balanceui-checkbox-checked {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes balanceui-checkbox-unchecked {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.balanceui-checkbox-checked svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
 }
 
 .balanceui-checkbox::before {
   content: "";
+  /* Using common class: .balanceui-absolute */
   position: absolute;
   top: 50%;
   left: 50%;
   width: 0;
   height: 0;
+  /* Using common class: .balanceui-border-radius-full */
   border-radius: 50%;
-  background-color: rgba(25, 118, 210, 0.1);
+  background-color: rgba(25, 118, 210, 0.2);
   transform: translate(-50%, -50%);
-  transition: width 0.3s ease, height 0.3s ease;
+  /* Using common class: .balanceui-transition */
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+              height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .balanceui-checkbox:not(.balanceui-checkbox-disabled):hover::before {
   width: 200%;
   height: 200%;
+  opacity: 1;
+}
+
+.balanceui-checkbox:not(.balanceui-checkbox-disabled):active::before {
+  width: 300%;
+  height: 300%;
+  opacity: 0.3;
+  transition: width 0.2s ease, height 0.2s ease, opacity 0.1s ease;
 }
 
 .balanceui-checkbox-check-icon,
 .balanceui-checkbox-indeterminate-icon {
-  animation: balanceui-checkbox-check 0.2s ease-out;
+  animation: balanceui-checkbox-icon-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   transform-origin: center;
 }
 
-@keyframes balanceui-checkbox-check {
-  from {
-    transform: scale(0);
+@keyframes balanceui-checkbox-icon-in {
+  0% {
+    transform: scale(0) rotate(-180deg);
     opacity: 0;
   }
-  to {
-    transform: scale(1);
+  50% {
+    transform: scale(1.2) rotate(10deg);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
     opacity: 1;
+  }
+}
+
+.balanceui-checkbox:not(.balanceui-checkbox-checked) .balanceui-checkbox-check-icon,
+.balanceui-checkbox:not(.balanceui-checkbox-indeterminate) .balanceui-checkbox-indeterminate-icon {
+  animation: balanceui-checkbox-icon-out 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes balanceui-checkbox-icon-out {
+  0% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0) rotate(180deg);
+    opacity: 0;
   }
 }
 
 .balanceui-checkbox:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2), 0 0 0 3px var(--bu-primary, #1976d2);
+  box-shadow: var(--bu-elevation-2), 0 0 0 3px rgba(25, 118, 210, 0.3);
+  transform: scale(1.05);
+  transition: box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1), transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .balanceui-checkbox-error:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(211, 47, 47, 0.2), 0 0 0 3px var(--bu-error, #d32f2f);
+  box-shadow: 0 0 0 2px rgba(211, 47, 47, 0.2), 0 0 0 3px rgba(211, 47, 47, 0.3);
+  transition: box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .balanceui-checkbox-label {

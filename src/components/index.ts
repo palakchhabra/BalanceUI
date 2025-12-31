@@ -32,3 +32,5 @@ export * from './Toolbar';
 export * from './List';
 export * from './Icon';
 export * from './VideoTrimmer';
+export * from './SearchSelect';
+export * from './Timeline';

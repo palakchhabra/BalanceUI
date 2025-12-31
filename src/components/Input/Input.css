@@ -1,197 +1,560 @@
-/* Input Wrapper */
+/* =========================================================
+   BalanceUI – Material Design Input Component
+   Uses common CSS patterns and design tokens
+   ========================================================= */
+
+/* -----------------------------
+   Input Wrapper
+------------------------------ */
 .balanceui-input-wrapper {
   position: relative;
-  margin-bottom: 8px;
+  margin-bottom: var(--bu-space-2);
+  width: 100%;
 }
 
 .balanceui-input-fullwidth {
   width: 100%;
 }
 
-/* Input Container */
+/* -----------------------------
+   Input Container
+------------------------------ */
 .balanceui-input-container {
   position: relative;
   display: flex;
   align-items: center;
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: var(--bu-transition-surface);
 }
 
-/* Container states handled by child elements */
-
-/* Base Input Styles */
+/* -----------------------------
+   Base Input Styles
+------------------------------ */
 .balanceui-input {
+  width: 100%;
+  box-sizing: border-box;
   font-family: var(--bu-font-family);
-  font-size: var(--bu-font-size-md, 14px);
-  line-height: var(--bu-line-height-normal, 1.5);
+  font-size: var(--bu-font-size-md);
+  line-height: var(--bu-line-height-normal);
+  color: var(--bu-fg);
   outline: none;
-  transition: 
-    border-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1),
-    background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: var(--bu-transition-surface), var(--bu-transition-shadow);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 .balanceui-input::placeholder {
-  color: transparent;
-  opacity: 0;
-  transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--bu-muted);
+  opacity: var(--bu-placeholder-opacity);
 }
 
-.balanceui-input:not(.balanceui-input-with-label)::placeholder {
-  color: var(--bu-muted, rgba(0, 0, 0, 0.54));
-  opacity: 0.7;
+/* Hide placeholder when label is floating (outlined variant) */
+.balanceui-input-with-label:not(.balanceui-input-focused):not(.balanceui-input-has-value)::placeholder {
+  opacity: var(--bu-placeholder-opacity-hidden);
 }
 
-/* Floating Label Input - show placeholder when not focused and empty */
-.balanceui-input-with-label:not(:focus):placeholder-shown::placeholder {
-  color: transparent;
+.balanceui-input-with-label.balanceui-input-focused::placeholder,
+.balanceui-input-with-label.balanceui-input-has-value::placeholder {
+  opacity: var(--bu-placeholder-opacity);
 }
 
-/* Focus States */
-.balanceui-input:focus,
-.balanceui-input-focused {
-  border-color: var(--bu-primary, #1976d2);
-  box-shadow: 0 0 0 1px var(--bu-primary, #1976d2);
+/* -----------------------------
+   Variants
+------------------------------ */
+
+/* OUTLINED VARIANT */
+.balanceui-input[data-variant="outlined"] {
+  background: var(--bu-surface);
+  border: var(--bu-border-width) var(--bu-border-style) var(--bu-border);
+  border-radius: var(--bu-input-border-radius);
+  padding: var(--bu-input-padding-y) var(--bu-input-padding-x);
+  height: var(--bu-input-height-md);
 }
 
-.balanceui-input:focus-visible {
+.balanceui-input[data-variant="outlined"].balanceui-input-with-label {
+  padding-top: var(--bu-input-padding-y-floating);
+  padding-bottom: var(--bu-space-2);
+  height: var(--bu-input-height-floating);
+}
+
+.balanceui-input[data-variant="outlined"]:hover:not(:disabled):not(:focus) {
+  border-color: var(--bu-border-hover);
+}
+
+.balanceui-input[data-variant="outlined"]:focus {
+  border-color: var(--bu-primary);
+  border-width: var(--bu-border-width-thick);
+  padding: calc(var(--bu-input-padding-y) - 1px) calc(var(--bu-input-padding-x) - 1px);
+}
+
+.balanceui-input[data-variant="outlined"].balanceui-input-with-label:focus {
+  padding-top: calc(var(--bu-input-padding-y-floating) - 1px);
+  padding-bottom: calc(var(--bu-space-2) - 1px);
+}
+
+.balanceui-input[data-variant="outlined"]:focus-visible {
+  box-shadow: 
+    0 0 0 var(--bu-focus-ring-width) var(--bu-primary),
+    0 0 0 var(--bu-focus-ring-offset) rgba(25, 118, 210, var(--bu-focus-ring-opacity));
   outline: none;
-  border-color: var(--bu-primary, #1976d2);
-  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2), 0 0 0 1px var(--bu-primary, #1976d2);
 }
 
-/* Error States */
-.balanceui-input-error,
-.balanceui-input-container-error .balanceui-input {
-  border-color: var(--bu-error, #d32f2f);
+/* FILLED VARIANT */
+.balanceui-input[data-variant="filled"] {
+  background: var(--bu-surface-variant);
+  border: none;
+  border-bottom: var(--bu-border-width) var(--bu-border-style) var(--bu-border);
+  border-radius: var(--bu-radius-sm) var(--bu-radius-sm) 0 0;
+  padding: var(--bu-space-2) var(--bu-space-3);
+  height: var(--bu-input-height-md);
 }
 
-.balanceui-input-error:focus,
-.balanceui-input-container-error .balanceui-input:focus {
-  border-color: var(--bu-error, #d32f2f);
-  box-shadow: 0 0 0 1px var(--bu-error, #d32f2f);
+.balanceui-input[data-variant="filled"].balanceui-input-with-label {
+  padding-top: var(--bu-space-5);
+  padding-bottom: var(--bu-space-1);
+  height: var(--bu-input-height-floating);
 }
 
-/* Disabled States */
-.balanceui-input:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  background: var(--bu-surface-variant, rgba(0, 0, 0, 0.05));
-  border-color: var(--bu-border, rgba(0, 0, 0, 0.12));
+.balanceui-input[data-variant="filled"]:hover:not(:disabled):not(:focus) {
+  background: var(--bu-hover-bg);
 }
 
-.balanceui-input:read-only {
-  background: var(--bu-surface-variant, rgba(0, 0, 0, 0.05));
-  cursor: default;
+.balanceui-input[data-variant="filled"]:focus {
+  border-bottom: var(--bu-border-width-thick) var(--bu-border-style) var(--bu-primary);
+  background: var(--bu-surface-variant);
+  padding-bottom: calc(var(--bu-space-1) - 1px);
 }
 
-/* Floating Label */
+.balanceui-input[data-variant="filled"]:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+/* STANDARD VARIANT */
+.balanceui-input[data-variant="standard"] {
+  background: transparent;
+  border: none;
+  border-bottom: var(--bu-border-width) var(--bu-border-style) var(--bu-border);
+  border-radius: 0;
+  padding: var(--bu-space-2) 0;
+  height: var(--bu-input-height-md);
+}
+
+.balanceui-input[data-variant="standard"].balanceui-input-with-label {
+  padding-top: var(--bu-space-5);
+  padding-bottom: var(--bu-space-1);
+  height: var(--bu-input-height-floating);
+}
+
+.balanceui-input[data-variant="standard"]:hover:not(:disabled):not(:focus) {
+  border-bottom-color: var(--bu-fg);
+}
+
+.balanceui-input[data-variant="standard"]:focus {
+  border-bottom: var(--bu-border-width-thick) var(--bu-border-style) var(--bu-primary);
+  padding-bottom: calc(var(--bu-space-1) - 1px);
+}
+
+.balanceui-input[data-variant="standard"]:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+/* -----------------------------
+   Padding with Adornments
+------------------------------ */
+.balanceui-input-container:has(.balanceui-input-adornment-start) .balanceui-input[data-variant="outlined"] {
+  padding-left: var(--bu-input-padding-x-with-adornment);
+}
+
+.balanceui-input-container:has(.balanceui-input-adornment-end) .balanceui-input[data-variant="outlined"] {
+  padding-right: var(--bu-input-padding-x-with-adornment);
+}
+
+.balanceui-input-container:has(.balanceui-input-adornment-start) .balanceui-input[data-variant="filled"],
+.balanceui-input-container:has(.balanceui-input-adornment-start) .balanceui-input[data-variant="standard"] {
+  padding-left: var(--bu-input-adornment-width-filled);
+}
+
+.balanceui-input-container:has(.balanceui-input-adornment-end) .balanceui-input[data-variant="filled"],
+.balanceui-input-container:has(.balanceui-input-adornment-end) .balanceui-input[data-variant="standard"] {
+  padding-right: var(--bu-input-adornment-width-filled);
+}
+
+/* Number input spinner padding */
+.balanceui-input-container:has(.balanceui-input-number-spinner) .balanceui-input {
+  padding-right: var(--bu-spinner-padding-right);
+}
+
+/* -----------------------------
+   Floating Label
+------------------------------ */
 .balanceui-input-label {
   position: absolute;
-  left: 12px;
+  pointer-events: none;
+  transition: var(--bu-transition-surface), var(--bu-transition-transform);
+  z-index: var(--bu-label-z-index);
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: calc(100% - var(--bu-input-label-max-width-offset-outlined));
+}
+
+/* Outlined variant label */
+.balanceui-input-container[data-variant="outlined"] .balanceui-input-label {
+  left: var(--bu-input-label-left-outlined);
   top: 50%;
   transform: translateY(-50%);
-  font-size: var(--bu-font-size-md, 14px);
-  color: var(--bu-fg-secondary, rgba(0, 0, 0, 0.6));
-  pointer-events: none;
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 1;
-  line-height: 1;
+  font-size: var(--bu-font-size-md);
+  color: var(--bu-muted);
   background: transparent;
   padding: 0;
 }
 
-.balanceui-input-label-floating {
-  top: 8px;
-  transform: none;
-  font-size: var(--bu-font-size-xs, 11px);
-  background: var(--bu-surface, #ffffff);
-  padding: 0 4px;
-  color: var(--bu-primary, #1976d2);
+.balanceui-input-container[data-variant="outlined"] .balanceui-input-label.balanceui-input-label-floating {
+  top: 0;
+  font-size: var(--bu-font-size-xs);
+  font-weight: var(--bu-font-weight-medium);
+  color: var(--bu-primary);
+  background: var(--bu-surface);
+  padding: 0 var(--bu-space-1);
+  transform: translateY(-50%);
 }
 
-.balanceui-input-container-focused .balanceui-input-label:not(.balanceui-input-label-floating) {
-  color: var(--bu-primary, #1976d2);
+.balanceui-input-container[data-variant="outlined"]:has(.balanceui-input-adornment-start) .balanceui-input-label {
+  left: var(--bu-input-padding-x-with-adornment);
+  max-width: calc(100% - var(--bu-input-label-max-width-offset-outlined-with-adornment));
 }
 
+/* Filled and Standard variant label */
+.balanceui-input-container[data-variant="filled"] .balanceui-input-label,
+.balanceui-input-container[data-variant="standard"] .balanceui-input-label {
+  left: var(--bu-input-label-left-filled);
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--bu-font-size-md);
+  color: var(--bu-muted);
+  background: transparent;
+  padding: 0;
+}
+
+.balanceui-input-container[data-variant="filled"] .balanceui-input-label.balanceui-input-label-floating,
+.balanceui-input-container[data-variant="standard"] .balanceui-input-label.balanceui-input-label-floating {
+  top: 0;
+  font-size: var(--bu-font-size-xs);
+  font-weight: var(--bu-font-weight-medium);
+  color: var(--bu-primary);
+  background: transparent;
+  padding: 0;
+  transform: translateY(-50%);
+}
+
+.balanceui-input-container[data-variant="filled"]:has(.balanceui-input-adornment-start) .balanceui-input-label,
+.balanceui-input-container[data-variant="standard"]:has(.balanceui-input-adornment-start) .balanceui-input-label {
+  left: var(--bu-input-adornment-width-filled);
+  max-width: calc(100% - var(--bu-input-label-max-width-offset-filled));
+}
+
+/* Error state label */
 .balanceui-input-label-error {
-  color: var(--bu-error, #d32f2f);
+  color: var(--bu-error) !important;
 }
 
-.balanceui-input-label-floating.balanceui-input-label-error {
-  color: var(--bu-error, #d32f2f);
+.balanceui-input-container[data-variant="outlined"] .balanceui-input-label-error.balanceui-input-label-floating {
+  color: var(--bu-error) !important;
 }
 
-/* Adornments */
+/* -----------------------------
+   Error State
+------------------------------ */
+.balanceui-input-error {
+  border-color: var(--bu-error) !important;
+}
+
+.balanceui-input-error:focus-visible {
+  box-shadow: 
+    0 0 0 var(--bu-focus-ring-width) var(--bu-error),
+    0 0 0 var(--bu-focus-ring-offset) rgba(211, 47, 47, var(--bu-focus-ring-opacity)) !important;
+  outline: none;
+}
+
+.balanceui-input[data-variant="filled"].balanceui-input-error:focus,
+.balanceui-input[data-variant="standard"].balanceui-input-error:focus {
+  border-bottom-color: var(--bu-error) !important;
+}
+
+/* -----------------------------
+   Disabled / Readonly
+------------------------------ */
+.balanceui-input:disabled {
+  opacity: var(--bu-opacity-disabled);
+  cursor: not-allowed;
+  background: var(--bu-surface-variant);
+  border-color: var(--bu-border);
+  box-shadow: none;
+  color: var(--bu-muted);
+}
+
+.balanceui-input[data-variant="filled"]:disabled,
+.balanceui-input[data-variant="standard"]:disabled {
+  background: transparent;
+  border-bottom-color: var(--bu-border);
+}
+
+.balanceui-input:read-only {
+  background: var(--bu-surface-variant);
+  cursor: default;
+}
+
+/* -----------------------------
+   Adornments
+------------------------------ */
 .balanceui-input-adornment {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--bu-adornment-size);
+  height: var(--bu-adornment-size);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--bu-fg-secondary, rgba(0, 0, 0, 0.6));
-  font-size: var(--bu-font-size-md, 14px);
-  flex-shrink: 0;
+  color: var(--bu-muted);
+  z-index: 2;
+  pointer-events: none;
 }
 
 .balanceui-input-adornment-start {
-  padding-left: 12px;
-  padding-right: 8px;
+  left: 0;
 }
 
 .balanceui-input-adornment-end {
-  padding-left: 8px;
-  padding-right: 12px;
+  right: 0;
 }
 
-/* Helper Text & Error Messages */
+/* -----------------------------
+   Helper Text
+------------------------------ */
 .balanceui-input-helper {
-  margin-top: 4px;
-  padding: 0 12px;
-  font-size: var(--bu-font-size-xs, 11px);
-  line-height: 1.4;
-  color: var(--bu-fg-secondary, rgba(0, 0, 0, 0.6));
-  min-height: 16px;
-  transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: var(--bu-space-1);
+  padding: 0 var(--bu-space-3);
+  font-size: var(--bu-font-size-xs);
+  line-height: var(--bu-line-height-normal);
+  color: var(--bu-muted);
 }
 
 .balanceui-input-helper-error {
-  color: var(--bu-error, #d32f2f);
+  color: var(--bu-error);
 }
 
-/* Variant Specific Styles */
-.balanceui-input[data-variant="solid"] {
-  background: var(--bu-surface-variant, rgba(0, 0, 0, 0.05));
-  color: var(--bu-fg);
-  border-color: var(--bu-border);
+/* -----------------------------
+   Number Input Spinner
+------------------------------ */
+.balanceui-input[type="number"]::-webkit-inner-spin-button,
+.balanceui-input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
-.balanceui-input[data-variant="solid"]:not(.balanceui-input-with-label)::placeholder {
-  color: var(--bu-fg-secondary);
-  opacity: 0.7;
+.balanceui-input[type="number"] {
+  -moz-appearance: textfield;
 }
 
-.balanceui-input[data-variant="solid"]:focus,
-.balanceui-input[data-variant="solid"].balanceui-input-focused {
-  box-shadow: 0 0 0 2px var(--bu-primary, #1976d2);
-  border-color: var(--bu-primary, #1976d2);
+.balanceui-input-number-spinner {
+  position: absolute;
+  right: var(--bu-space-2);
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--bu-spinner-gap);
+  width: var(--bu-spinner-width);
+  height: var(--bu-spinner-height);
+  z-index: 2;
 }
 
-.balanceui-input[data-variant="soft"] {
-  background: var(--bu-soft, rgba(0, 0, 0, 0.04));
-  border-color: transparent;
+.balanceui-input-number-spinner-button {
+  width: var(--bu-spinner-width);
+  height: var(--bu-spinner-button-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  color: var(--bu-muted);
+  border-radius: var(--bu-radius-xs);
+  transition: var(--bu-transition-surface);
 }
 
-.balanceui-input[data-variant="soft"]:focus,
-.balanceui-input[data-variant="soft"].balanceui-input-focused {
-  background: var(--bu-surface, #ffffff);
-  border-color: var(--bu-primary, #1976d2);
-  box-shadow: 0 0 0 1px var(--bu-primary, #1976d2);
+.balanceui-input-number-spinner-button svg {
+  width: var(--bu-spinner-icon-size);
+  height: var(--bu-spinner-icon-size);
+  display: block;
 }
 
-/* Reduced Motion Support */
+.balanceui-input-number-spinner-button:hover {
+  background-color: var(--bu-hover-bg);
+  color: var(--bu-primary);
+}
+
+.balanceui-input-number-spinner-button:active {
+  background-color: var(--bu-active-bg);
+  transform: scale(0.9);
+}
+
+.balanceui-input:disabled + .balanceui-input-number-spinner .balanceui-input-number-spinner-button {
+  opacity: var(--bu-opacity-disabled);
+  pointer-events: none;
+}
+
+/* -----------------------------
+   Micro Interaction
+------------------------------ */
+.balanceui-input:active:not(:disabled) {
+  transform: scale(0.995);
+}
+
+/* -----------------------------
+   Reduced Motion
+------------------------------ */
 @media (prefers-reduced-motion: reduce) {
   .balanceui-input,
   .balanceui-input-label,
   .balanceui-input-container,
+  .balanceui-input-adornment,
+  .balanceui-input-number-spinner-button {
+    transition: none !important;
+  }
+}
+
+/* -----------------------------
+   Dark Mode Support
+------------------------------ */
+@media (prefers-color-scheme: dark) {
+  .balanceui-input {
+    color: var(--bu-dark-fg);
+  }
+
+  .balanceui-input::placeholder {
+    color: var(--bu-dark-muted);
+  }
+
+  /* Outlined variant dark mode */
+  .balanceui-input[data-variant="outlined"] {
+    background: var(--bu-dark-surface);
+    border-color: var(--bu-dark-border);
+    color: var(--bu-dark-fg);
+  }
+
+  .balanceui-input[data-variant="outlined"]:hover:not(:disabled):not(:focus) {
+    border-color: var(--bu-dark-border-hover);
+  }
+
+  .balanceui-input[data-variant="outlined"]:focus {
+    border-color: var(--bu-dark-primary);
+  }
+
+  .balanceui-input[data-variant="outlined"]:focus-visible {
+    box-shadow: 
+      0 0 0 var(--bu-focus-ring-width) var(--bu-dark-primary),
+      0 0 0 var(--bu-focus-ring-offset) rgba(144, 202, 249, var(--bu-focus-ring-opacity));
+  }
+
+  /* Filled variant dark mode */
+  .balanceui-input[data-variant="filled"] {
+    background: var(--bu-dark-surface-variant);
+    border-bottom-color: var(--bu-dark-border);
+    color: var(--bu-dark-fg);
+  }
+
+  .balanceui-input[data-variant="filled"]:hover:not(:disabled):not(:focus) {
+    background: var(--bu-dark-hover-bg);
+  }
+
+  .balanceui-input[data-variant="filled"]:focus {
+    border-bottom-color: var(--bu-dark-primary);
+  }
+
+  /* Standard variant dark mode */
+  .balanceui-input[data-variant="standard"] {
+    background: transparent;
+    border-bottom-color: var(--bu-dark-border);
+    color: var(--bu-dark-fg);
+  }
+
+  .balanceui-input[data-variant="standard"]:hover:not(:disabled):not(:focus) {
+    border-bottom-color: var(--bu-dark-fg);
+  }
+
+  .balanceui-input[data-variant="standard"]:focus {
+    border-bottom-color: var(--bu-dark-primary);
+  }
+
+  /* Label dark mode */
+  .balanceui-input-label {
+    color: var(--bu-dark-muted-light);
+  }
+
+  .balanceui-input-container[data-variant="outlined"] .balanceui-input-label.balanceui-input-label-floating {
+    background: var(--bu-dark-surface);
+    color: var(--bu-dark-primary);
+  }
+
+  .balanceui-input-container[data-variant="filled"] .balanceui-input-label.balanceui-input-label-floating,
+  .balanceui-input-container[data-variant="standard"] .balanceui-input-label.balanceui-input-label-floating {
+    color: var(--bu-dark-primary);
+  }
+
+  /* Adornment dark mode */
+  .balanceui-input-adornment {
+    color: var(--bu-dark-muted);
+  }
+
+  /* Helper text dark mode */
   .balanceui-input-helper {
-    transition: none;
+    color: var(--bu-dark-muted);
+  }
+
+  /* Number spinner dark mode */
+  .balanceui-input-number-spinner-button {
+    color: var(--bu-dark-muted);
+  }
+
+  .balanceui-input-number-spinner-button:hover {
+    background-color: var(--bu-dark-hover-bg);
+    color: var(--bu-dark-primary);
+  }
+
+  /* Disabled dark mode */
+  .balanceui-input:disabled {
+    background: var(--bu-dark-disabled-bg);
+    border-color: var(--bu-dark-disabled-border);
+    color: var(--bu-dark-disabled-fg);
+  }
+
+  .balanceui-input[data-variant="filled"]:disabled,
+  .balanceui-input[data-variant="standard"]:disabled {
+    background: transparent;
+    border-bottom-color: var(--bu-dark-disabled-border);
+  }
+
+  /* Error state dark mode */
+  .balanceui-input-error {
+    border-color: var(--bu-dark-error) !important;
+  }
+
+  .balanceui-input-error:focus-visible {
+    box-shadow: 
+      0 0 0 var(--bu-focus-ring-width) var(--bu-dark-error),
+      0 0 0 var(--bu-focus-ring-offset) rgba(244, 67, 54, var(--bu-focus-ring-opacity)) !important;
+  }
+
+  .balanceui-input-label-error {
+    color: var(--bu-dark-error) !important;
+  }
+
+  .balanceui-input-helper-error {
+    color: var(--bu-dark-error);
   }
 }

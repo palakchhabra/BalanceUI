@@ -45,17 +45,14 @@ export const toastStyle = (
   
   return {
     padding: "14px 16px",
-    borderRadius: "var(--bu-radius-md, 4px)",
+    borderRadius: "var(--bu-radius-lg, 12px)",
     background: colors.bg,
     color: colors.text,
     minWidth: 280,
     maxWidth: 400,
     fontSize: "14px",
     fontWeight: 500,
-    boxShadow: 
-      "0px 3px 5px -1px rgba(0, 0, 0, 0.2), " +
-      "0px 6px 10px 0px rgba(0, 0, 0, 0.14), " +
-      "0px 1px 18px 0px rgba(0, 0, 0, 0.12)",
+    boxShadow: "var(--bu-elevation-6)",
     display: "flex",
     alignItems: "center",
     gap: "12px",

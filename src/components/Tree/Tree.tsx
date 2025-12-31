@@ -10,6 +10,40 @@ interface FlatTreeNode {
   index: number;
 }
 
+// Helper function to collect all descendant node IDs recursively
+const collectDescendantIds = (node: TreeNode): string[] => {
+  const ids: string[] = [];
+  // #region agent log
+  fetch('http://127.0.0.1:7242/ingest/4131f597-13c0-41fc-90af-eb2005d763cb',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Tree.tsx:collectDescendantIds',message:'Collecting descendants',data:{nodeId:node.id,hasChildren:!!node.children,childrenCount:node.children?.length||0},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+  // #endregion
+  if (node.children && node.children.length > 0) {
+    for (const child of node.children) {
+      ids.push(child.id);
+      ids.push(...collectDescendantIds(child));
+    }
+  }
+  // #region agent log
+  fetch('http://127.0.0.1:7242/ingest/4131f597-13c0-41fc-90af-eb2005d763cb',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Tree.tsx:collectDescendantIds',message:'Descendants collected',data:{nodeId:node.id,descendantCount:ids.length,descendantIds:ids},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+  // #endregion
+  return ids;
+};
+
+// Helper function to find a node by ID in the tree
+const findNodeById = (nodes: TreeNode[], id: string): TreeNode | null => {
+  for (const node of nodes) {
+    if (node.id === id) {
+      return node;
+    }
+    if (node.children) {
+      const found = findNodeById(node.children, id);
+      if (found) {
+        return found;
+      }
+    }
+  }
+  return null;
+};
+
 const TreeItem = ({
   node,
   level,
@@ -50,8 +84,8 @@ const TreeItem = ({
   );
 
   return (
-    <div className={`balanceui-tree-node ${isSelected ? "selected" : ""} ${className || ""}`} style={{ paddingLeft: `${level * 16}px` }}>
-      <div className="balanceui-tree-label" onClick={handleToggle}>
+    <div className={`balanceui-tree-node ${isSelected ? "selected" : ""} ${className || ""}`} style={{ paddingLeft: `${level * 20}px` }}>
+      <div className="balanceui-tree-label" onClick={handleToggle} style={{ width: "100%" }}>
         {showCheckbox && (
           <span className="balanceui-tree-checkbox" onClick={handleCheckboxChange}>
             <input
@@ -208,20 +242,52 @@ export const Tree = ({
 
   const handleSelect = useCallback(
     (id: string, checked: boolean) => {
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/4131f597-13c0-41fc-90af-eb2005d763cb',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Tree.tsx:handleSelect',message:'Selection triggered',data:{nodeId:id,checked,selectedCount:controlledSelected.size},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+      // #endregion
+      
+      // Find the node to get its children
+      const node = findNodeById(data, id);
+      const descendantIds = node ? collectDescendantIds(node) : [];
+      
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/4131f597-13c0-41fc-90af-eb2005d763cb',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Tree.tsx:handleSelect',message:'Descendants found',data:{nodeId:id,descendantCount:descendantIds.length,descendantIds},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+      // #endregion
+      
+      // Collect all IDs that will be affected (parent + descendants)
+      const allAffectedIds = [id, ...descendantIds];
+      
       if (selected === undefined) {
         setInternalSelected((prev) => {
           const next = new Set(prev);
           if (checked) {
-            next.add(id);
+            // Add parent and all descendant IDs
+            allAffectedIds.forEach(nodeId => next.add(nodeId));
+            // #region agent log
+            fetch('http://127.0.0.1:7242/ingest/4131f597-13c0-41fc-90af-eb2005d763cb',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Tree.tsx:handleSelect',message:'Selection applied',data:{nodeId:id,checked:true,newSelectedCount:next.size,addedIds:allAffectedIds},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+            // #endregion
           } else {
-            next.delete(id);
+            // Remove parent and all descendant IDs
+            allAffectedIds.forEach(nodeId => next.delete(nodeId));
+            // #region agent log
+            fetch('http://127.0.0.1:7242/ingest/4131f597-13c0-41fc-90af-eb2005d763cb',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Tree.tsx:handleSelect',message:'Deselection applied',data:{nodeId:id,checked:false,newSelectedCount:next.size,removedIds:allAffectedIds},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+            // #endregion
           }
           return next;
         });
+      } else {
+        // When using controlled selection, update the parent's state
+        // The parent should handle cascading in their own handler
+        // But we still need to call onSelect for each affected node
+        allAffectedIds.forEach(nodeId => {
+          onSelect?.(nodeId, checked);
+        });
+        // #region agent log
+        fetch('http://127.0.0.1:7242/ingest/4131f597-13c0-41fc-90af-eb2005d763cb',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'Tree.tsx:handleSelect',message:'Controlled selection - onSelect called',data:{nodeId:id,checked,affectedCount:allAffectedIds.length,affectedIds:allAffectedIds},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+        // #endregion
       }
-      onSelect?.(id, checked);
     },
-    [selected, onSelect]
+    [selected, onSelect, data]
   );
 
   const flatNodes = useMemo(
@@ -268,7 +334,8 @@ export const Tree = ({
     }
   }, [expanded]);
 
-  if (height && flatNodes.length > 100) {
+  // Use virtual scrolling for datasets with 50+ nodes (lowered threshold for better performance)
+  if (height && flatNodes.length > 50) {
     return (
       <div
         ref={containerRef}

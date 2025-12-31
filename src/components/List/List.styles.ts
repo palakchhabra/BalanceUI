@@ -27,7 +27,7 @@ export const listItemStyle = (
       : "transparent",
     transition: "background-color 0.15s ease",
     opacity: disabled ? 0.5 : 1,
-    borderBottom: "1px solid var(--bu-border, rgba(0, 0, 0, 0.1))",
+    borderBottom: "none",
   } as React.CSSProperties;
 };
 

@@ -1,4 +1,5 @@
 import { useMemo, useCallback, useState, useEffect, useRef } from "react";
+import { Icon } from "../Icon/Icon";
 import {
   tableWrapperStyle,
   scrollContainerStyle,
@@ -39,10 +40,13 @@ export const DataTable = <T,>({
   showRecordCount = false,
   recordCountLabel = "Records",
   emptyMessage = "No data",
+  autoRefresh,
 }: DataTableProps<T>) => {
   const [scrollTop, setScrollTop] = useState(0);
   const [internalSelectedRows, setInternalSelectedRows] = useState<T[]>([]);
+  const [lastRefreshed, setLastRefreshed] = useState<Date | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const refreshIntervalRef = useRef<NodeJS.Timeout | null>(null);
   
   const isControlled = controlledSelectedRows !== undefined;
   const selectedRows = isControlled ? controlledSelectedRows : internalSelectedRows;
@@ -141,6 +145,49 @@ export const DataTable = <T,>({
     }
   }, []);
 
+  // Auto-refresh logic
+  useEffect(() => {
+    if (autoRefresh?.enabled && autoRefresh.interval > 0) {
+      // Set initial refresh time
+      setLastRefreshed(new Date());
+      
+      // Set up interval
+      refreshIntervalRef.current = setInterval(async () => {
+        try {
+          await autoRefresh.onRefresh();
+          setLastRefreshed(new Date());
+        } catch (error) {
+          console.error("Auto-refresh error:", error);
+        }
+      }, autoRefresh.interval);
+
+      return () => {
+        if (refreshIntervalRef.current) {
+          clearInterval(refreshIntervalRef.current);
+        }
+      };
+    } else {
+      // Clear interval if disabled
+      if (refreshIntervalRef.current) {
+        clearInterval(refreshIntervalRef.current);
+        refreshIntervalRef.current = null;
+      }
+    }
+  }, [autoRefresh?.enabled, autoRefresh?.interval, autoRefresh?.onRefresh]);
+
+  // Format last refreshed time
+  const formatLastRefreshed = useCallback((date: Date) => {
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    const seconds = Math.floor(diff / 1000);
+    const minutes = Math.floor(seconds / 60);
+    
+    if (seconds < 10) return "Just now";
+    if (seconds < 60) return `${seconds}s ago`;
+    if (minutes < 60) return `${minutes}m ago`;
+    return date.toLocaleTimeString();
+  }, []);
+
   const getSortClass = useCallback(
     (columnId: string) => {
       if (!sorting?.sort || sorting.sort.columnId !== columnId) {
@@ -217,9 +264,19 @@ export const DataTable = <T,>({
   return (
     <div
       className={`balanceui-datatable-wrapper ${className || ""}`}
-      style={{ ...tableWrapperStyle(height), ...style }}
+      style={{ 
+        ...tableWrapperStyle(height), 
+        ...style,
+        boxShadow: "var(--bu-elevation-4)",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.boxShadow = "var(--bu-elevation-6)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.boxShadow = "var(--bu-elevation-4)";
+      }}
     >
-      {showRecordCount && (
+      {(showRecordCount || autoRefresh?.enabled) && (
         <div
           style={{
             padding: "0.75rem 1rem",
@@ -234,22 +291,38 @@ export const DataTable = <T,>({
             gap: "0.5rem",
           }}
         >
-          <span>
-            {recordCountLabel}: {totalRows}
-            {selectable && selectedRows.length > 0 && (
-              <span style={{ marginLeft: "0.5rem", color: "var(--bu-primary, #1976d2)" }}>
-                ({selectedRows.length} selected)
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
+            {showRecordCount && (
+              <span>
+                {recordCountLabel}: {totalRows}
+                {selectable && selectedRows.length > 0 && (
+                  <span style={{ marginLeft: "0.5rem", color: "var(--bu-primary, #1976d2)" }}>
+                    ({selectedRows.length} selected)
+                  </span>
+                )}
               </span>
             )}
-          </span>
-          {pagination?.showPageSizeSelector && pagination && (
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <span style={{ fontSize: "0.75rem" }}>Rows per page:</span>
+            {pagination?.showPageSizeSelector && pagination && (
               <PageSizeSelector
                 value={pagination.pageSize}
                 options={pagination.pageSizeOptions || [10, 20, 50, 100]}
                 onChange={(newPageSize) => pagination.onChange(1, newPageSize)}
+                label="Items per page:"
               />
+            )}
+          </div>
+          {autoRefresh?.enabled && lastRefreshed && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                fontSize: "0.75rem",
+                color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))",
+              }}
+            >
+              <Icon name="refresh" size="sm" />
+              <span>Last refreshed: {formatLastRefreshed(lastRefreshed)}</span>
             </div>
           )}
         </div>
@@ -301,7 +374,21 @@ export const DataTable = <T,>({
                   }}
                   onClick={() => sorting && col.sortable !== false && handleSort(col.id)}
                 >
-                  {col.header}
+                  <span style={{ flex: 1 }}>{col.header}</span>
+                  {sorting && col.sortable !== false && (
+                    <span className="balanceui-datatable-th-sort-icon">
+                      {getSortClass(col.id) === "sort-asc" ? (
+                        <Icon name="arrow_up" size="sm" />
+                      ) : getSortClass(col.id) === "sort-desc" ? (
+                        <Icon name="arrow_down" size="sm" />
+                      ) : (
+                        <div style={{ display: "flex", flexDirection: "column", gap: "2px", alignItems: "center" }}>
+                          <Icon name="arrow_up" size="xs" style={{ opacity: 0.3, lineHeight: 0 }} />
+                          <Icon name="arrow_down" size="xs" style={{ opacity: 0.3, lineHeight: 0, marginTop: "-4px" }} />
+                        </div>
+                      )}
+                    </span>
+                  )}
                 </th>
               ))}
             </tr>

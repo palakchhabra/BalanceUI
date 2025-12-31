@@ -1,10 +1,13 @@
 import type { CSSProperties } from "react";
 
 export const tableWrapperStyle = (height?: number): CSSProperties => ({
-  border: "1px solid var(--bu-border)",
-  borderRadius: "var(--bu-radius-md)",
+  border: "none",
+  borderRadius: 0,
   overflow: "hidden",
   height,
+  boxShadow: "var(--bu-elevation-4)",
+  backgroundColor: "var(--bu-surface, #ffffff)",
+  transition: "var(--bu-transition-elevation)",
 });
 
 export const scrollContainerStyle: CSSProperties = {

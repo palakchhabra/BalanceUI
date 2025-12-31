@@ -6,33 +6,37 @@
 }
 
 .balanceui-tree-node {
-  padding-left: 16px;
   cursor: pointer;
   user-select: none;
-  transition: 
-    background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
-    color 150ms cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-  border-radius: 4px;
-  margin: 2px 0;
+  margin: var(--bu-space-1, 4px) 0;
+  display: flex;
+  align-items: center;
+  transition: var(--bu-transition-surface);
 }
 
 .balanceui-tree-node:hover {
-  background-color: rgba(0, 0, 0, 0.04);
+  background-color: var(--bu-hover-bg, rgba(0, 0, 0, 0.04));
+  transition: var(--bu-transition-surface);
 }
 
 .balanceui-tree-node.selected {
-  background-color: var(--bu-tonal-bg, #e8e5df);
-  color: var(--bu-primary, #1f2937);
+  background-color: var(--bu-selected-bg, rgba(25, 118, 210, 0.08));
+  color: var(--bu-primary, #1976d2);
+  border-radius: 0;
 }
 
 .balanceui-tree-node.selected .balanceui-tree-content {
   font-weight: var(--bu-font-weight-semibold, 600);
 }
 
+.balanceui-tree-node.selected .balanceui-tree-label {
+  border-radius: 0;
+}
+
 /* Color propagation for selected nodes */
 .balanceui-tree-node.selected .balanceui-tree-toggle {
-  color: var(--bu-primary, #1f2937);
+  color: var(--bu-primary, #1976d2);
 }
 
 .balanceui-tree-node.propagated {
@@ -46,10 +50,13 @@
 .balanceui-tree-label {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 8px;
-  border-radius: var(--bu-radius-sm, 4px);
-  min-height: 28px;
+  gap: var(--bu-tree-node-gap, var(--bu-space-2));
+  padding: var(--bu-tree-node-padding-y, var(--bu-space-1)) var(--bu-tree-node-padding-x, var(--bu-space-2));
+  min-height: var(--bu-tree-node-min-height, var(--bu-control-height-md));
+  line-height: var(--bu-line-height-normal, 1.5);
+  width: 100%;
+  box-sizing: border-box;
+  transition: var(--bu-transition-surface);
 }
 
 .balanceui-tree-toggle {
@@ -59,23 +66,33 @@
   width: 18px;
   height: 18px;
   color: var(--bu-muted, #6b7280);
-  transition: transform var(--bu-transition-base), color var(--bu-transition-fast);
+  transition: var(--bu-transition-surface), var(--bu-transition-transform);
   flex-shrink: 0;
   cursor: pointer;
-  border-radius: var(--bu-radius-sm, 4px);
+  border-radius: var(--bu-radius-sm);
 }
 
 .balanceui-tree-toggle:hover {
   color: var(--bu-primary, #1f2937);
   background: var(--bu-hover-bg-light, rgba(0, 0, 0, 0.02));
+  transition: var(--bu-transition-surface);
+}
+
+.balanceui-tree-toggle:not(.expanded):hover {
+  transform: scale(1.1);
 }
 
 .balanceui-tree-toggle.expanded {
   transform: rotate(90deg);
+  transition: var(--bu-transition-transform);
+}
+
+.balanceui-tree-toggle.expanded:hover {
+  transform: rotate(90deg) scale(1.1);
 }
 
 .balanceui-tree-icon {
-  transition: transform var(--bu-transition-base);
+  transition: var(--bu-transition-transform);
 }
 
 .balanceui-tree-spacer {
@@ -97,8 +114,8 @@
   height: 18px;
   flex-shrink: 0;
   color: var(--bu-muted, #6b7280);
-  margin-right: 4px;
-  transition: color var(--bu-transition-fast);
+  margin-right: var(--bu-space-1);
+  transition: var(--bu-transition-surface);
 }
 
 .balanceui-tree-node:hover .balanceui-tree-icon-default {
@@ -110,6 +127,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  line-height: var(--bu-line-height-normal, 1.5);
+  color: var(--bu-fg, rgba(0, 0, 0, 0.87));
+  transition: var(--bu-transition-surface);
 }
 
 .balanceui-tree-children {
@@ -131,4 +153,3 @@
   right: 0;
   pointer-events: none;
 }
-

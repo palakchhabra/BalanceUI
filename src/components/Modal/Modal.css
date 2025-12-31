@@ -15,16 +15,44 @@
 
 .balanceui-modal {
   background: var(--bu-surface, #ffffff);
-  border-radius: var(--bu-radius-lg, 8px);
-  box-shadow: var(--bu-elevation-8);
-  max-width: 90vw;
+  border-radius: var(--bu-radius-lg, 12px);
+  box-shadow: var(--bu-elevation-24);
   max-height: 90vh;
   overflow: auto;
   animation: bu-scale-in var(--bu-transition-base);
   position: relative;
+  transition: var(--bu-transition-elevation);
+  /* Modal must float prominently above all content */
+  z-index: calc(var(--bu-z-modal, 1050) + 1);
 }
 
 .balanceui-modal:focus {
   outline: none;
+}
+
+/* Size variants */
+.balanceui-modal-size-sm {
+  width: 90%;
+  max-width: 400px;
+}
+
+.balanceui-modal-size-md {
+  width: 90%;
+  max-width: 600px;
+}
+
+.balanceui-modal-size-lg {
+  width: 90%;
+  max-width: 900px;
+}
+
+.balanceui-modal-size-xl {
+  width: 90%;
+  max-width: 1200px;
+}
+
+.balanceui-modal-size-full {
+  width: 95%;
+  max-width: 95vw;
 }
 

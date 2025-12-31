@@ -45,10 +45,10 @@ export const knobStyle = (
   background: "var(--bu-primary)",
 
   boxShadow: active
-    ? "0 0 0 3px rgba(255,255,255,0.9)"
-    : "none",
+    ? "var(--bu-elevation-4), 0 0 0 3px rgba(255,255,255,0.9)"
+    : "var(--bu-elevation-2)",
 
-  transition: "box-shadow 120ms ease",
+  transition: "var(--bu-transition-elevation)",
 });
 
 export const valueLabelStyle = (percent: number): CSSProperties => ({

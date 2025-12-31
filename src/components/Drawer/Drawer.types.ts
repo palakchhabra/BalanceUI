@@ -19,4 +19,6 @@ export interface DrawerProps {
   style?: React.CSSProperties;
   showHandle?: boolean;
   title?: string;
+  ariaLabel?: string;
+  ariaLabelledBy?: string;
 }

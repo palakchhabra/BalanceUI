@@ -1,0 +1,207 @@
+/* Dialog Component - Material Design */
+
+.balanceui-dialog-content {
+  padding: 0;
+  min-width: 280px;
+  max-width: 560px;
+}
+
+.balanceui-dialog-title {
+  margin: 0 0 20px 0;
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--bu-fg, rgba(0, 0, 0, 0.87));
+  letter-spacing: 0.00938em;
+}
+
+.balanceui-dialog-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  align-items: center;
+  padding-top: 8px;
+  flex-wrap: wrap;
+}
+
+/* Material UI Button Styling for Dialog */
+.balanceui-dialog-button {
+  min-width: 64px;
+  padding: 6px 16px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.02857em;
+  text-transform: uppercase;
+  border-radius: 4px;
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+              box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+              border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+              color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+}
+
+/* Cancel Button - Material Text Button */
+.balanceui-dialog-button-cancel {
+  color: var(--bu-primary, #1976d2);
+  background-color: transparent;
+  border: none;
+  padding: 6px 8px;
+}
+
+.balanceui-dialog-button-cancel:hover {
+  background-color: rgba(25, 118, 210, 0.04);
+}
+
+.balanceui-dialog-button-cancel:active {
+  background-color: rgba(25, 118, 210, 0.08);
+}
+
+/* Confirm Button - Material Contained Button */
+.balanceui-dialog-button-confirm {
+  background-color: var(--bu-primary, #1976d2);
+  color: var(--bu-on-primary, #ffffff);
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+              0px 2px 2px 0px rgba(0, 0, 0, 0.14),
+              0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  border: none;
+}
+
+.balanceui-dialog-button-confirm:hover {
+  background-color: var(--bu-primary-dark, #1565c0);
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+              0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+              0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+}
+
+.balanceui-dialog-button-confirm:active {
+  box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2),
+              0px 8px 10px 1px rgba(0, 0, 0, 0.14),
+              0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.balanceui-dialog-button-confirm:focus-visible {
+  outline: none;
+  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+              0px 2px 2px 0px rgba(0, 0, 0, 0.14),
+              0px 1px 5px 0px rgba(0, 0, 0, 0.12),
+              0 0 0 3px rgba(25, 118, 210, 0.12);
+}
+
+.balanceui-dialog-button:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Feedback Modals (Success/Cancel) */
+.balanceui-dialog-feedback {
+  padding: 32px 24px;
+  text-align: center;
+  min-width: 280px;
+  max-width: 400px;
+}
+
+.balanceui-dialog-feedback-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  animation: balanceui-scale-bounce 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.balanceui-dialog-success .balanceui-dialog-feedback-icon {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: #4caf50;
+}
+
+.balanceui-dialog-cancel .balanceui-dialog-feedback-icon {
+  background-color: rgba(244, 67, 54, 0.1);
+  color: #f44336;
+}
+
+.balanceui-dialog-feedback-title {
+  margin: 0 0 8px 0;
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--bu-fg, rgba(0, 0, 0, 0.87));
+  letter-spacing: 0.00938em;
+}
+
+.balanceui-dialog-feedback-message {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--bu-fg-secondary, rgba(0, 0, 0, 0.6));
+}
+
+/* Success Animation */
+@keyframes balanceui-scale-bounce {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.balanceui-dialog-success {
+  animation: balanceui-success-slide-in 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.balanceui-dialog-cancel {
+  animation: balanceui-cancel-slide-in 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes balanceui-success-slide-in {
+  0% {
+    transform: translateY(-20px) scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes balanceui-cancel-slide-in {
+  0% {
+    transform: translateY(20px) scale(0.9);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .balanceui-dialog-title {
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .balanceui-dialog-button-cancel:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+
+  .balanceui-dialog-button-cancel:active {
+    background-color: rgba(255, 255, 255, 0.12);
+  }
+
+  .balanceui-dialog-feedback-title {
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .balanceui-dialog-feedback-message {
+    color: rgba(255, 255, 255, 0.6);
+  }
+}
+

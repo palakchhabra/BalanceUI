@@ -25,5 +25,6 @@ export interface MultiSelectProps {
   "aria-describedby"?: string;
   renderOption?: (option: MultiSelectOption, isSelected: boolean) => React.ReactNode;
   renderChip?: (option: MultiSelectOption, onRemove: () => void) => React.ReactNode;
+  allowDisabledSelection?: boolean;
 }
 

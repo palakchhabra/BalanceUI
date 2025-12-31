@@ -55,11 +55,20 @@ export const ToastViewport = ({
         return (
           <div
             key={t.id}
-            className={`balanceui-toast balanceui-toast-${variant}`}
+            className={`balanceui-toast balanceui-toast-${variant} ${isEntering ? "balanceui-toast-entering" : ""} ${isExiting ? "balanceui-toast-exiting" : ""}`}
             style={toastStyle(variant, !isExiting && isEntering)}
             onClick={() => handleRemove(t.id)}
+            onKeyDown={(e) => {
+              if (e.key === "Escape" || e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                handleRemove(t.id);
+              }
+            }}
             role="alert"
-            aria-live="polite"
+            aria-live={variant === "error" ? "assertive" : "polite"}
+            aria-atomic="true"
+            tabIndex={0}
+            aria-label={`${variant} notification: ${t.message}`}
           >
             <span style={toastIconStyle} className="balanceui-toast-icon">
               {colors.icon}

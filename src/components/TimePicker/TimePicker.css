@@ -14,6 +14,12 @@
 
 .balanceui-timepicker-dropdown {
   animation: balanceui-fade-in 0.2s ease-out;
+  box-shadow: var(--bu-elevation-8);
+  border-radius: var(--bu-radius-lg, 12px);
+  border: 1px solid var(--bu-border, rgba(0, 0, 0, 0.12));
+  background: var(--bu-surface, #ffffff);
+  z-index: 1000;
+  transition: var(--bu-transition-elevation);
 }
 
 @keyframes balanceui-fade-in {
@@ -29,9 +35,13 @@
 
 .balanceui-timepicker-item {
   user-select: none;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .balanceui-timepicker-item:hover {
   background-color: var(--bu-surface-variant, rgba(0, 0, 0, 0.05)) !important;
+  box-shadow: var(--bu-elevation-1);
+  border-radius: var(--bu-radius-sm, 4px);
+  transition: var(--bu-transition-elevation);
 }
-

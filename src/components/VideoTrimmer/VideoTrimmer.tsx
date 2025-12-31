@@ -3,7 +3,7 @@ import { VideoTrimmerProps } from "./VideoTrimmer.types";
 import { useVideoTrimmerMedia } from "./useVideoTrimmerMedia";
 import { useVideoTrimmerTimeline } from "./useVideoTrimmerTimeline";
 import { useVideoTrimmerFrames } from "./useVideoTrimmerFrames";
-import { Shimmer } from "../Shimmer";
+import { ShimmerElement } from "../Shimmer";
 import "./VideoTrimmer.css";
 
 export const VideoTrimmer = ({
@@ -219,8 +219,7 @@ export const VideoTrimmer = ({
           <div style={{ position: "relative", width: "100%", borderRadius: "var(--bu-radius-md, 0.375rem)", overflow: "hidden", minHeight: "clamp(200px, 40vh, 400px)" }}>
             {isVideoLoading && (
               <div className="balanceui-videotrimmer-loading-overlay" style={{ position: "absolute", inset: 0, zIndex: 10 }}>
-                <Shimmer 
-                  variant="card" 
+                <ShimmerElement 
                   width="100%" 
                   height="100%" 
                   style={{ position: "absolute", inset: 0, borderRadius: "var(--bu-radius-md, 0.375rem)" }} 
@@ -354,7 +353,7 @@ export const VideoTrimmer = ({
                 zIndex: 1,
               }}
             >
-              <Shimmer variant="rectangular" width="100%" height="100%" />
+              <ShimmerElement width="100%" height="100%" />
             </div>
           )}
 
@@ -645,7 +644,7 @@ export const VideoTrimmer = ({
           >
             {isTrimming ? (
               <>
-                <Shimmer variant="text" width="100%" height="100%" style={{ position: "absolute", inset: 0 }} />
+                <ShimmerElement width="100%" height="100%" style={{ position: "absolute", inset: 0 }} />
                 <span style={{ position: "relative", zIndex: 1 }}>Trimming...</span>
               </>
             ) : (

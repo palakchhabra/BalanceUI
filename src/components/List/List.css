@@ -1,9 +1,19 @@
 .balanceui-list-item {
   position: relative;
+  border-bottom: none !important;
+}
+
+/* Remove any default borders or separators */
+.balanceui-list-item::after,
+.balanceui-list-item::before {
+  display: none !important;
 }
 
 .balanceui-list-item:not(.balanceui-list-disabled):hover {
   background-color: var(--bu-surface-variant, rgba(0, 0, 0, 0.05)) !important;
+  box-shadow: var(--bu-elevation-1);
+  transform: translateY(-1px);
+  transition: var(--bu-transition-elevation);
 }
 
 .balanceui-list-item.balanceui-list-selected:not(.balanceui-list-disabled):hover {
@@ -28,6 +38,13 @@
   height: 2.5rem;
   border-radius: 50%;
   overflow: hidden;
+  box-shadow: var(--bu-elevation-2);
+  transition: var(--bu-transition-elevation);
+}
+
+.balanceui-list-avatar:hover {
+  box-shadow: var(--bu-elevation-4);
+  transform: scale(1.05);
 }
 
 .balanceui-list-icon {
@@ -55,6 +72,15 @@
 .balanceui-list-action {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   flex-shrink: 0;
+  margin-left: auto;
+  padding-left: 1rem;
+}
+
+/* Ensure action buttons don't trigger item click */
+.balanceui-list-action button,
+.balanceui-list-action .balanceui-button {
+  pointer-events: auto;
 }
 

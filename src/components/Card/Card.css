@@ -4,11 +4,8 @@
   font-family: var(--bu-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
   background: var(--bu-surface, #ffffff);
   border-radius: var(--bu-radius-lg, 12px);
-  transition: 
-    box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1),
-    transform 200ms cubic-bezier(0.4, 0, 0.2, 1),
-    background-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
-    border-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: var(--bu-transition-elevation);
+  /* Using common class: .balanceui-relative */
   position: relative;
   overflow: hidden;
   display: block;
@@ -91,13 +88,13 @@
    ================================ */
 
 .balanceui-card-outlined {
-  border: 1px solid var(--bu-border, rgba(0, 0, 0, 0.12));
+  border: none;
   box-shadow: none;
   background: var(--bu-surface, #ffffff);
 }
 
 .balanceui-card-outlined:hover {
-  border-color: var(--bu-primary, #1976d2);
+  border: 1px solid var(--bu-primary, #1976d2);
 }
 
 /* ================================
