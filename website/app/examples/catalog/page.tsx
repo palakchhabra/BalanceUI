@@ -20,21 +20,31 @@ export default function CatalogExample() {
   const displayedProducts = products.slice(startIndex, startIndex + itemsPerPage);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:ml-64">
       <div className="mb-8">
         <Link
           href="/examples"
-          className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+          className="text-sm transition-colors"
+          style={{
+            color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))",
+            textDecoration: "none",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = "var(--bu-primary, #1976d2)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))";
+          }}
         >
           ← Back to Examples
         </Link>
       </div>
 
       <div className="mb-12">
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
+        <h1 className="text-4xl font-bold tracking-tight" style={{ color: "var(--bu-fg, rgba(0, 0, 0, 0.87))" }}>
           Product Catalog Example
         </h1>
-        <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
+        <p className="mt-4 text-lg" style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>
           Product listing with Cards, Pagination, and category filters.
         </p>
       </div>
@@ -53,18 +63,32 @@ export default function CatalogExample() {
             elevation={2}
             style={{
               padding: "1.5rem",
-              transition: "all 0.3s ease",
+              transition: "var(--bu-transition-elevation)",
+              cursor: "pointer",
             }}
-            className="hover:shadow-lg hover:-translate-y-1"
+            onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
+              e.currentTarget.style.transform = "translateY(-4px)";
+              e.currentTarget.style.boxShadow = "var(--bu-elevation-4)";
+            }}
+            onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "var(--bu-elevation-2)";
+            }}
           >
-            <div className="mb-4 h-32 bg-gray-200 rounded flex items-center justify-center">
-              <span className="text-gray-400">Image</span>
+            <div 
+              className="mb-4 h-32 rounded flex items-center justify-center"
+              style={{
+                backgroundColor: "var(--bu-surface-variant, rgba(0, 0, 0, 0.08))",
+                borderRadius: "var(--bu-radius-md, 10px)",
+              }}
+            >
+              <span style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>Image</span>
             </div>
-            <h3 className="font-semibold text-gray-900 dark:text-white">
+            <h3 className="font-semibold" style={{ color: "var(--bu-fg, rgba(0, 0, 0, 0.87))" }}>
               {product.name}
             </h3>
             <div className="mt-2 flex items-center justify-between">
-              <span className="text-lg font-bold text-gray-900 dark:text-white">
+              <span className="text-lg font-bold" style={{ color: "var(--bu-fg, rgba(0, 0, 0, 0.87))" }}>
                 {product.price}
               </span>
               <Badge variant="soft">{product.rating} ⭐</Badge>

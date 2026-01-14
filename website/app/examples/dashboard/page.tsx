@@ -19,21 +19,31 @@ export default function DashboardExample() {
     : sampleData.filter(item => item.status.toLowerCase() === selectedStatus.toLowerCase());
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:ml-64">
       <div className="mb-8">
         <Link
           href="/examples"
-          className="text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+          className="text-sm transition-colors"
+          style={{
+            color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))",
+            textDecoration: "none",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = "var(--bu-primary, #1976d2)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))";
+          }}
         >
           ← Back to Examples
         </Link>
       </div>
 
       <div className="mb-12">
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
+        <h1 className="text-4xl font-bold tracking-tight" style={{ color: "var(--bu-fg, rgba(0, 0, 0, 0.87))" }}>
           Dashboard Example
         </h1>
-        <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
+        <p className="mt-4 text-lg" style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>
           A complete dashboard with cards, data table, and progress indicators.
         </p>
       </div>
@@ -45,20 +55,28 @@ export default function DashboardExample() {
           elevation={2}
           style={{
             padding: "1.5rem",
-            transition: "all 0.3s ease",
+            transition: "var(--bu-transition-elevation)",
+            cursor: "pointer",
           }}
-          className="hover:shadow-lg hover:-translate-y-1"
+          onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
+            e.currentTarget.style.transform = "translateY(-4px)";
+            e.currentTarget.style.boxShadow = "var(--bu-elevation-4)";
+          }}
+          onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "var(--bu-elevation-2)";
+          }}
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Total Users</p>
-              <p className="mt-1 text-3xl font-bold text-gray-900 dark:text-white">1,234</p>
+              <p className="text-sm" style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>Total Users</p>
+              <p className="mt-1 text-3xl font-bold" style={{ color: "var(--bu-fg, rgba(0, 0, 0, 0.87))" }}>1,234</p>
             </div>
             <div className="text-4xl">👥</div>
           </div>
           <div className="mt-4">
             <Badge variant="success">+12%</Badge>
-            <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">
+            <span className="ml-2 text-sm" style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>
               from last month
             </span>
           </div>
@@ -69,20 +87,28 @@ export default function DashboardExample() {
           elevation={2}
           style={{
             padding: "1.5rem",
-            transition: "all 0.3s ease",
+            transition: "var(--bu-transition-elevation)",
+            cursor: "pointer",
           }}
-          className="hover:shadow-lg hover:-translate-y-1"
+          onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
+            e.currentTarget.style.transform = "translateY(-4px)";
+            e.currentTarget.style.boxShadow = "var(--bu-elevation-4)";
+          }}
+          onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "var(--bu-elevation-2)";
+          }}
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Revenue</p>
-              <p className="mt-1 text-3xl font-bold text-gray-900 dark:text-white">$45,678</p>
+              <p className="text-sm" style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>Revenue</p>
+              <p className="mt-1 text-3xl font-bold" style={{ color: "var(--bu-fg, rgba(0, 0, 0, 0.87))" }}>$45,678</p>
             </div>
             <div className="text-4xl">💰</div>
           </div>
           <div className="mt-4">
             <Badge variant="success">+8%</Badge>
-            <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">
+            <span className="ml-2 text-sm" style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>
               from last month
             </span>
           </div>
@@ -93,20 +119,28 @@ export default function DashboardExample() {
           elevation={2}
           style={{
             padding: "1.5rem",
-            transition: "all 0.3s ease",
+            transition: "var(--bu-transition-elevation)",
+            cursor: "pointer",
           }}
-          className="hover:shadow-lg hover:-translate-y-1"
+          onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
+            e.currentTarget.style.transform = "translateY(-4px)";
+            e.currentTarget.style.boxShadow = "var(--bu-elevation-4)";
+          }}
+          onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "var(--bu-elevation-2)";
+          }}
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Orders</p>
-              <p className="mt-1 text-3xl font-bold text-gray-900 dark:text-white">567</p>
+              <p className="text-sm" style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>Orders</p>
+              <p className="mt-1 text-3xl font-bold" style={{ color: "var(--bu-fg, rgba(0, 0, 0, 0.87))" }}>567</p>
             </div>
             <div className="text-4xl">📦</div>
           </div>
           <div className="mt-4">
             <Badge variant="warning">-3%</Badge>
-            <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">
+            <span className="ml-2 text-sm" style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>
               from last month
             </span>
           </div>
@@ -117,20 +151,28 @@ export default function DashboardExample() {
           elevation={2}
           style={{
             padding: "1.5rem",
-            transition: "all 0.3s ease",
+            transition: "var(--bu-transition-elevation)",
+            cursor: "pointer",
           }}
-          className="hover:shadow-lg hover:-translate-y-1"
+          onMouseEnter={(e: React.MouseEvent<HTMLDivElement>) => {
+            e.currentTarget.style.transform = "translateY(-4px)";
+            e.currentTarget.style.boxShadow = "var(--bu-elevation-4)";
+          }}
+          onMouseLeave={(e: React.MouseEvent<HTMLDivElement>) => {
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "var(--bu-elevation-2)";
+          }}
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Conversion</p>
-              <p className="mt-1 text-3xl font-bold text-gray-900 dark:text-white">3.24%</p>
+              <p className="text-sm" style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>Conversion</p>
+              <p className="mt-1 text-3xl font-bold" style={{ color: "var(--bu-fg, rgba(0, 0, 0, 0.87))" }}>3.24%</p>
             </div>
             <div className="text-4xl">📊</div>
           </div>
           <div className="mt-4">
             <Badge variant="success">+0.5%</Badge>
-            <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">
+            <span className="ml-2 text-sm" style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>
               from last month
             </span>
           </div>
@@ -143,17 +185,17 @@ export default function DashboardExample() {
         elevation={2}
         style={{ padding: "2rem", marginBottom: "2rem" }}
       >
-        <h2 className="mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+        <h2 className="mb-6 text-2xl font-semibold" style={{ color: "var(--bu-fg, rgba(0, 0, 0, 0.87))" }}>
           Project Progress
         </h2>
         <div className="space-y-4">
           {filteredData.map((item) => (
             <div key={item.id}>
               <div className="mb-2 flex items-center justify-between">
-                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                <span className="text-sm font-medium" style={{ color: "var(--bu-fg, rgba(0, 0, 0, 0.87))" }}>
                   {item.name}
                 </span>
-                <span className="text-sm text-gray-600 dark:text-gray-400">
+                <span className="text-sm" style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>
                   {item.progress}%
                 </span>
               </div>
@@ -166,7 +208,7 @@ export default function DashboardExample() {
       {/* Data Table */}
       <Card variant="elevated" elevation={2} style={{ padding: "2rem" }}>
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-semibold text-gray-900 dark:text-white">
+          <h2 className="text-2xl font-semibold" style={{ color: "var(--bu-fg, rgba(0, 0, 0, 0.87))" }}>
             Users
           </h2>
           <div className="flex gap-2">
@@ -194,30 +236,57 @@ export default function DashboardExample() {
           </div>
         </div>
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead className="bg-gray-50 dark:bg-gray-800">
+          <table 
+            className="min-w-full divide-y"
+            style={{
+              borderColor: "var(--bu-border, rgba(0, 0, 0, 0.12))",
+            }}
+          >
+            <thead 
+              style={{
+                backgroundColor: "var(--bu-surface-variant, rgba(0, 0, 0, 0.02))",
+              }}
+            >
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                <th 
+                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
+                  style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}
+                >
                   Name
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                <th 
+                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
+                  style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}
+                >
                   Email
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                <th 
+                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
+                  style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}
+                >
                   Status
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                <th 
+                  className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider"
+                  style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}
+                >
                   Progress
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-900">
+            <tbody 
+              className="divide-y"
+              style={{
+                backgroundColor: "var(--bu-surface, #ffffff)",
+                borderColor: "var(--bu-border, rgba(0, 0, 0, 0.12))",
+              }}
+            >
               {filteredData.map((item) => (
                 <tr key={item.id}>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
+                  <td className="whitespace-nowrap px-6 py-4 text-sm font-medium" style={{ color: "var(--bu-fg, rgba(0, 0, 0, 0.87))" }}>
                     {item.name}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                  <td className="whitespace-nowrap px-6 py-4 text-sm" style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>
                     {item.email}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-sm">

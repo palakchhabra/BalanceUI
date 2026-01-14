@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Card } from "@balanceui/core";
+import { useState } from "react";
+import { Card, Tabs, Accordion, Stepper, Badge, Icon, Progress, Button } from "@balanceui/core";
 
 const docsSections = [
   {
@@ -43,15 +44,38 @@ const docsSections = [
 ];
 
 export default function DocsPage() {
+  const [activeTab, setActiveTab] = useState("getting-started");
+  const [accordionOpenId, setAccordionOpenId] = useState<string | undefined>("1");
+
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       <div className="mb-12">
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
-          Documentation
-        </h1>
-        <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
+        <div className="flex items-center gap-3 mb-4">
+          <Icon name="home" size="lg" />
+          <h1 className="text-4xl font-bold tracking-tight" style={{ color: "var(--bu-fg, rgba(0, 0, 0, 0.87))" }}>
+            Documentation
+          </h1>
+          <Badge variant="solid">v1.0.0</Badge>
+        </div>
+        <p className="mt-4 text-lg" style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>
           Everything you need to know about using BalanceUI in your projects.
         </p>
+        <div className="mt-6">
+          <Progress value={75} showValue />
+        </div>
+      </div>
+
+      {/* Tabs Navigation */}
+      <div className="mb-8">
+        <Tabs
+          tabs={[
+            { id: "getting-started", label: "Getting Started", content: null },
+            { id: "components", label: "Components", content: null },
+            { id: "theming", label: "Theming", content: null },
+          ]}
+          value={activeTab}
+          onChange={(id) => setActiveTab(id)}
+        />
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -65,24 +89,60 @@ export default function DocsPage() {
                 height: "100%",
                 display: "flex",
                 flexDirection: "column",
-                transition: "all 0.3s ease",
+                transition: "var(--bu-transition-elevation)",
                 cursor: "pointer",
               }}
-              className="group-hover:shadow-lg group-hover:-translate-y-1"
+              className="balanceui-hover-elevate"
             >
               <div className="mb-4 text-4xl">{section.icon}</div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+              <h3 className="text-xl font-semibold" style={{ color: "var(--bu-fg, rgba(0, 0, 0, 0.87))" }}>
                 {section.title}
               </h3>
-              <p className="mt-2 text-gray-600 dark:text-gray-400">
+              <p className="mt-2" style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>
                 {section.description}
               </p>
-              <div className="mt-4 text-sm font-medium text-black dark:text-white dark:text-white">
+              <div className="mt-4 text-sm font-medium" style={{ color: "var(--bu-fg, rgba(0, 0, 0, 0.87))" }}>
                 Read More →
               </div>
             </Card>
           </Link>
         ))}
+      </div>
+
+      {/* Accordion FAQ */}
+      <div className="mt-12">
+        <Card variant="elevated" elevation={2} style={{ padding: "2rem" }} className="sm:p-8">
+          <h2 className="text-2xl font-bold mb-6" style={{ color: "var(--bu-fg, rgba(0, 0, 0, 0.87))" }}>
+            Frequently Asked Questions
+          </h2>
+          <Accordion
+            items={[
+              {
+                id: "1",
+                title: "How do I install BalanceUI?",
+                content: <p style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>
+                  Install BalanceUI using npm: <code className="bg-gray-100 px-2 py-1 rounded">npm install @balanceui/core</code>
+                </p>
+              },
+              {
+                id: "2",
+                title: "Is BalanceUI free to use?",
+                content: <p style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>
+                  Yes! BalanceUI is completely open source and free to use under the MIT License.
+                </p>
+              },
+              {
+                id: "3",
+                title: "Does BalanceUI support TypeScript?",
+                content: <p style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>
+                  Yes, BalanceUI is built with TypeScript and includes comprehensive type definitions.
+                </p>
+              },
+            ]}
+            openId={accordionOpenId}
+            onChange={(id) => setAccordionOpenId(id === accordionOpenId ? undefined : id)}
+          />
+        </Card>
       </div>
 
       <div className="mt-12 rounded-lg bg-gray-100 p-8 dark:bg-gray-800">

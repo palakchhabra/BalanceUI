@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Card, Button, Badge } from "@balanceui/core";
+import { useState } from "react";
+import { Card, Button, Badge, Tabs, Stepper, Icon, Progress, List, Toolbar } from "@balanceui/core";
 
 const examples = [
   {
@@ -40,19 +41,64 @@ const examples = [
     href: "/examples/notifications",
     tags: ["Toast", "Badge", "Feedback"],
   },
+  {
+    title: "Icon Library",
+    description: "Browse and search through all available icons with categories",
+    href: "/examples/icons",
+    tags: ["Icons", "Search", "Display"],
+  },
 ];
 
 export default function ExamplesPage() {
+  const [activeTab, setActiveTab] = useState("all");
+  const [currentStep, setCurrentStep] = useState(0);
+
   return (
-    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:ml-64">
       <div className="mb-12">
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
-          Examples
-        </h1>
-        <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
+        <div className="flex items-center gap-3 mb-4">
+          <Icon name="check" size="lg" />
+          <h1 className="text-4xl font-bold tracking-tight" style={{ color: "var(--bu-fg, rgba(0, 0, 0, 0.87))" }}>
+            Examples
+          </h1>
+          <Badge variant="success">30+ Examples</Badge>
+        </div>
+        <p className="mt-4 text-lg" style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>
           Explore real-world examples and use cases. See how BalanceUI
           components work together to build complete interfaces.
         </p>
+        <div className="mt-6">
+          <Progress value={85} variant="success" showValue />
+        </div>
+      </div>
+
+      {/* Toolbar */}
+      <div className="mb-8">
+        <Toolbar
+          items={[
+            { id: "1", icon: <Icon name="home" />, label: "All Examples", onClick: () => setActiveTab("all") },
+            { id: "2", icon: <Icon name="menu" />, label: "Forms", onClick: () => setActiveTab("forms") },
+            { id: "3", icon: <Icon name="check" />, label: "Dashboards", onClick: () => setActiveTab("dashboards") },
+          ]}
+        />
+      </div>
+
+      {/* Stepper */}
+      <div className="mb-8">
+        <Card variant="elevated" elevation={2} style={{ padding: "1.5rem" }} className="sm:p-8">
+          <h3 className="text-lg font-semibold mb-4" style={{ color: "var(--bu-fg, rgba(0, 0, 0, 0.87))" }}>
+            Browse Examples
+          </h3>
+          <Stepper
+            steps={[
+              { id: "step1", label: "Browse" },
+              { id: "step2", label: "Select" },
+              { id: "step3", label: "Explore" },
+            ]}
+            activeStep={currentStep}
+            onStepClick={setCurrentStep}
+          />
+        </Card>
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -66,15 +112,15 @@ export default function ExamplesPage() {
                 height: "100%",
                 display: "flex",
                 flexDirection: "column",
-                transition: "all 0.3s ease",
+                transition: "var(--bu-transition-elevation)",
                 cursor: "pointer",
               }}
-              className="group-hover:shadow-lg group-hover:-translate-y-1"
+              className="balanceui-hover-elevate"
             >
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+              <h3 className="text-xl font-semibold" style={{ color: "var(--bu-fg, rgba(0, 0, 0, 0.87))" }}>
                 {example.title}
               </h3>
-              <p className="mt-2 flex-1 text-gray-600 dark:text-gray-400">
+              <p className="mt-2 flex-1" style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>
                 {example.description}
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
@@ -91,7 +137,7 @@ export default function ExamplesPage() {
                   </Badge>
                 ))}
               </div>
-              <div className="mt-4 text-sm font-medium text-black dark:text-white dark:text-white">
+              <div className="mt-4 text-sm font-medium" style={{ color: "var(--bu-fg, rgba(0, 0, 0, 0.87))" }}>
                 View Example →
               </div>
             </Card>
@@ -99,11 +145,34 @@ export default function ExamplesPage() {
         ))}
       </div>
 
-      <div className="mt-12 rounded-lg bg-gray-50 p-8 dark:bg-gray-800">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+      {/* List Component */}
+      <div className="mt-12">
+        <Card variant="elevated" elevation={2} style={{ padding: "2rem" }} className="sm:p-8">
+          <h2 className="text-2xl font-bold mb-6" style={{ color: "var(--bu-fg, rgba(0, 0, 0, 0.87))" }}>
+            Quick Links
+          </h2>
+          <List
+            items={[
+              { id: "1", primary: "Component Documentation", secondary: "Browse all component APIs", icon: "home" },
+              { id: "2", primary: "Code Examples", secondary: "See components in action", icon: "menu" },
+              { id: "3", primary: "Theme Customization", secondary: "Customize the look and feel", icon: "check" },
+            ]}
+            onItemClick={(item) => window.location.href = item.id === "1" ? "/components" : item.id === "2" ? "/examples" : "/docs/theming"}
+          />
+        </Card>
+      </div>
+
+      <div 
+        className="mt-12 rounded-lg p-8"
+        style={{
+          backgroundColor: "var(--bu-surface-variant, rgba(0, 0, 0, 0.02))",
+          borderRadius: "var(--bu-radius-lg, 12px)",
+        }}
+      >
+        <h2 className="text-2xl font-bold" style={{ color: "var(--bu-fg, rgba(0, 0, 0, 0.87))" }}>
           Want to Contribute?
         </h2>
-        <p className="mt-4 text-gray-600 dark:text-gray-400">
+        <p className="mt-4" style={{ color: "var(--bu-fg-secondary, rgba(0, 0, 0, 0.6))" }}>
           Have an example you'd like to share? We'd love to see how you're using
           BalanceUI!
         </p>
